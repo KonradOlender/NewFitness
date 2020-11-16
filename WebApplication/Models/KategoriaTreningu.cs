@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
+    [Table("KategorieTreningow")]
     public class KategoriaTreningu
     {
         [Key]

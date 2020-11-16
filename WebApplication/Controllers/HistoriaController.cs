@@ -42,7 +42,7 @@ namespace WebApplication.Controllers
 
             var historiaUzytkownika = await _context.historiaUzytkownika
                 .Include(h => h.uzytkownik)
-                .FirstOrDefaultAsync(m => m.id_historia == id);
+                .FirstOrDefaultAsync();
             if (historiaUzytkownika == null)
             {
                 return NotFound();
@@ -99,7 +99,7 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id_historia,id_uzytkownika,data,waga,wzrost")] HistoriaUzytkownika historiaUzytkownika)
         {
-            if (id != historiaUzytkownika.id_historia)
+            if (id != historiaUzytkownika.id_uzytkownika)
             {
                 return NotFound();
             }
@@ -113,7 +113,7 @@ namespace WebApplication.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HistoriaUzytkownikaExists(historiaUzytkownika.id_historia))
+                    if (!HistoriaUzytkownikaExists(historiaUzytkownika.id_uzytkownika))
                     {
                         return NotFound();
                     }
@@ -138,7 +138,7 @@ namespace WebApplication.Controllers
 
             var historiaUzytkownika = await _context.historiaUzytkownika
                 .Include(h => h.uzytkownik)
-                .FirstOrDefaultAsync(m => m.id_historia == id);
+                .FirstOrDefaultAsync(m => m.id_uzytkownika == id);
             if (historiaUzytkownika == null)
             {
                 return NotFound();
@@ -160,7 +160,7 @@ namespace WebApplication.Controllers
 
         private bool HistoriaUzytkownikaExists(int id)
         {
-            return _context.historiaUzytkownika.Any(e => e.id_historia == id);
+            return _context.historiaUzytkownika.Any(e => e.id_uzytkownika == id);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Trening
-        public async Task<IActionResult> Index(String searchString)
+        public async Task<IActionResult> Index(String searchString, String category)
         {
             ViewData["currentSearchString"] = searchString;
 
@@ -44,12 +44,27 @@ namespace WebApplication.Controllers
 
             ViewBag.trainersIds = trainersIds;
 
+            SelectList categories = new SelectList(_context.kategoriaTreningu, "id_kategorii", "nazwa");
+            List<SelectListItem> _categories = categories.ToList();
+            _categories.Insert(0, new SelectListItem() { Value = "-1", Text = "Wszystkie" });
+            ViewBag.category = new SelectList((IEnumerable<SelectListItem>)_categories, "Value", "Text");
+
+            var trainings = _context.treningi.Where(k => true);
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                return View(await _context.treningi.Include(t => t.kategoria).Include(t => t.uzytkownik).Where(k => k.nazwa.Contains(searchString)).ToListAsync());
+                trainings = trainings.Where(k => k.nazwa.Contains(searchString));
             }
-            else
-                return View(await _context.treningi.Include(t => t.kategoria).Include(t => t.uzytkownik).ToListAsync());
+            
+            if(!String.IsNullOrEmpty(category))
+            {
+                int category_id = int.Parse(category);
+                if(category_id != -1)
+                    trainings = trainings.Where(k => k.id_kategorii == category_id);
+            }
+                
+            return View(await trainings.Include(t => t.kategoria).Include(t => t.uzytkownik).ToListAsync());
+
         }
 
         // GET: Trening/Details/5

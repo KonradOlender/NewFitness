@@ -29,7 +29,7 @@
             {
             <li>
                 Nazwa: 
-                <a asp-controller="Trening" asp-action="Details">
+                <a asp-controller="Trening" asp-action="Details" asp-route-id="@t.id_treningu">
                     @t.nazwa
                 </a>
             </li>

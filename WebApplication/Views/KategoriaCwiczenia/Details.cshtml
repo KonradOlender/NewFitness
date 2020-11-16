@@ -20,6 +20,20 @@
     </dl>
 </div>
 <div>
+    <ul>
+        @foreach (Cwiczenie cw in Model.cwiczenia)
+        {
+        <li>
+            <b>Nazwa:</b>
+            @cw.nazwa
+            <a asp-controller="Cwiczenie" asp-action="Details" asp-route-id="@cw.id_cwiczenia">Zobacz</a>
+        </li>
+        }
+    </ul>
+</div>
+
+
+<div>
     <a asp-action="Edit" asp-route-id="@Model.id_kategorii">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

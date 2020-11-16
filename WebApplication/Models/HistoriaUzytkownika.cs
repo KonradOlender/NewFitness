@@ -8,10 +8,9 @@ using WebApplication.Areas.Identity.Data;
 
 namespace WebApplication.Models
 {
+    [Table("HistoriaUzytkownikow")]
     public class HistoriaUzytkownika
     {
-        [Key]
-        public int id_historia { get; set; }
         [ForeignKey("uzytkownik")]
         public int id_uzytkownika { get; set; }
         [Required]

@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
+    [Table("Cwiczenia")]
     public class Cwiczenie
     {
         [Key]
         public int id_cwiczenia { get; set; }
         [Required]
-        [Column(TypeName = "varchar(15)")]
+        [Column(TypeName = "varchar(20)")]
         public string nazwa { get; set; }
-        [Column(TypeName = "varchar(250)")]
+        [Column(TypeName = "varchar(1000)")]
         [Required]
         public string opis { get; set; }
         public int spalone_kalorie { get; set; }

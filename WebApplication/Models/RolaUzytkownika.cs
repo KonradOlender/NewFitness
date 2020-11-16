@@ -8,6 +8,7 @@ using WebApplication.Areas.Identity.Data;
 
 namespace WebApplication.Models
 {
+    [Table("RoleUzytkownikow")]
     public class RolaUzytkownika
     {
         [Required, ForeignKey("uzytkownik")]

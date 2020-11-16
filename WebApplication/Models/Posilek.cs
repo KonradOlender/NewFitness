@@ -8,16 +8,17 @@ using WebApplication.Areas.Identity.Data;
 
 namespace WebApplication.Models
 {
+    [Table("Posilki")]
     public class Posilek
     {
         [Key]
         public int id_posilku { get; set; }
         [Required]
-        [Column(TypeName = "varchar(30)")]
+        [Column(TypeName = "varchar(40)")]
         public string nazwa { get; set; }
         [Required]
         public int kalorie { get; set; }
-        [Column(TypeName = "varchar(700)")]
+        [Column(TypeName = "varchar(1000)")]
         public string opis { get; set; }
         [Required, ForeignKey("uzytkownik")]
         public int id_uzytkownika { get; set; }
