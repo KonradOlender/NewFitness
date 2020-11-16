@@ -27,7 +27,7 @@ namespace WebApplication.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
-            builder.Entity<Uzytkownik>(b =>
+            /*builder.Entity<Uzytkownik>(b =>
             {
                 b.HasMany<RolaUzytkownika>(t => t.role)
                  .WithOne(t => t.uzytkownik)
@@ -97,8 +97,7 @@ namespace WebApplication.Data
                 .WithMany(t => t.skladniki)
                 .HasForeignKey(d => d.id_kategorii);
 
-            builder.Entity<HistoriaUzytkownika>().HasKey(t => t.id_historia);
-            //modelBuilder.Entity<HistoriaUzytkownika>().HasKey(t => new { t.id_uzytkownika, t.data });
+            builder.Entity<HistoriaUzytkownika>().HasKey(t => new { t.id_uzytkownika, t.data });
             builder.Entity<HistoriaUzytkownika>()
                 .HasOne<Uzytkownik>(t => t.uzytkownik)
                 .WithMany(t => t.historiaUzytkownika)
@@ -142,7 +141,7 @@ namespace WebApplication.Data
                 .HasOne<Uzytkownik>(t => t.uzytkownik)
                 .WithMany(t => t.role)
                 .HasForeignKey(d => d.id_uzytkownika)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);*/
         }
     }
 }

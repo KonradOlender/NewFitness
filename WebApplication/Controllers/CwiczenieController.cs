@@ -26,16 +26,29 @@ namespace WebApplication.Controllers
         //sort == 0 and other data arent sorted
         //sort == 1 data are sorted ascending
         //sort == 2 data are sorted descending
-        public async Task<IActionResult> Index(String searchString, int sort)
+        public async Task<IActionResult> Index(String searchString, String category, int sort)
         {
             ViewData["currentSearchString"] = searchString;
             ViewData["currentSort"] = (sort + 1)%3;
 
             ViewBag.isTrainer = isTrainer();
+            var exercises = _context.cwiczenia.Where(k => true);
+
+            SelectList categories = new SelectList(_context.kategoriaCwiczenia, "id_kategorii", "nazwa");
+            List<SelectListItem> _categories = categories.ToList();
+            _categories.Insert(0, new SelectListItem() { Value = "-1", Text = "Wszystkie" });
+            ViewBag.category = new SelectList((IEnumerable<SelectListItem>)_categories, "Value", "Text");
+
+            if (!String.IsNullOrEmpty(category))
+            {
+                int id = int.Parse(category);
+                if(id!= -1)
+                    exercises = exercises.Where(k => k.id_kategorii == id);
+            }
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                var exercises = _context.cwiczenia.Include(c => c.kategoria).Where(k => k.nazwa.Contains(searchString));
+                exercises = exercises.Include(c => c.kategoria).Where(k => k.nazwa.Contains(searchString));
                 switch(sort)
                 {
                     case 2:
@@ -54,7 +67,7 @@ namespace WebApplication.Controllers
             }
             else
             {
-                var exercises = _context.cwiczenia.Include(c => c.kategoria).AsQueryable();
+                exercises = exercises.Include(c => c.kategoria).AsQueryable();
                 switch (sort)
                 {
                     case 2:

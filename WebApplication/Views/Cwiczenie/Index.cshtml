@@ -10,15 +10,19 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Szukaj: <input type="text" name="SearchString" value="@ViewData["currentSearchString"]" />
-            <input type="submit" value="Szukaj" class="btn btn-default" /> |
-            <a asp-action="Index">Wyczyść wyszukiwanie</a>
-        </p>
-    </div>
-</form>
+@using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
+{
+<fieldset>
+    @Html.TextBox("searchString")
+
+    @Html.DropDownList("category")
+
+    <p>
+        <input type="submit" value="Filtruj" />
+    </p>
+
+</fieldset>
+}
 
 <table class="table">
     <thead>

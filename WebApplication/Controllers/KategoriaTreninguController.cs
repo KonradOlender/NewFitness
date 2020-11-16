@@ -72,9 +72,6 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            if (!this.isTrainer())
-                return RedirectToAction("Index");
-
             return View(kategoriaTreningu);
         }
 

@@ -8,6 +8,7 @@ using WebApplication.Areas.Identity.Data;
 
 namespace WebApplication.Models
 {
+    [Table("PlanowaneTreningi")]
     public class PlanowanieTreningow
     {
         [Key]

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
+    [Table("Skladniki")]
     public class Skladnik
     {
         [Key]

@@ -10,15 +10,20 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Szukaj: <input type="text" name="SearchString" value="@ViewData["currentSearchString"]" />
-            <input type="submit" value="Szukaj" class="btn btn-default" /> |
-            <a asp-action="Index">Wyczyść wyszukiwanie</a>
-        </p>
-    </div>
-</form>
+<hr />
+@using (Html.BeginForm("Index", "Trening", FormMethod.Get, new { id = ViewBag.trainingId }))
+{
+<fieldset>
+    @Html.TextBox("searchString")
+
+    @Html.DropDownList("category")
+
+    <p>
+        <input type="submit" value="Filtruj" />
+    </p>
+
+</fieldset>
+}
 
 <table class="table">
     <thead>
@@ -35,26 +40,27 @@
     <tbody>
 
 
-@foreach (var item in Model) {
-        @if (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
+        @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.nazwa)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.kategoria.nazwa)
-                </td>
-                <td>
-                    @if(ViewBag.userId == item.id_uzytkownika)
-                    {
-                        <a asp-action="Delete" asp-route-id="@item.id_treningu">Delete</a> <br />
-                        <a asp-action="Edit" asp-route-id="@item.id_treningu">Edit</a> <br />
-                    }
-                    <a asp-action="Details" asp-route-id="@item.id_treningu">Details</a> <br />
-                </td>
-            </tr>
+            @if (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nazwa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.kategoria.nazwa)
+                    </td>
+                    <td>
+                        @if (ViewBag.userId == item.id_uzytkownika)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.id_treningu">Delete</a> <br />
+                            <a asp-action="Edit" asp-route-id="@item.id_treningu">Edit</a> <br />
+                        }
+                        <a asp-action="Details" asp-route-id="@item.id_treningu">Details</a> <br />
+                    </td>
+                </tr>
+            }
         }
-}
     </tbody>
 </table>

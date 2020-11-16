@@ -8,8 +8,11 @@ using WebApplication.Areas.Identity.Data;
 
 namespace WebApplication.Models
 {
+    [Table("PlanowanePosilki")]
     public class PlanowaniePosilkow
     {
+        [Required]
+        public int id { get; set; }
         [Required, ForeignKey("uzytkownik")]
         public int id_uzytkownika { get; set; }
         [Required, ForeignKey("posilek")]

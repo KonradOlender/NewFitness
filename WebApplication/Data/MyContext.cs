@@ -22,7 +22,7 @@ namespace WebApplication.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+         
             //mapowanie kluczy głównych i obcych
             builder.Entity<Uzytkownik>(b =>
             {
@@ -94,8 +94,8 @@ namespace WebApplication.Data
                 .WithMany(t => t.skladniki)
                 .HasForeignKey(d => d.id_kategorii);
 
-            builder.Entity<HistoriaUzytkownika>().HasKey(t => t.id_historia);
-            //modelBuilder.Entity<HistoriaUzytkownika>().HasKey(t => new { t.id_uzytkownika, t.data });
+            //builder.Entity<HistoriaUzytkownika>().HasKey(t => t.id_historia);
+            builder.Entity<HistoriaUzytkownika>().HasKey(t => new { t.id_uzytkownika, t.data });
             builder.Entity<HistoriaUzytkownika>()
                 .HasOne<Uzytkownik>(t => t.uzytkownik)
                 .WithMany(t => t.historiaUzytkownika)
@@ -142,7 +142,7 @@ namespace WebApplication.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            builder.Entity<PlanowaniePosilkow>().HasKey(t => new { t.id_posilku, t.id_uzytkownika, t.data });
+            builder.Entity<PlanowaniePosilkow>().HasKey(t => t.id);
             builder.Entity<PlanowaniePosilkow>()
                 .HasOne<Uzytkownik>(t => t.uzytkownik)
                 .WithMany(t => t.planowanePosilki)
@@ -156,7 +156,6 @@ namespace WebApplication.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            //builder.Entity<PlanowanieTreningow>().HasKey(t => new { t.id_treningu, t.id_uzytkownika, t.data });
             builder.Entity<PlanowanieTreningow>().HasKey(t => t.id );
             builder.Entity<PlanowanieTreningow>()
                 .HasOne<Uzytkownik>(t => t.uzytkownik)
@@ -190,6 +189,23 @@ namespace WebApplication.Data
                 .HasForeignKey(d => d.id_uzytkownika_oceniajacego)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<KategoriaCwiczenia>().HasData(
+                                new { id_kategorii = 1, nazwa = "inne" });
+
+            builder.Entity<KategoriaTreningu>().HasData(
+                                new { id_kategorii = 1, nazwa = "inne" });
+
+            builder.Entity<KategoriaSkladnikow>().HasData(
+                                new { id_kategorii = 1, nazwa = "inne" });
+
+            builder.Entity<Rola>().HasData(
+                                new { id_roli = 1, nazwa = "admin" });
+
+            builder.Entity<Rola>().HasData(
+                                new { id_roli = 2, nazwa = "trener" });
+
+            builder.Entity<Rola>().HasData(
+                                new { id_roli = 3, nazwa = "dietetyk" });
         }
 
         public DbSet<Cwiczenie> cwiczenia { get; set; }

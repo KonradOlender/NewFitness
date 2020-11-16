@@ -10,8 +10,8 @@ using WebApplication.Data;
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20201110203530_migracja2")]
-    partial class migracja2
+    [Migration("20201115222050_migracja1")]
+    partial class migracja1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -240,11 +240,11 @@ namespace WebApplication.Migrations
 
                     b.Property<string>("nazwa")
                         .IsRequired()
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("opis")
                         .IsRequired()
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<int>("spalone_kalorie")
                         .HasColumnType("int");
@@ -253,21 +253,16 @@ namespace WebApplication.Migrations
 
                     b.HasIndex("id_kategorii");
 
-                    b.ToTable("cwiczenia");
+                    b.ToTable("Cwiczenia");
                 });
 
             modelBuilder.Entity("WebApplication.Models.HistoriaUzytkownika", b =>
                 {
-                    b.Property<int>("id_historia")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("id_uzytkownika")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("data")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("id_uzytkownika")
-                        .HasColumnType("int");
 
                     b.Property<double>("waga")
                         .HasColumnType("float");
@@ -275,11 +270,9 @@ namespace WebApplication.Migrations
                     b.Property<int>("wzrost")
                         .HasColumnType("int");
 
-                    b.HasKey("id_historia");
+                    b.HasKey("id_uzytkownika", "data");
 
-                    b.HasIndex("id_uzytkownika");
-
-                    b.ToTable("historiaUzytkownika");
+                    b.ToTable("HistoriaUzytkownikow");
                 });
 
             modelBuilder.Entity("WebApplication.Models.KategoriaCwiczenia", b =>
@@ -295,7 +288,14 @@ namespace WebApplication.Migrations
 
                     b.HasKey("id_kategorii");
 
-                    b.ToTable("kategoriaCwiczenia");
+                    b.ToTable("KategorieCwiczen");
+
+                    b.HasData(
+                        new
+                        {
+                            id_kategorii = 1,
+                            nazwa = "inne"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.KategoriaSkladnikow", b =>
@@ -311,7 +311,14 @@ namespace WebApplication.Migrations
 
                     b.HasKey("id_kategorii");
 
-                    b.ToTable("kategoriaSkladnikow");
+                    b.ToTable("KategorieSkladnikow");
+
+                    b.HasData(
+                        new
+                        {
+                            id_kategorii = 1,
+                            nazwa = "inne"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.KategoriaTreningu", b =>
@@ -327,7 +334,14 @@ namespace WebApplication.Migrations
 
                     b.HasKey("id_kategorii");
 
-                    b.ToTable("kategoriaTreningu");
+                    b.ToTable("KategorieTreningow");
+
+                    b.HasData(
+                        new
+                        {
+                            id_kategorii = 1,
+                            nazwa = "inne"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.Ocena", b =>
@@ -355,20 +369,27 @@ namespace WebApplication.Migrations
 
             modelBuilder.Entity("WebApplication.Models.PlanowaniePosilkow", b =>
                 {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("data")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("id_posilku")
                         .HasColumnType("int");
 
                     b.Property<int>("id_uzytkownika")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("data")
-                        .HasColumnType("datetime2");
+                    b.HasKey("id");
 
-                    b.HasKey("id_posilku", "id_uzytkownika", "data");
+                    b.HasIndex("id_posilku");
 
                     b.HasIndex("id_uzytkownika");
 
-                    b.ToTable("planowanePosilki");
+                    b.ToTable("PlanowanePosilki");
                 });
 
             modelBuilder.Entity("WebApplication.Models.PlanowanieTreningow", b =>
@@ -393,7 +414,7 @@ namespace WebApplication.Migrations
 
                     b.HasIndex("id_uzytkownika");
 
-                    b.ToTable("planowaneTreningi");
+                    b.ToTable("PlanowaneTreningi");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Posilek", b =>
@@ -411,16 +432,16 @@ namespace WebApplication.Migrations
 
                     b.Property<string>("nazwa")
                         .IsRequired()
-                        .HasColumnType("varchar(30)");
+                        .HasColumnType("varchar(40)");
 
                     b.Property<string>("opis")
-                        .HasColumnType("varchar(700)");
+                        .HasColumnType("varchar(1000)");
 
                     b.HasKey("id_posilku");
 
                     b.HasIndex("id_uzytkownika");
 
-                    b.ToTable("posilki");
+                    b.ToTable("Posilki");
                 });
 
             modelBuilder.Entity("WebApplication.Models.PosilekSzczegoly", b =>
@@ -454,7 +475,24 @@ namespace WebApplication.Migrations
 
                     b.HasKey("id_roli");
 
-                    b.ToTable("role");
+                    b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            id_roli = 1,
+                            nazwa = "admin"
+                        },
+                        new
+                        {
+                            id_roli = 2,
+                            nazwa = "trener"
+                        },
+                        new
+                        {
+                            id_roli = 3,
+                            nazwa = "dietetyk"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.RolaUzytkownika", b =>
@@ -469,7 +507,7 @@ namespace WebApplication.Migrations
 
                     b.HasIndex("id_uzytkownika");
 
-                    b.ToTable("RolaUzytkownika");
+                    b.ToTable("RoleUzytkownikow");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Skladnik", b =>
@@ -496,7 +534,7 @@ namespace WebApplication.Migrations
 
                     b.HasIndex("id_kategorii");
 
-                    b.ToTable("skladnik");
+                    b.ToTable("Skladniki");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Trening", b =>
@@ -522,7 +560,7 @@ namespace WebApplication.Migrations
 
                     b.HasIndex("id_uzytkownika");
 
-                    b.ToTable("treningi");
+                    b.ToTable("Treningi");
                 });
 
             modelBuilder.Entity("WebApplication.Models.TreningSzczegoly", b =>
