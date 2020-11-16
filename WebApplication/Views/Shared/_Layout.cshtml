@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FitnessFriend</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    @*<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">*@
+
+
+
 </head>
 <body>
     <header>
@@ -32,7 +37,7 @@
                         {
                             <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
                                 <li class="nav-item text-light">
-                                    <p>@User.Identity.Name</p>
+                                    <span class="navbar-text text-light">@User.Identity.Name</span>
                                 </li>
                                 <li class="nav-item">
                                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
@@ -41,7 +46,7 @@
                                         <button type="submit" class="nav-link btn btn-link text-light">Logout</button>
                                     </form>
                                 </li>
-                            </ul> 
+                            </ul>
                         }
                         else
                         {
@@ -70,9 +75,12 @@
             &copy; 2020 - WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

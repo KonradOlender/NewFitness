@@ -1,8 +1,38 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<div class="text-center col-md-12">
+    <div class="row">
+        <div class="col-md-2">
+            @{ if (User.Identity.Name != null)
+                {
+                    <label>Something</label>
+                }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+            }
+        </div>
+
+
+        <div class="col-md-6">
+            @{if (User.Identity.Name != null)
+                {
+                    <h1 class="display-4">Witaj @User.Identity.Name</h1>
+                    <h4>Aktualne BMI: @ViewBag.bmi</h4>
+                    <h4>@ViewBag.user.limit</h4>
+                    <a class="btn btn-primary" href="/historia/create" role="button">Dodaj dane</a>
+                }
+
+            }
+            <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        </div>
+
+        <div class="col-md-4">
+            <div id="datepicker" data-date=""></div>
+            <input type="hidden" id="my_hidden_input">
+        </div>
+    </div>
 </div>
+
+
+
+
