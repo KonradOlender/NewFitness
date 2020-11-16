@@ -32,9 +32,6 @@ namespace WebApplication.Controllers
 
         public IActionResult Index()
         {
-            string debug;
-            
-
             if (User.Identity.IsAuthenticated)
             {
                 double bmi = 0;
@@ -43,9 +40,8 @@ namespace WebApplication.Controllers
 
                 if (_context.historiaUzytkownika.Any(e => e.data.Date == System.DateTime.Today))
                 {
-                    debug = "jest";
                 }
-                else
+                else if(!_context.historiaUzytkownika.Any(e => e.data.Date == System.DateTime.Today) && _context.historiaUzytkownika.Any())
                 {
                     var dayBefore = _context.historiaUzytkownika.Single(e => e.data == _context.historiaUzytkownika.Select(e => e.data).Max());
                     HistoriaUzytkownika hs = new HistoriaUzytkownika();
@@ -56,15 +52,24 @@ namespace WebApplication.Controllers
                     hs.uzytkownik = user;
                     _context.Add(hs);
                     _context.SaveChanges();
-                    debug = "nie ma";
 
+                }
+                else
+                {
+                    HistoriaUzytkownika hs = new HistoriaUzytkownika();
+                    hs.id_uzytkownika = user.Id;
+                    hs.data = DateTime.Today;
+                    hs.waga = 0;
+                    hs.wzrost = 0;
+                    hs.uzytkownik = user;
+                    _context.Add(hs);
+                    _context.SaveChanges();
                 }
                 var his = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id && e.data.Date == DateTime.Today).ToList();
                 var now = his.Single(e => e.data == his.Select(e => e.data).Max());
                 bmi = now.waga / ((now.wzrost/100) ^ 2);
                 ViewBag.user = user;
                 ViewBag.bmi = bmi;
-                ViewBag.debug = debug;
             }
             return View();
         }
