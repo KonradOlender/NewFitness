@@ -6,7 +6,15 @@
         <div class="col-md-2">
             @{ if (User.Identity.Name != null)
                 {
-                    <label>Something</label>
+                    @using (Html.BeginForm())
+                    {
+                        <div class="col-md-4">
+                            <div id="datepicker" data-date=""></div>
+                            <input type="hidden" id="my_hidden_input" name="sellected_date">
+                            <h4>@ViewBag.selected</h4>
+                        </div>
+                    }
+
                 }
 
             }
@@ -26,10 +34,8 @@
             <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
         </div>
 
-        <div class="col-md-4">
-            <div id="datepicker" data-date=""></div>
-            <input type="hidden" id="my_hidden_input">
-        </div>
+        
+
     </div>
 </div>
 

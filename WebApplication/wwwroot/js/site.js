@@ -4,11 +4,13 @@
 // Write your JavaScript code.
 
 $("#datepicker").datepicker({
-    format: "yyyy-mm-dd",
+    format: "dd-mm-yyyy",
 });
 $('#datepicker').on('changeDate', function () {
     console.log($(this));
     $('#my_hidden_input').val(
-        $('#datepicker').datepicker('getFormattedDate')
+        $('#datepicker').datepicker('getFormattedDate')       
     );
+    $('form').submit();
 });
+$('#my_hidden_input')
