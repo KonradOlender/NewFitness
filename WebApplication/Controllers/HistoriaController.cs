@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
+    [Authorize]
     public class HistoriaController : Controller
     {
         private readonly MyContext _context;
@@ -22,39 +25,20 @@ namespace WebApplication.Controllers
         // GET: Historia
         public async Task<IActionResult> Index()
         {
-            var myContext = _context.historiaUzytkownika.Include(h => h.uzytkownik);
+            int users_id = int.Parse(User.Identity.GetUserId());
+            var myContext = _context.historiaUzytkownika.Where(k => k.id_uzytkownika==users_id);
             return View(await myContext.ToListAsync());
         }
 
         public async Task<IActionResult> Done()
         {
-            
+
             return View();
-        }
-
-        // GET: Historia/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var historiaUzytkownika = await _context.historiaUzytkownika
-                .Include(h => h.uzytkownik)
-                .FirstOrDefaultAsync();
-            if (historiaUzytkownika == null)
-            {
-                return NotFound();
-            }
-
-            return View(historiaUzytkownika);
         }
 
         // GET: Historia/Create
         public IActionResult Create()
         {
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id");
             return View();
         }
 
@@ -63,32 +47,35 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_historia,id_uzytkownika,data,waga,wzrost")] HistoriaUzytkownika historiaUzytkownika)
+        public async Task<IActionResult> Create([Bind("id_historia,data,waga,wzrost")] HistoriaUzytkownika historiaUzytkownika)
         {
+            int users_id = int.Parse(User.Identity.GetUserId());
+            if (this.HistoriaUzytkownikaExists(users_id, historiaUzytkownika.data))
+                return View();                                                              ///TRZEBA PRZEKIEROWYWAC DO CREATE TU I MOWIC ZE SIE NIE DODAŁO
+
             if (ModelState.IsValid)
             {
+                historiaUzytkownika.id_uzytkownika = users_id;
                 _context.Add(historiaUzytkownika);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Done));
             }
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", historiaUzytkownika.id_uzytkownika);
             return View(historiaUzytkownika);
         }
 
         // GET: Historia/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(DateTime date)
         {
-            if (id == null)
+            if (date == null)
             {
                 return NotFound();
             }
-
-            var historiaUzytkownika = await _context.historiaUzytkownika.FindAsync(id);
+            int users_id = int.Parse(User.Identity.GetUserId());
+            var historiaUzytkownika =  _context.historiaUzytkownika.Where(k => k.id_uzytkownika == users_id && k.data == date);
             if (historiaUzytkownika == null)
             {
                 return NotFound();
             }
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", historiaUzytkownika.id_uzytkownika);
             return View(historiaUzytkownika);
         }
 
@@ -97,9 +84,9 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_historia,id_uzytkownika,data,waga,wzrost")] HistoriaUzytkownika historiaUzytkownika)
+        public async Task<IActionResult> Edit(DateTime date, [Bind("id_historia,waga,wzrost")] HistoriaUzytkownika historiaUzytkownika)
         {
-            if (id != historiaUzytkownika.id_uzytkownika)
+            if (date != historiaUzytkownika.data)
             {
                 return NotFound();
             }
@@ -124,21 +111,20 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", historiaUzytkownika.id_uzytkownika);
             return View(historiaUzytkownika);
         }
 
         // GET: Historia/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(DateTime id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
+            int users_id = int.Parse(User.Identity.GetUserId());
             var historiaUzytkownika = await _context.historiaUzytkownika
                 .Include(h => h.uzytkownik)
-                .FirstOrDefaultAsync(m => m.id_uzytkownika == id);
+                .FirstOrDefaultAsync(m => m.id_uzytkownika == users_id && m.data == id);
             if (historiaUzytkownika == null)
             {
                 return NotFound();
@@ -150,7 +136,7 @@ namespace WebApplication.Controllers
         // POST: Historia/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(DateTime id)
         {
             var historiaUzytkownika = await _context.historiaUzytkownika.FindAsync(id);
             _context.historiaUzytkownika.Remove(historiaUzytkownika);
@@ -161,6 +147,11 @@ namespace WebApplication.Controllers
         private bool HistoriaUzytkownikaExists(int id)
         {
             return _context.historiaUzytkownika.Any(e => e.id_uzytkownika == id);
+        }
+
+        private bool HistoriaUzytkownikaExists(int id, DateTime date)
+        {
+            return _context.historiaUzytkownika.Any(e => e.id_uzytkownika == id && e.data == date);
         }
     }
 }
