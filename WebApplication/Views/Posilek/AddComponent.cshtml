@@ -1,0 +1,51 @@
+﻿@model WebApplication.Models.PosilekSzczegoly
+
+@{
+    ViewData["Title"] = "AddComponent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>AddComponent</h1>
+
+<h4>PosilekSzczegoly</h4>
+<hr />
+@using (Html.BeginForm("AddComponent", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
+{
+    <fieldset>
+        @Html.DropDownList("category")
+
+        <p>
+            <input type="submit" value="Filtruj" />
+        </p>
+
+    </fieldset>
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddComponent">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="id_skladnika" class="control-label"></label>
+                <select asp-for="id_skladnika" class="form-control" asp-items="ViewBag.id_skladnika"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="porcja" class="control-label"></label>
+                <input asp-for="porcja" class="form-control" />
+                <span asp-validation-for="porcja" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj składnik" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details" asp-route-id="@ViewBag.posilekId">Powrót do posilku</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
