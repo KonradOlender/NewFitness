@@ -50,7 +50,7 @@ namespace WebApplication.Controllers
                 else if(!_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id) && _context.historiaUzytkownika.Any(e => e.id_uzytkownika == user.Id))
                 {
                     var warunek = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id).ToList();
-                    var dayBefore = _context.historiaUzytkownika.Single(e => e.data == warunek.Select(e => e.data).Max());
+                    var dayBefore = warunek.Single(e => e.data == warunek.Select(e => e.data).Max());
                     HistoriaUzytkownika hs = new HistoriaUzytkownika();
                     hs.id_uzytkownika = user.Id;
                     hs.data = sellected_date;
