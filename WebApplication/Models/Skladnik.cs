@@ -13,10 +13,10 @@ namespace WebApplication.Models
         [Key]
         public int id_skladnika { get; set; }
         [Required]
-        public int waga { get; set; }
-        [Required]
         [Column(TypeName = "varchar(20)")]
-        public int nazwa { get; set; }
+        public string nazwa { get; set; }
+        [Required]
+        public int waga { get; set; }
         [Required]
         public int kalorie { get; set; }
         [Required, ForeignKey("kategoria")]
@@ -24,5 +24,10 @@ namespace WebApplication.Models
 
         public virtual KategoriaSkladnikow kategoria { get; set; }
         public virtual ICollection<PosilekSzczegoly> posilki { get; set; }
+    
+        public override string ToString()
+        {
+            return nazwa;
+        }
     }
 }

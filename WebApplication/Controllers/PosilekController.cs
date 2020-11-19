@@ -293,7 +293,7 @@ namespace WebApplication.Controllers
             List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
 
             foreach (var usersRole in usersRoles)
-                if (usersRole.rola.nazwa == "dietetzk" || usersRole.rola.nazwa == "admin")
+                if (usersRole.rola.nazwa == "dietetyk" || usersRole.rola.nazwa == "admin")
                     return true;
             return false;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,66 @@ namespace WebApplication.Controllers
         }
 
         // GET: Skladnik
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(String searchString, String category, int sort)
         {
-            var myContext = _context.skladnik.Include(s => s.kategoria);
-            return View(await myContext.ToListAsync());
-        }
+            ViewData["currentSearchString"] = searchString;
+            ViewData["currentSort"] = (sort + 1) % 3;
+
+            ViewBag.isDietician = isDietician();
+            var components = _context.skladnik.Where(k => true);
+
+            SelectList categories = new SelectList(_context.kategoriaSkladnikow, "id_kategorii", "nazwa");
+            List<SelectListItem> _categories = categories.ToList();
+            _categories.Insert(0, new SelectListItem() { Value = "-1", Text = "Wszystkie" });
+            ViewBag.category = new SelectList((IEnumerable<SelectListItem>)_categories, "Value", "Text");
+
+            if (!String.IsNullOrEmpty(category))
+            {
+                int id = int.Parse(category);
+                if (id != -1)
+                    components = components.Where(k => k.id_kategorii == id);
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                components = components.Include(c => c.kategoria).Where(k => k.nazwa.Contains(searchString));
+                switch (sort)
+                {
+                    case 2:
+                        components = components.OrderBy(k => k.waga);
+                        break;
+
+                    case 1:
+                        components = components.OrderByDescending(k => k.waga);
+                        break;
+                    default:
+
+                        break;
+                }
+
+                return View(await components.ToListAsync());
+            }
+            else
+            {
+                components = components.Include(c => c.kategoria).AsQueryable();
+                switch (sort)
+                {
+                    case 2:
+                        components = components.OrderBy(k => k.waga);
+                        break;
+
+                    case 1:
+                        components = components.OrderByDescending(k => k.waga);
+                        break;
+                    default:
+
+                        break;
+                }
+
+                return View(await components.ToListAsync());
+            }
+        
+    }
 
         // GET: Skladnik/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,6 +104,9 @@ namespace WebApplication.Controllers
         // GET: Skladnik/Create
         public IActionResult Create()
         {
+            if (!this.isDietician())
+                return RedirectToAction("Index");
+
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaSkladnikow, "id_kategorii", "nazwa");
             return View();
         }
@@ -57,8 +116,11 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_skladnika,waga,kalorie,id_kategorii")] Skladnik skladnik)
+        public async Task<IActionResult> Create([Bind("id_skladnika,nazwa,waga,kalorie,id_kategorii")] Skladnik skladnik)
         {
+            if (!this.isDietician())
+                return RedirectToAction("Index");
+
             if (ModelState.IsValid)
             {
                 _context.Add(skladnik);
@@ -72,6 +134,9 @@ namespace WebApplication.Controllers
         // GET: Skladnik/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!this.isDietician())
+                return RedirectToAction("Index");
+
             if (id == null)
             {
                 return NotFound();
@@ -91,8 +156,11 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_skladnika,waga,kalorie,id_kategorii")] Skladnik skladnik)
+        public async Task<IActionResult> Edit(int id, [Bind("id_skladnika,nazwa,waga,kalorie,id_kategorii")] Skladnik skladnik)
         {
+            if (!this.isDietician())
+                return RedirectToAction("Index");
+
             if (id != skladnik.id_skladnika)
             {
                 return NotFound();
@@ -125,6 +193,9 @@ namespace WebApplication.Controllers
         // GET: Skladnik/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!this.isDietician())
+                return RedirectToAction("Index");
+
             if (id == null)
             {
                 return NotFound();
@@ -146,6 +217,9 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!this.isDietician())
+                return RedirectToAction("Index");
+
             var skladnik = await _context.skladnik.FindAsync(id);
             _context.skladnik.Remove(skladnik);
             await _context.SaveChangesAsync();
@@ -155,6 +229,17 @@ namespace WebApplication.Controllers
         private bool SkladnikExists(int id)
         {
             return _context.skladnik.Any(e => e.id_skladnika == id);
+        }
+
+        private bool isDietician()
+        {
+            int userId = int.Parse(User.Identity.GetUserId());
+            List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+
+            foreach (var usersRole in usersRoles)
+                if (usersRole.rola.nazwa == "dietetyk" || usersRole.rola.nazwa == "admin")
+                    return true;
+            return false;
         }
     }
 }

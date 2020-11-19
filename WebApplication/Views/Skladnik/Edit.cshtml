@@ -15,6 +15,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id_skladnika" />
             <div class="form-group">
+                <label asp-for="nazwa" class="control-label"></label>
+                <input asp-for="nazwa" class="form-control" />
+                <span asp-validation-for="nazwa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="waga" class="control-label"></label>
                 <input asp-for="waga" class="form-control" />
                 <span asp-validation-for="waga" class="text-danger"></span>
