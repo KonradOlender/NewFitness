@@ -478,6 +478,31 @@ namespace WebApplication.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "KategorieCwiczen",
+                columns: new[] { "id_kategorii", "nazwa" },
+                values: new object[] { 1, "inne" });
+
+            migrationBuilder.InsertData(
+                table: "KategorieSkladnikow",
+                columns: new[] { "id_kategorii", "nazwa" },
+                values: new object[] { 1, "inne" });
+
+            migrationBuilder.InsertData(
+                table: "KategorieTreningow",
+                columns: new[] { "id_kategorii", "nazwa" },
+                values: new object[] { 1, "inne" });
+
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "id_roli", "nazwa" },
+                values: new object[,]
+                {
+                    { 1, "admin" },
+                    { 2, "trener" },
+                    { 3, "dietetyk" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",

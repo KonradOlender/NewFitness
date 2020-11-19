@@ -10,8 +10,8 @@ using WebApplication.Data;
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20201115161626_initial")]
-    partial class initial
+    [Migration("20201116191247_Addlimit")]
+    partial class Addlimit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -212,6 +212,9 @@ namespace WebApplication.Migrations
                     b.Property<string>("imie")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("limit")
+                        .HasColumnType("int");
+
                     b.Property<string>("login")
                         .HasColumnType("nvarchar(max)");
 
@@ -289,6 +292,13 @@ namespace WebApplication.Migrations
                     b.HasKey("id_kategorii");
 
                     b.ToTable("KategorieCwiczen");
+
+                    b.HasData(
+                        new
+                        {
+                            id_kategorii = 1,
+                            nazwa = "inne"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.KategoriaSkladnikow", b =>
@@ -305,6 +315,13 @@ namespace WebApplication.Migrations
                     b.HasKey("id_kategorii");
 
                     b.ToTable("KategorieSkladnikow");
+
+                    b.HasData(
+                        new
+                        {
+                            id_kategorii = 1,
+                            nazwa = "inne"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.KategoriaTreningu", b =>
@@ -321,6 +338,13 @@ namespace WebApplication.Migrations
                     b.HasKey("id_kategorii");
 
                     b.ToTable("KategorieTreningow");
+
+                    b.HasData(
+                        new
+                        {
+                            id_kategorii = 1,
+                            nazwa = "inne"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.Ocena", b =>
@@ -455,6 +479,23 @@ namespace WebApplication.Migrations
                     b.HasKey("id_roli");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            id_roli = 1,
+                            nazwa = "admin"
+                        },
+                        new
+                        {
+                            id_roli = 2,
+                            nazwa = "trener"
+                        },
+                        new
+                        {
+                            id_roli = 3,
+                            nazwa = "dietetyk"
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Models.RolaUzytkownika", b =>

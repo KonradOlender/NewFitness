@@ -26,6 +26,12 @@ namespace WebApplication.Controllers
             return View(await myContext.ToListAsync());
         }
 
+        public async Task<IActionResult> Done()
+        {
+            
+            return View();
+        }
+
         // GET: Historia/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -63,7 +69,7 @@ namespace WebApplication.Controllers
             {
                 _context.Add(historiaUzytkownika);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Done));
             }
             ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", historiaUzytkownika.id_uzytkownika);
             return View(historiaUzytkownika);

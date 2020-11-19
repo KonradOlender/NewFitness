@@ -210,6 +210,9 @@ namespace WebApplication.Migrations
                     b.Property<string>("imie")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("limit")
+                        .HasColumnType("int");
+
                     b.Property<string>("login")
                         .HasColumnType("nvarchar(max)");
 
