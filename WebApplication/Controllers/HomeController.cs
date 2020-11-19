@@ -41,14 +41,16 @@ namespace WebApplication.Controllers
             {
                 double bmi = 0;
                 string name = User.Identity.Name;
-                var user = _context.uzytkownicy.Single(e => e.login == name);
+                var user = _context.uzytkownicy.Single(e => e.Email == name);
 
-                if (_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date))
+
+                if (_context.historiaUzytkownika.Any( e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id))
                 {
                 }
-                else if(!_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date) && _context.historiaUzytkownika.Any())
+                else if(!_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id) && _context.historiaUzytkownika.Any(e => e.id_uzytkownika == user.Id))
                 {
-                    var dayBefore = _context.historiaUzytkownika.Single(e => e.data == _context.historiaUzytkownika.Select(e => e.data).Max());
+                    var warunek = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id).ToList();
+                    var dayBefore = _context.historiaUzytkownika.Single(e => e.data == warunek.Select(e => e.data).Max());
                     HistoriaUzytkownika hs = new HistoriaUzytkownika();
                     hs.id_uzytkownika = user.Id;
                     hs.data = sellected_date;
