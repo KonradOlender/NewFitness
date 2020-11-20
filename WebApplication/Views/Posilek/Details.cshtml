@@ -30,7 +30,10 @@
             @Html.DisplayNameFor(model => model.uzytkownik)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.uzytkownik.Id)
+            @Html.DisplayFor(model => model.uzytkownik.login)
+        </dd>
+        <dd class="col-sm-10">
+            Ma @eaten_calories kalorii
         </dd>
     </dl>
     @if (ViewBag.userId == ViewBag.posilekOwner)
@@ -52,7 +55,7 @@
                 @posilek.skladnik.opis
                 <br />
                 Porcja: @posilek.porcja
-                @if (ViewBag.userId == ViewBag.posilekOwner)//poprawic ten fragment trzeba wysylac dwie wartosci id
+                @if (ViewBag.userId == ViewBag.posilekOwner)
                 {
                     <form asp-action="DeleteComponent" asp-route-idt="@posilek.id_posilku" asp-route-idc="@posilek.id_skladnika">
                         <input type="submit" value="Usuń składnik" class="btn btn-danger" />
