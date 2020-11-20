@@ -23,7 +23,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Posilek
-        public async Task<IActionResult> Index(String searchString, String category)
+        public async Task<IActionResult> Index(String searchString)
         {
             ViewData["currentSearchString"] = searchString;
 
@@ -40,6 +40,7 @@ namespace WebApplication.Controllers
                 }
 
             ViewBag.dieticiansIds = dieticiansIds;
+
 
             var meals = _context.posilki.Where(k => true);
 
@@ -91,7 +92,7 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_posilku,nazwa,kalorie,opis,id_uzytkownika")] Posilek posilek)
+        public async Task<IActionResult> Create([Bind("id_posilku,nazwa,opis")] Posilek posilek)
         {
             posilek.id_uzytkownika = int.Parse(User.Identity.GetUserId());
             if (ModelState.IsValid)
@@ -129,7 +130,7 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_posilku,nazwa,kalorie,opis,id_uzytkownika")] Posilek posilek)
+        public async Task<IActionResult> Edit(int id, [Bind("id_posilku,nazwa,opis")] Posilek posilek)
         {
             if (id != posilek.id_posilku)
             {
@@ -159,7 +160,7 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
+
             return View(posilek);
         }
 
@@ -257,7 +258,7 @@ namespace WebApplication.Controllers
         // POST: Posilek/AddComponent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddComponentint (int id, [Bind("id_skladnika,liczba_powtorzen")] PosilekSzczegoly pszczegoly)
+        public async Task<IActionResult> AddComponentint (int id, [Bind("id_skladnika,porcja")] PosilekSzczegoly pszczegoly)
         {
             Posilek posilek = _context.posilki.FirstOrDefault(x => x.id_posilku == id);
             if(posilek == null)
@@ -280,7 +281,7 @@ namespace WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(AddComponent), new { id = posilek.id_posilku });
             }
-            ViewBag.mealId = id;
+            ViewBag.posilekId = id;
             ViewData["id_skladnika"] = new SelectList(_context.skladnik, "id_skladnika", "nazwa", pszczegoly.id_skladnika);
             return View(pszczegoly);
 
