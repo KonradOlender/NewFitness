@@ -51,7 +51,7 @@ namespace WebApplication.Controllers
         {
             int users_id = int.Parse(User.Identity.GetUserId());
             if (this.HistoriaUzytkownikaExists(users_id, historiaUzytkownika.data))
-                return View();                                                              ///TRZEBA PRZEKIEROWYWAC DO CREATE TU I MOWIC ZE SIE NIE DODAŁO
+                return View("AlreadyExists");                                                              
 
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: Historia/Edit/5
-        public async Task<IActionResult> Edit(DateTime date)
+        /*public async Task<IActionResult> Edit(DateTime date)
         {
             if (date == null)
             {
@@ -112,33 +112,38 @@ namespace WebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(historiaUzytkownika);
-        }
+        }*/
 
         // GET: Historia/Delete/5
-        public async Task<IActionResult> Delete(DateTime id)
+        public async Task<IActionResult> Delete(String date)
         {
-            if (id == null)
+            if (date == null)
             {
                 return NotFound();
             }
             int users_id = int.Parse(User.Identity.GetUserId());
             var historiaUzytkownika = await _context.historiaUzytkownika
-                .Include(h => h.uzytkownik)
-                .FirstOrDefaultAsync(m => m.id_uzytkownika == users_id && m.data == id);
+                .FirstOrDefaultAsync(m => m.id_uzytkownika == users_id && m.data == Convert.ToDateTime(date));
             if (historiaUzytkownika == null)
             {
-                return NotFound();
+                return View("UnableToDelete");
             }
-
+            ViewBag.date = historiaUzytkownika.data;
             return View(historiaUzytkownika);
         }
 
         // POST: Historia/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(DateTime id)
+        public async Task<IActionResult> DeleteConfirmed(String date)
         {
-            var historiaUzytkownika = await _context.historiaUzytkownika.FindAsync(id);
+            int users_id = int.Parse(User.Identity.GetUserId());
+            var historiaUzytkownika = await _context.historiaUzytkownika
+                .FirstOrDefaultAsync(m => m.id_uzytkownika == users_id && m.data == Convert.ToDateTime(date));
+            if (historiaUzytkownika == null)
+            {
+                return View("UnableToDelete");
+            }
             _context.historiaUzytkownika.Remove(historiaUzytkownika);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
