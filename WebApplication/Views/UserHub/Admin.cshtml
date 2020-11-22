@@ -1,0 +1,154 @@
+﻿@{
+    ViewData["Title"] = "Admin Page";
+}
+
+@{
+
+    if (ViewBag.isadmin)
+    {
+        <h1>Admin Panel</h1>
+        <div class="row">
+            <div class="col-2">
+                <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-cwiczenie-list" data-toggle="list" href="#list-cwiczenie" role="tab" aria-controls="cwiczenia">Ćwiczenia</a>
+                    <a class="list-group-item list-group-item-action" id="list-trening-list" data-toggle="list" href="#list-trening" role="tab" aria-controls="treningi">Treningi</a>
+                    <a class="list-group-item list-group-item-action" id="list-skladnik-list" data-toggle="list" href="#list-skladnik" role="tab" aria-controls="skladniki">Składniki</a>
+                    <a class="list-group-item list-group-item-action" id="list-posilek-list" data-toggle="list" href="#list-posilek" role="tab" aria-controls="posilki">Posiłki</a>
+                    <a class="list-group-item list-group-item-action" id="list-rola-list" data-toggle="list" href="#list-rola" role="tab" aria-controls="rola">Role</a>
+                    <a href="/Historia" class="list-group-item list-group-item-action">Historia Użytkownika</a>
+                    <a href="/KategoriaCwiczenia" class="list-group-item list-group-item-action">Kategorie Ćwiczeń</a>
+                    <a href="/KategoriaTreningu" class="list-group-item list-group-item-action">Kategorie Treningów</a>
+                    <a href="/KategoriaSkladnikow" class="list-group-item list-group-item-action">Kategorie Składników</a>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-cwiczenie" role="tabpanel" aria-labelledby="list-cwiczenie-list">
+                        <a class="btn btn-primary" href="/Cwiczenie" role="button">Manage</a>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nazwa</th>
+                                    <th scope="col">Opis</th>
+                                    <th scope="col">Kategoria</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.cwiczenie)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.id_cwiczenia</th>
+                                            <td>@item.nazwa</td>
+                                            <td>@item.opis</td>
+                                            <td>@item.spalone_kalorie </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="tab-pane fade" id="list-trening" role="tabpanel" aria-labelledby="list-trening-list">
+                        <a class="btn btn-primary" href="/Trening" role="button">Manage</a>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nazwa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.trening)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.id_treningu</th>
+                                            <td>@item.nazwa</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-skladnik" role="tabpanel" aria-labelledby="list-skladnik-list">
+                        <a class="btn btn-primary" href="/Skladnik" role="button">Manage</a>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nazwa</th>
+                                    <th scope="col">Waga</th>
+                                    <th scope="col">Kalorie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.skladnik)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.id_skladnika</th>
+                                            <td>@item.nazwa</td>
+                                            <td>@item.waga</td>
+                                            <td>@item.kalorie</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-posilek" role="tabpanel" aria-labelledby="list-posilek-list">
+                        <a class="btn btn-primary" href="/Posilek" role="button">Manage</a>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nazwa</th>
+                                    <th scope="col">Opis</th>
+                                    <th scope="col">Kalorie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.posilek)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.id_posilku</th>
+                                            <td>@item.nazwa</td>
+                                            <td>@item.opis</td>
+                                            <td>@item.kalorie</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-rola" role="tabpanel" aria-labelledby="list-rola-list">
+                        <a class="btn btn-primary" href="/Rolauzytkownika" role="button">Manage</a>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nazwa</th>
+                                    <th scope="col">Id Użytkownika</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.role)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.id_roli</th>
+                                            <td>@item.rola.nazwa</td>
+                                            <td>@item.id_uzytkownika</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1>You are not an admin</h1>
+    }
+}

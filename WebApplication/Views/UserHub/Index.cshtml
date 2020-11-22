@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "UserHub Page";
+}
+<div class="col-md-12">
+    <div class="row">
+        @{ if (User.Identity.Name != null)
+            {
+                @using (Html.BeginForm())
+                {
+                    <h4>@ViewBag.selected</h4>
+                    <div id="datepicker" data-date="" style="background-color: Tomato;"></div>
+                    <input type="hidden" id="my_hidden_input" name="sellected_date">
+
+                    <h4>@ViewBag.name</h4>
+                }
+
+            }
+
+        }
+
+
+    <div class="col-md-6">
+        @{if (User.Identity.Name != null)
+            {
+                <div class="text-center">
+                    <h1 class="display-4">Witaj @User.Identity.Name</h1>
+                    <h4>Aktualne BMI: @ViewBag.bmi</h4>
+                    <h4>@ViewBag.user.limit</h4>
+                    <a class="btn btn-primary" href="/historia/create" role="button">Dodaj dane</a>
+                </div>
+                <div>
+                    <a class="btn btn-primary" href="/historia/create" role="button">Dodaj</a>
+                </div>
+                <div class="text-center">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">Kategoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ foreach (var item in ViewBag.posilki)
+                                {
+                                    <tr>
+                                        <th scope="row">#</th>
+                                        <td>@item.posilek.nazwa</td>
+                                        <td>@item.posilek.kalorie </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+
+
+
+    </div>
+</div>
