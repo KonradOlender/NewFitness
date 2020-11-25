@@ -151,15 +151,18 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
+            Trening trainingToEdit = await _context.treningi.FindAsync(id);
 
-            if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+            if (trainingToEdit.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = trening.id_treningu });
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(trening);
+                    trainingToEdit.nazwa = trening.nazwa;
+                    trainingToEdit.id_kategorii = trening.id_kategorii;
+                    _context.Update(trainingToEdit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

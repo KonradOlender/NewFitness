@@ -136,15 +136,18 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
+            Posilek posilekToEdit = await _context.posilki.FindAsync(id);
 
-            if (posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+            if (posilekToEdit.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = posilek.id_posilku });
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(posilek);
+                    posilekToEdit.nazwa = posilek.nazwa;
+                    posilekToEdit.opis = posilek.opis;
+                    _context.Update(posilekToEdit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -258,7 +261,7 @@ namespace WebApplication.Controllers
         // POST: Posilek/AddComponent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddComponentint (int id, [Bind("id_skladnika,porcja")] PosilekSzczegoly pszczegoly)
+        public async Task<IActionResult> AddComponent (int id, [Bind("id_skladnika,porcja")] PosilekSzczegoly pszczegoly)
         {
             Posilek posilek = _context.posilki.FirstOrDefault(x => x.id_posilku == id);
             if(posilek == null)
