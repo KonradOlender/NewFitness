@@ -66,7 +66,6 @@ namespace WebApplication.Controllers
                 PlanowaniePosilkow meal = new PlanowaniePosilkow();
                 meal.id_posilku = id;
                 meal.data = DateTime.Now;
-
                 return View(meal);
             }
 

@@ -29,7 +29,7 @@
                     <a class="btn btn-primary" href="/historia/create" role="button">Dodaj dane</a>
                 </div>
                 <div>
-                    <a class="btn btn-primary" href="/historia/create" role="button">Dodaj</a>
+                    <a class="btn btn-primary" href="/Planowanieposilkow/Create" role="button">Dodaj</a>
                 </div>
                 <div class="text-center">
                     <table class="table table-striped">
@@ -37,16 +37,25 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nazwa</th>
-                                <th scope="col">Kategoria</th>
+                                <th scope="col">Kaloriea</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{ foreach (var item in ViewBag.posilki)
                                 {
                                     <tr>
-                                        <th scope="row">#</th>
-                                        <td>@item.posilek.nazwa</td>
-                                        <td>@item.posilek.kalorie </td>
+                                        <th scope="row">@item.id</th>
+                                        @{
+                                            if (item.posilek != null)
+                                            {
+                                                <td>@item.posilek.nazwa</td>
+                                            }
+                                            else
+                                            {
+                                                <td>dupa</td>
+                                            }
+                                        }
+                                        <td>@item.posilek.kalorie</td>
                                     </tr>
                                 }
                             }
