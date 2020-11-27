@@ -3,9 +3,9 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int eaten_calories = 0;
+    double eaten_calories = 0;
     foreach (var posilek in ViewBag.mealsDetails)
-        eaten_calories += (posilek.porcja / posilek.skladnik.waga * posilek.skladnik.kalorie);
+        eaten_calories += ((double)posilek.porcja/ (double)posilek.skladnik.waga * (double)posilek.skladnik.kalorie );
 }
 
 <h1>Details</h1>
