@@ -1,0 +1,31 @@
+﻿@model WebApplication.Models.PlanowaniePosilkow
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>PlanowaniePosilkow</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.uzytkownik)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.uzytkownik.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.posilek)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.posilek.nazwa)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller="Posilek" asp-action="Details" asp-route-id="@Model.posilek.id_posilku">Zobacz szczegóły posilku</a>
+    <a asp-action="Index">Powrót do listy zadan</a>
+</div>
