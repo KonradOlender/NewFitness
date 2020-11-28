@@ -29,6 +29,7 @@ namespace WebApplication.Controllers
             DateTime first = new DateTime(01, 01, 0001);
             if (sellected_date == first)
             {
+
                 sellected_date = DateTime.Today;
             }
             if (User.Identity.IsAuthenticated)
@@ -36,6 +37,7 @@ namespace WebApplication.Controllers
                 double bmi = 0;
                 int userid = int.Parse(User.Identity.GetUserId());
                 var user = _context.uzytkownicy.Single(e => e.Id == userid);
+                user.limit = 2000;
 
 
                 if (_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id))
@@ -70,7 +72,12 @@ namespace WebApplication.Controllers
                 var now = his.Single(e => e.data == his.Select(e => e.data).Max());
                 bmi = now.waga / ((now.wzrost / 100) ^ 2);
 
-                var posilki = _context.planowanePosilki.Where(e=> e.id_uzytkownika == user.Id && e.data.Day == sellected_date.Day).ToList();
+                var posilki = _context.planowanePosilki.Include(e => e.posilek)
+                    .Where(e=> e.id_uzytkownika == user.Id && e.data.Day == sellected_date.Day).ToList();
+                foreach (var item in posilki)
+                {
+                    user.limit -= item.posilek.kalorie;
+                }
                 ViewBag.user = user;
                 ViewBag.bmi = bmi;
                 ViewBag.selected = sellected_date;
@@ -91,6 +98,7 @@ namespace WebApplication.Controllers
             var posilek = _context.posilki.ToList();
             var kat_skladnika = _context.kategoriaSkladnikow.ToList();
             var role = _context.RolaUzytkownika.ToList();
+            var planowanie_trening = _context.planowaneTreningi.ToList();
             ViewBag.cwiczenie = cwiczenie;
             ViewBag.trening = trening;
             ViewBag.kat_treningu = kat_treningu;
@@ -99,6 +107,7 @@ namespace WebApplication.Controllers
             ViewBag.posilek = posilek;
             ViewBag.kat_skladnika = kat_skladnika;
             ViewBag.role = role;
+            ViewBag.planowanie_trening = planowanie_trening;
             return View();
         }
 
