@@ -131,6 +131,9 @@ namespace WebApplication.Controllers
             return View(skladnik);
         }
 
+        //obliczanie kalorii posiłku 
+        private static int editedwaga=-1, editedkalorie=-1;
+
         // GET: Skladnik/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -147,6 +150,8 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
+            editedwaga = skladnik.waga;
+            editedkalorie = skladnik.kalorie;
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaSkladnikow, "id_kategorii", "nazwa", skladnik.id_kategorii);
             return View(skladnik);
         }
@@ -170,8 +175,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
+                    editCalories(false, skladnik);
                     _context.Update(skladnik);
+                    editCalories(true, skladnik);
+
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -240,6 +249,27 @@ namespace WebApplication.Controllers
                 if (usersRole.rola.nazwa == "dietetyk" || usersRole.rola.nazwa == "admin")
                     return true;
             return false;
+        }
+
+        //podliczanie kalorii
+        public void editCalories(bool dzialanie, Skladnik skladnik)
+        {
+            int waga = skladnik.waga;
+            int kalorie = skladnik.kalorie;
+            List<PosilekSzczegoly> posilki = _context.posilekSzczegoly.Where(k => k.id_skladnika == skladnik.id_skladnika).Include(c => c.posilek).ToList();
+            foreach (PosilekSzczegoly pszczegoly in posilki)
+            {
+                if (dzialanie)
+                {
+                    //dodwanie
+                    pszczegoly.posilek.kalorie += pszczegoly.porcja / waga * kalorie;
+                }
+                else
+                {
+                    //usuwanie
+                    if(editedwaga>0 && editedkalorie>0) pszczegoly.posilek.kalorie -= pszczegoly.porcja / editedwaga * editedkalorie;
+                }
+            }
         }
     }
 }

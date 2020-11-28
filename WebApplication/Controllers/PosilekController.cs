@@ -98,6 +98,8 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(posilek);
+                //podliczanie kalorii
+                posilek.kalorie = 0;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -217,6 +219,8 @@ namespace WebApplication.Controllers
             if (skladnik.posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = skladnik.id_posilku });
 
+            editCalories(false, skladnik);
+
             _context.posilekSzczegoly.Remove(skladnik);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = idt });
@@ -281,6 +285,9 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(pszczegoly);
+
+                editCalories(true, pszczegoly);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(AddComponent), new { id = posilek.id_posilku });
             }
@@ -302,10 +309,29 @@ namespace WebApplication.Controllers
             return false;
         }
 
-
         private bool PosilekExists(int id)
         {
             return _context.posilki.Any(e => e.id_posilku == id);
+        }
+
+        //podliczanie kalorii
+        public void editCalories(bool dzialanie, PosilekSzczegoly pszczegoly)
+        {
+            int id_skladnika = pszczegoly.id_skladnika;
+            List<Skladnik> skladniki = _context.skladnik.Where(k => k.id_skladnika == id_skladnika).ToList();
+            int waga = skladniki[0].waga;
+            int kalorie = skladniki[0].kalorie;
+
+            if (dzialanie)
+            {
+                //dodwanie
+                pszczegoly.posilek.kalorie += pszczegoly.porcja / waga * kalorie;
+            }
+            else
+            {
+                //usuwanie
+                pszczegoly.posilek.kalorie -= pszczegoly.porcja / waga * kalorie;
+            }
         }
 }
 }
