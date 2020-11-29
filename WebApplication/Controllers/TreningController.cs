@@ -284,13 +284,12 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
-            /*if (id != trening.id_treningu)
-            {
-                return NotFound();
-            }*/
 
             if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = trening.id_treningu });
+
+            if (ExerciseAlreadyInTraining(trening.id_treningu, tszczegoly.id_cwiczenia))
+                return View("AlreadyExists");
 
             tszczegoly.id_treningu = id;
             if(tszczegoly.liczba_powtorzen <= 0)
@@ -307,6 +306,11 @@ namespace WebApplication.Controllers
             ViewBag.trainingId = id;
             ViewData["id_cwiczenia"] = new SelectList(_context.cwiczenia, "id_cwiczenia", "nazwa", tszczegoly.id_cwiczenia);
             return View(tszczegoly);
+        }
+
+        private bool ExerciseAlreadyInTraining(int training_id, int exercise_id)
+        {
+            return _context.treningSzczegoly.Any(e => e.id_treningu == training_id && e.id_cwiczenia == training_id);
         }
 
         private bool TreningExists(int id)
@@ -327,5 +331,3 @@ namespace WebApplication.Controllers
 
     }
 }
-////////////////////////////////////////////////////////////
-// Adding an exercise -> think how to add it 

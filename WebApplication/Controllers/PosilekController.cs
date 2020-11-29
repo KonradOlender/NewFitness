@@ -276,6 +276,9 @@ namespace WebApplication.Controllers
             if (posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = posilek.id_posilku});
 
+            if (ComponentAlreadyInMeal(posilek.id_posilku, pszczegoly.id_skladnika))
+                return View("AlreadyExists");
+
             pszczegoly.id_posilku = id;
             if (pszczegoly.porcja <= 0)
             {
@@ -307,6 +310,11 @@ namespace WebApplication.Controllers
                 if (usersRole.rola.nazwa == "dietetyk" || usersRole.rola.nazwa == "admin")
                     return true;
             return false;
+        }
+
+        private bool ComponentAlreadyInMeal(int meal_id, int component_id)
+        {
+            return _context.posilekSzczegoly.Any(e => e.id_posilku == meal_id && e.id_skladnika == component_id);
         }
 
         private bool PosilekExists(int id)
