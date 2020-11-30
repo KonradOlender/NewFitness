@@ -97,7 +97,7 @@ namespace WebApplication.Controllers
             var skladnik = _context.skladnik.ToList();
             var posilek = _context.posilki.ToList();
             var kat_skladnika = _context.kategoriaSkladnikow.ToList();
-            var role = _context.RolaUzytkownika.ToList();
+            var role = _context.RolaUzytkownika.Include(e=>e.rola).ToList();
             var planowanie_trening = _context.planowaneTreningi.ToList();
             ViewBag.cwiczenie = cwiczenie;
             ViewBag.trening = trening;

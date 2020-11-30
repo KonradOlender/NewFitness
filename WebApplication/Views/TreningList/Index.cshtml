@@ -1,0 +1,49 @@
+﻿<div class="row">
+    <div class="col-2">
+        <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action active" id="list-poniedzialek-list" data-toggle="list" href="#list-poniedzialek" role="tab" aria-controls="poniedzialek">Poniedzialek</a>
+            <a class="list-group-item list-group-item-action" id="list-wtorek-list" data-toggle="list" href="#list-wtorek" role="tab" aria-controls="wtorek">Wtorek</a>
+            <a class="list-group-item list-group-item-action" id="list-sroda-list" data-toggle="list" href="#list-sroda" role="tab" aria-controls="sroda">Środa</a>
+            <a class="list-group-item list-group-item-action" id="list-czwartek-list" data-toggle="list" href="#list-czwartek" role="tab" aria-controls="czwartek">Czwartek</a>
+            <a class="list-group-item list-group-item-action" id="list-piatek-list" data-toggle="list" href="#list-piatek" role="tab" aria-controls="piatek">Piatek</a>
+            <a class="list-group-item list-group-item-action" id="list-sobota-list" data-toggle="list" href="#list-sobota" role="tab" aria-controls="sobota">Sobota</a>
+            <a class="list-group-item list-group-item-action" id="list-niedziela-list" data-toggle="list" href="#list-niedziela" role="tab" aria-controls="niedziela">Niedziela</a>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="list-poniedzialek" role="tabpanel" aria-labelledby="list-poniedzialek-list">
+                <a class="btn btn-primary" href="/Poniedzialek" role="button">Manage</a>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ foreach (var item in ViewBag.listatrening)
+                            {
+                                if (item.dzien == "Poniedziałek")
+                                {
+                                    <tr>
+                                        <th scope="row">@item.id</th>
+                                        <td>@item.trening</td>
+                                        <td>
+                                            <div>
+                                                <a class="btn btn-primary" href="#" role="button">Dodaj</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

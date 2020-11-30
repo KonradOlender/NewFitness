@@ -19,6 +19,7 @@ namespace WebApplication.Models
         public int id_treningu { get; set; }
         [Required]
         public DateTime data { get; set; }
+        public string dzien { get; set; }
 
         public virtual Uzytkownik uzytkownik { get; set; }
         public virtual Trening trening { get; set; }

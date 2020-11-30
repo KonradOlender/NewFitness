@@ -77,7 +77,7 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_uzytkownika,id_treningu,data")] PlanowanieTreningow planowanieTreningow)
+        public async Task<IActionResult> Create([Bind("id_uzytkownika,id_treningu,data,dzien")] PlanowanieTreningow planowanieTreningow)
         {
             if (ModelState.IsValid)
             {
