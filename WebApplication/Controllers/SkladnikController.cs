@@ -175,9 +175,9 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    editCalories(false, skladnik);
+                    editCalories(1, skladnik);
                     _context.Update(skladnik);
-                    editCalories(true, skladnik);
+                    editCalories(0, skladnik);
 
                     await _context.SaveChangesAsync();
 
@@ -230,6 +230,10 @@ namespace WebApplication.Controllers
                 return RedirectToAction("Index");
 
             var skladnik = await _context.skladnik.FindAsync(id);
+
+            //podliczanie kalorii
+            editCalories(2, skladnik);
+
             _context.skladnik.Remove(skladnik);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -252,22 +256,28 @@ namespace WebApplication.Controllers
         }
 
         //podliczanie kalorii
-        public void editCalories(bool dzialanie, Skladnik skladnik)
+        //dzialanie 0-dodawanie, 1-odejmowanie przy edycji, 2-odejmowanie przy usuwaniu składnika
+        public void editCalories(int dzialanie, Skladnik skladnik)
         {
             int waga = skladnik.waga;
             int kalorie = skladnik.kalorie;
             List<PosilekSzczegoly> posilki = _context.posilekSzczegoly.Where(k => k.id_skladnika == skladnik.id_skladnika).Include(c => c.posilek).ToList();
             foreach (PosilekSzczegoly pszczegoly in posilki)
             {
-                if (dzialanie)
+                if (dzialanie==0)
                 {
                     //dodwanie
                     pszczegoly.posilek.kalorie += pszczegoly.porcja / waga * kalorie;
                 }
-                else
+                else if(dzialanie==1)
                 {
                     //usuwanie
                     if(editedwaga>0 && editedkalorie>0) pszczegoly.posilek.kalorie -= pszczegoly.porcja / editedwaga * editedkalorie;
+                }
+                else if(dzialanie==2)
+                {
+                    //usuwanie
+                    pszczegoly.posilek.kalorie -= pszczegoly.porcja / waga * kalorie;
                 }
             }
         }
