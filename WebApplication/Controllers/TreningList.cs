@@ -21,9 +21,10 @@ namespace WebApplication.Controllers
         public IActionResult Index()
         {
             int userId = int.Parse(User.Identity.GetUserId());
-            var listaplantrening = _context.planowaneTreningi.Include(e => e.trening).Where(e => e.id_uzytkownika == userId);
-
-            ViewBag.listatrening = listaplantrening;
+            var listaplantrening = _context.planowaneTreningi.Where(e => e.id_uzytkownika == userId);
+            var listatrening = _context.treningi.ToList();
+            ViewBag.listaplantrening = listaplantrening;
+            ViewBag.listatrening = listatrening;
             return View();
         }
     }

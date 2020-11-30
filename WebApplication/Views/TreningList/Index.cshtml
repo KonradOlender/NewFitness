@@ -13,7 +13,6 @@
     <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="list-poniedzialek" role="tabpanel" aria-labelledby="list-poniedzialek-list">
-                <a class="btn btn-primary" href="/Poniedzialek" role="button">Manage</a>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -23,37 +22,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (ViewBag.listatrening != null)
+                        @if (ViewBag.listaplantrening != null)
                         {
-                            @foreach (var item in ViewBag.listatrening)
+                            @foreach (var item in ViewBag.listaplantrening)
                             {
                                 if (item.dzien == "Poniedziałek")
                                 {
                                     <tr>
                                         <th scope="row">@item.id</th>
-                                        @if(item.trening != null)
+                                        @foreach (var itemm in ViewBag.listatrening)
                                         {
-                                            <td>@item.trening.nazwa</td>
+                                            @if (item.id_treningu == itemm.id_treningu)
+                                            {
+                                                <td>@itemm.nazwa</td>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <td>dupa</td>
-                                        }
-
-                                        <td>
-                                            <div>
-                                                <a class="btn btn-primary" href="#" role="button">Zobacz</a>
-                                            </div>
-                                        </td>
+                                        <td> <button type="button" class="btn btn-primary">Zobacz</button></td>
                                     </tr>
                                 }
-
                             }
                         }
 
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
             </div>
         </div>
