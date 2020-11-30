@@ -22,6 +22,7 @@ namespace WebApplication.Controllers
         {
             int userId = int.Parse(User.Identity.GetUserId());
             var listaplantrening = _context.planowaneTreningi.Include(e => e.trening).Where(e => e.id_uzytkownika == userId);
+
             ViewBag.listatrening = listaplantrening;
             return View();
         }
