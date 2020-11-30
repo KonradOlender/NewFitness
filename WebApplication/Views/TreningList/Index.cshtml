@@ -23,16 +23,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @{ foreach (var item in ViewBag.listatrening)
+                        @if (ViewBag.listatrening != null)
+                        {
+                            @foreach (var item in ViewBag.listatrening)
                             {
                                 if (item.dzien == "Poniedziałek")
                                 {
                                     <tr>
                                         <th scope="row">@item.id</th>
-                                        <td>@item.trening</td>
+                                        @if(item.trening != null)
+                                        {
+                                            <td>@item.trening.nazwa</td>
+                                        }
+                                        else
+                                        {
+                                            <td>dupa</td>
+                                        }
+
                                         <td>
                                             <div>
-                                                <a class="btn btn-primary" href="#" role="button">Dodaj</a>
+                                                <a class="btn btn-primary" href="#" role="button">Zobacz</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -40,6 +50,8 @@
 
                             }
                         }
+
+
                     </tbody>
                 </table>
 
