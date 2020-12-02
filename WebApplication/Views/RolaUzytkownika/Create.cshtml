@@ -5,31 +5,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Przydziel role</h1>
 
-<h4>RolaUzytkownika</h4>
+<h4></h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="id_uzytkownika" class="control-label"></label>
+                <label asp-for="id_uzytkownika" class="control-label">Wybierz użytkownika:</label>
                 <select asp-for="id_uzytkownika" class ="form-control" asp-items="ViewBag.id_uzytkownika"></select>
             </div>
             <div class="form-group">
-                <label asp-for="id_roli" class="control-label"></label>
+                <label asp-for="id_roli" class="control-label">Wybierz role:</label>
                 <select asp-for="id_roli" class ="form-control" asp-items="ViewBag.id_roli"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Przydziel" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrot do listy</a>
 </div>
 
 @section Scripts {

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Edytuj</h1>
 
 <h4>Trening</h4>
 <hr />
@@ -20,19 +20,19 @@
                 <span asp-validation-for="nazwa" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="id_kategorii" class="control-label"></label>
+                <label asp-for="id_kategorii" class="control-label">Wybierz kategorie:</label>
                 <select asp-for="id_kategorii" class="form-control" asp-items="ViewBag.id_kategorii"></select>
                 <span asp-validation-for="id_kategorii" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Zapisz" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót do listy treningów</a>
 </div>
 
 @section Scripts {

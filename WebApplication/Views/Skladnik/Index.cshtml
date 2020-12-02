@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Składniki</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj nowy</a>
 </p>
 
 @using (Html.BeginForm("Index", "Skladnik", FormMethod.Get))
@@ -71,12 +71,12 @@
                 @Html.DisplayFor(modelItem => item.kategoria.nazwa)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.id_skladnika">Details</a> <br />
+                <a asp-action="Details" asp-route-id="@item.id_skladnika">Szczegóły</a> <br />
 
                 @if (ViewBag.isDietician)
                 {
-                    <a asp-action="Edit" asp-route-id="@item.id_skladnika">Edit</a> <br />
-                    <a asp-action="Delete" asp-route-id="@item.id_skladnika">Delete</a> <br />
+                    <a asp-action="Edit" asp-route-id="@item.id_skladnika">Edytuj</a> <br />
+                    <a asp-action="Delete" asp-route-id="@item.id_skladnika">Usuń</a> <br />
                 }
 
             </td>
