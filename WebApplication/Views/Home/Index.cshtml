@@ -1,9 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    .container{
+        max-width:90%;
+    }
+</style>
 <div class="text-center col-md-12">
-    <div class="row">
-        <h2>Homa Page</h2>
+    <div class="row" style="position: relative">
+        <div class="col-md-5" style="text-align:left; font-family: Corbel; ">
+            <div style="display: table; height: 100%">
+                <div style="display:table-cell; vertical-align:middle">
+                    <p style="font-weight:500; font-size:3vw;">Zachowaj zdrowie z naszą aplikacją</p>
+                    <p style="font-weight:400; font-size:2vw;">Skorzystaj z pomocy naszych fachowców i śledź sowje postępy</p>
+                    <a class="btn btn-primary" href="/identity/Account/Register" role="button">Dołącz do nas</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7"><img style="width: 100%; display: block;" src="~/images/MainPage.svg" /></div>
     </div>
 </div>
 

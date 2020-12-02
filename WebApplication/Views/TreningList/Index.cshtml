@@ -1,4 +1,11 @@
 ﻿<div class="row">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h3>Dołącz do nas aby odblokować tą funkcjonalność</h3>
+    }
+    else
+    {
+
     <div class="col-2">
         <div class="list-group" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active" id="list-poniedzialek-list" data-toggle="list" href="#list-poniedzialek" role="tab" aria-controls="poniedzialek">Poniedzialek</a>
@@ -13,20 +20,24 @@
     <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="list-poniedzialek" role="tabpanel" aria-labelledby="list-poniedzialek-list">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nazwa</th>
-                            <th scope="col">View</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (ViewBag.listaplantrening != null)
-                        {
-                            @foreach (var item in ViewBag.listaplantrening)
+                @if (ViewBag.poniedzialki.Count <= 0)
+                {
+                    <a class="btn btn-primary" href="/PlanowanieTreningow/Create" role="button">Stwórz</a>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.listaplantrening != null)
                             {
-                                if (item.dzien == "Poniedziałek")
+                                @foreach (var item in ViewBag.poniedzialki)
                                 {
                                     <tr>
                                         <th scope="row">@item.id</th>
@@ -35,19 +46,242 @@
                                             @if (item.id_treningu == itemm.id_treningu)
                                             {
                                                 <td>@itemm.nazwa</td>
+                                                <td> <a class="btn btn-primary" href="/Trening/Details/@item.id_treningu" role="button">Zobacz</a></td>
                                             }
                                         }
-                                        <td> <button type="button" class="btn btn-primary">Zobacz</button></td>
+                                        
                                     </tr>
                                 }
                             }
-                        }
 
 
                         </tbody>
                     </table>
-
+                }
+            </div>
+            <div class="tab-pane fade show" id="list-wtorek" role="tabpanel" aria-labelledby="list-wtorek-list">
+                @if (ViewBag.wtorki.Count <= 0)
+                {
+                    <a class="btn btn-primary" href="/PlanowanieTreningow/Create" role="button">Stwórz</a>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.listaplantrening != null)
+                            {
+                                @foreach (var item in ViewBag.wtorki)
+                                {
+                                    <tr>
+                                        <th scope="row">@item.id</th>
+                                        @foreach (var itemm in ViewBag.listatrening)
+                                        {
+                                            @if (item.id_treningu == itemm.id_treningu)
+                                            {
+                                                <td>@itemm.nazwa</td>
+                                                <td> <a class="btn btn-primary" href="/Trening/Details/@item.id_treningu" role="button">Zobacz</a></td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <div class="tab-pane fade show" id="list-sroda" role="tabpanel" aria-labelledby="list-sroda-list">
+                @if (ViewBag.sroda.Count <= 0)
+                {
+                    <a class="btn btn-primary" href="/PlanowanieTreningow/Create" role="button">Stwórz</a>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.listaplantrening != null)
+                            {
+                                @foreach (var item in ViewBag.sroda)
+                                {
+                            <tr>
+                                <th scope="row">@item.id</th>
+                                @foreach (var itemm in ViewBag.listatrening)
+                                {
+                                    @if (item.id_treningu == itemm.id_treningu)
+                                    {
+                                        <td>@itemm.nazwa</td>
+                                        <td> <a class="btn btn-primary" href="/Trening/Details/@item.id_treningu" role="button">Zobacz</a></td>
+                                    }
+                                }
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <div class="tab-pane fade show" id="list-czwartek" role="tabpanel" aria-labelledby="list-czwartek-list">
+                @if (ViewBag.czwartek.Count <= 0)
+                {
+                    <a class="btn btn-primary" href="/PlanowanieTreningow/Create" role="button">Stwórz</a>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.listaplantrening != null)
+                            {
+                                @foreach (var item in ViewBag.czwartek)
+                                {
+                                    <tr>
+                                        <th scope="row">@item.id</th>
+                                        @foreach (var itemm in ViewBag.listatrening)
+                                        {
+                                            @if (item.id_treningu == itemm.id_treningu)
+                                            {
+                                                <td>@itemm.nazwa</td>
+                                                <td> <a class="btn btn-primary" href="/Trening/Details/@item.id_treningu" role="button">Zobacz</a></td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <div class="tab-pane fade show" id="list-piatek" role="tabpanel" aria-labelledby="list-piatek-list">
+                @if (ViewBag.piatek.Count <= 0)
+                {
+                    <a class="btn btn-primary" href="/PlanowanieTreningow/Create" role="button">Stwórz</a>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.listaplantrening != null)
+                            {
+                                @foreach (var item in ViewBag.piatek)
+                                {
+                                    <tr>
+                                        <th scope="row">@item.id</th>
+                                        @foreach (var itemm in ViewBag.listatrening)
+                                        {
+                                            @if (item.id_treningu == itemm.id_treningu)
+                                            {
+                                                <td>@itemm.nazwa</td>
+                                                <td> <a class="btn btn-primary" href="/Trening/Details/@item.id_treningu" role="button">Zobacz</a></td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <div class="tab-pane fade show" id="list-sobota" role="tabpanel" aria-labelledby="list-sobota-list">
+                @if (ViewBag.sobota.Count <= 0)
+                {
+                    <a class="btn btn-primary" href="/PlanowanieTreningow/Create" role="button">Stwórz</a>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.listaplantrening != null)
+                            {
+                                @foreach (var item in ViewBag.sobota)
+                                {
+                                    <tr>
+                                        <th scope="row">@item.id</th>
+                                        @foreach (var itemm in ViewBag.listatrening)
+                                        {
+                                            @if (item.id_treningu == itemm.id_treningu)
+                                            {
+                                                <td>@itemm.nazwa</td>
+                                                <td> <a class="btn btn-primary" href="/Trening/Details/@item.id_treningu" role="button">Zobacz</a></td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <div class="tab-pane fade show" id="list-niedziela" role="tabpanel" aria-labelledby="list-niedziela-list">
+                @if (ViewBag.niedziela.Count <= 0)
+                {
+                    <a class="btn btn-primary" href="/PlanowanieTreningow/Create" role="button">Stwórz</a>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.listaplantrening != null)
+                            {
+                                @foreach (var item in ViewBag.niedziela)
+                                {
+                                    <tr>
+                                        <th scope="row">@item.id</th>
+                                        @foreach (var itemm in ViewBag.listatrening)
+                                        {
+                                            @if (item.id_treningu == itemm.id_treningu)
+                                            {
+                                                <td>@itemm.nazwa</td>
+                                                <td> <a class="btn btn-primary" href="/Trening/Details/@item.id_treningu" role="button">Zobacz</a></td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
     </div>
+    }
 </div>
