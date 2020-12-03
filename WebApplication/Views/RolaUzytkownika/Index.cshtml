@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Przydziel role</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nadaj uprawnienia</a>
 </p>
 <table class="table">
     <thead>
@@ -32,9 +32,7 @@
                 @Html.DisplayFor(modelItem => item.uzytkownik.Id)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Delete" asp-route-users_id="@item.id_uzytkownika" asp-route-role_id="@item.id_roli">Pozbaw uprawnien</a>
             </td>
         </tr>
 }

@@ -88,6 +88,11 @@ namespace WebApplication
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "deleteRole",
+                    pattern: "rolaUzytkownika/deletepermissions/{role_id}/{user_id}",
+                    defaults: new { controller = "RolaUzytkownika", action = "DeleteConfirmed" });
+
+                endpoints.MapControllerRoute(
                     name: "exerciseDelete",
                     pattern: "trening/deleteexercise/{idt}/{idc}",
                     defaults: new { controller = "Trening", action = "DeleteExercise" });

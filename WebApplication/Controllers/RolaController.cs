@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
+    [Authorize]
     public class RolaController : Controller
     {
         private readonly MyContext _context;
@@ -22,30 +25,23 @@ namespace WebApplication.Controllers
         // GET: Rolas
         public async Task<IActionResult> Index()
         {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
             return View(await _context.role.ToListAsync());
-        }
-
-        // GET: Rolas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rola = await _context.role
-                .FirstOrDefaultAsync(m => m.id_roli == id);
-            if (rola == null)
-            {
-                return NotFound();
-            }
-
-            return View(rola);
         }
 
         // GET: Rolas/Create
         public IActionResult Create()
         {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+
             return View();
         }
 
@@ -56,6 +52,12 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_roli,nazwa")] Rola rola)
         {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(rola);
@@ -65,63 +67,19 @@ namespace WebApplication.Controllers
             return View(rola);
         }
 
-        // GET: Rolas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rola = await _context.role.FindAsync(id);
-            if (rola == null)
-            {
-                return NotFound();
-            }
-            return View(rola);
-        }
-
-        // POST: Rolas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_roli,nazwa")] Rola rola)
-        {
-            if (id != rola.id_roli)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(rola);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RolaExists(rola.id_roli))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(rola);
-        }
-
+        
         // GET: Rolas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
+            }
+
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
             }
 
             var rola = await _context.role
@@ -139,6 +97,12 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+
             var rola = await _context.role.FindAsync(id);
             _context.role.Remove(rola);
             await _context.SaveChangesAsync();
@@ -148,6 +112,16 @@ namespace WebApplication.Controllers
         private bool RolaExists(int id)
         {
             return _context.role.Any(e => e.id_roli == id);
+        }
+
+        private bool isAdmin()
+        {
+            int userId = int.Parse(User.Identity.GetUserId());
+            List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+            foreach (var usersRole in usersRoles)
+                if (usersRole.rola.nazwa == "admin")
+                    return true;
+            return false;
         }
     }
 }

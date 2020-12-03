@@ -5,10 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Stwórz nowy posiłek</a>
 </p>
 <hr />
 @using (Html.BeginForm("Index", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
@@ -52,10 +50,10 @@
             <td>
                 @if (ViewBag.userId == item.id_uzytkownika)
                 {
-                <a asp-action="Delete" asp-route-id="@item.id_posilku">Delete</a> <br />
-                <a asp-action="Edit" asp-route-id="@item.id_posilku">Edit</a> <br />
+                <a asp-action="Delete" asp-route-id="@item.id_posilku">Usuń</a> <br />
+                <a asp-action="Edit" asp-route-id="@item.id_posilku">Edytuj</a> <br />
                 }
-                <a asp-action="Details" asp-route-id="@item.id_posilku">Details</a> <br />
+                <a asp-action="Details" asp-route-id="@item.id_posilku">Szczegóły</a> <br />
             </td>
         </tr>
             }

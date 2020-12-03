@@ -3,10 +3,13 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
+using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 
 
 namespace WebApplication.Controllers
 {
+    [Authorize]
     public class TreningList : Controller
     {
         private readonly MyContext _context;
