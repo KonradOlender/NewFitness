@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>AddComponent</h1>
+<h1>Dodaj Składnik</h1>
 
-<h4>PosilekSzczegoly</h4>
+<h4></h4>
 <hr />
 @using (Html.BeginForm("AddComponent", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
 {
@@ -27,7 +27,7 @@
         <form asp-action="AddComponent">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="id_skladnika" class="control-label"></label>
+                <label asp-for="id_skladnika" class="control-label">Wybierz składnik</label>
                 <select asp-for="id_skladnika" class="form-control" asp-items="ViewBag.id_skladnika"></select>
             </div>
             <div class="form-group">

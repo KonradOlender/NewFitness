@@ -1,0 +1,23 @@
+﻿@*nie działa*@
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Apalone Kalorie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.trening)
+            {
+            <tr>
+                <th scope="row">@item.id_treningu</th>
+                <td>@item</td>
+                @*<td>@item.spalone_kalorie</td>*@
+            </tr>
+            }
+            
+        </tbody>
+    </table>
+</div>

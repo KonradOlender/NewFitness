@@ -4,11 +4,8 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj ćwiczenie</a>
 </p>
 @using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
 {
@@ -17,9 +14,9 @@
 
     @Html.DropDownList("category")
 
-    <p>
-        <input type="submit" value="Filtruj" />
-    </p>
+    <div style="padding: 5px">
+        <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+    </div>
 
 </fieldset>
 }
@@ -69,12 +66,12 @@
                 @Html.DisplayFor(modelItem => item.kategoria.nazwa)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.id_cwiczenia">Details</a> <br />
+                <a asp-action="Details" asp-route-id="@item.id_cwiczenia">Szczegóły</a> <br />
 
                 @if (ViewBag.isTrainer)
                 {
-                    <a asp-action="Edit" asp-route-id="@item.id_cwiczenia">Edit</a> <br />
-                    <a asp-action="Delete" asp-route-id="@item.id_cwiczenia">Delete</a> <br />
+                    <a asp-action="Edit" asp-route-id="@item.id_cwiczenia">Edytuj</a> <br />
+                    <a asp-action="Delete" asp-route-id="@item.id_cwiczenia">Usuń</a> <br />
                 }
 
             </td>

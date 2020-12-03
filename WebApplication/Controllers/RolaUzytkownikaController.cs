@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
+    [Authorize]
     public class RolaUzytkownikaController : Controller
     {
         private readonly MyContext _context;
@@ -23,34 +26,25 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Index()
         {
             var myContext = _context.RolaUzytkownika.Include(r => r.rola).Include(r => r.uzytkownik);
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+                
             return View(await myContext.ToListAsync());
-        }
-
-        // GET: RolaUzytkownika/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rolaUzytkownika = await _context.RolaUzytkownika
-                .Include(r => r.rola)
-                .Include(r => r.uzytkownik)
-                .FirstOrDefaultAsync(m => m.id_roli == id);
-            if (rolaUzytkownika == null)
-            {
-                return NotFound();
-            }
-
-            return View(rolaUzytkownika);
         }
 
         // GET: RolaUzytkownika/Create
         public IActionResult Create()
         {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
             ViewData["id_roli"] = new SelectList(_context.role, "id_roli", "nazwa");
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id");
+            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "login");
             return View();
         }
 
@@ -61,6 +55,12 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_uzytkownika,id_roli")] RolaUzytkownika rolaUzytkownika)
         {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(rolaUzytkownika);
@@ -68,71 +68,22 @@ namespace WebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["id_roli"] = new SelectList(_context.role, "id_roli", "nazwa", rolaUzytkownika.id_roli);
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", rolaUzytkownika.id_uzytkownika);
-            return View(rolaUzytkownika);
-        }
-
-        // GET: RolaUzytkownika/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rolaUzytkownika = await _context.RolaUzytkownika.FindAsync(id);
-            if (rolaUzytkownika == null)
-            {
-                return NotFound();
-            }
-            ViewData["id_roli"] = new SelectList(_context.role, "id_roli", "nazwa", rolaUzytkownika.id_roli);
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", rolaUzytkownika.id_uzytkownika);
-            return View(rolaUzytkownika);
-        }
-
-        // POST: RolaUzytkownika/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_uzytkownika,id_roli")] RolaUzytkownika rolaUzytkownika)
-        {
-            if (id != rolaUzytkownika.id_roli)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(rolaUzytkownika);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RolaUzytkownikaExists(rolaUzytkownika.id_roli))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["id_roli"] = new SelectList(_context.role, "id_roli", "nazwa", rolaUzytkownika.id_roli);
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", rolaUzytkownika.id_uzytkownika);
+            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "login", rolaUzytkownika.id_uzytkownika);
             return View(rolaUzytkownika);
         }
 
         // GET: RolaUzytkownika/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
+            }
+
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return Redirect("UnableToAccessThisPage");
             }
 
             var rolaUzytkownika = await _context.RolaUzytkownika
@@ -145,15 +96,22 @@ namespace WebApplication.Controllers
             }
 
             return View(rolaUzytkownika);
-        }
+        }*/
 
         // POST: RolaUzytkownika/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int role_id, int users_id)
         {
-            var rolaUzytkownika = await _context.RolaUzytkownika.FindAsync(id);
-            _context.RolaUzytkownika.Remove(rolaUzytkownika);
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return Redirect("UnableToAccessThisPage");
+            }
+            var rolaUzytkownika =  _context.RolaUzytkownika.FirstOrDefault(k => k.id_roli == role_id && k.id_uzytkownika == users_id);
+            if(rolaUzytkownika != null)
+                _context.RolaUzytkownika.Remove(rolaUzytkownika);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -161,6 +119,16 @@ namespace WebApplication.Controllers
         private bool RolaUzytkownikaExists(int id)
         {
             return _context.RolaUzytkownika.Any(e => e.id_roli == id);
+        }
+
+        private bool isAdmin()
+        {
+            int userId = int.Parse(User.Identity.GetUserId());
+            List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+            foreach (var usersRole in usersRoles)
+                if (usersRole.rola.nazwa == "admin")
+                    return true;
+            return false;
         }
     }
 }

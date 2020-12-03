@@ -5,10 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Stwórz nową kategorie</a>
 </p>
 <table class="table">
     <thead>
@@ -37,13 +35,13 @@
                 @Html.DisplayFor(modelItem => item.nazwa)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.id_kategorii">Details</a> <br />
+                <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a> <br />
 
                 @if (item.id_kategorii != ViewBag.DefaultCategory.id_kategorii && ViewBag.isTrainer)
                 {
 
-                    <a asp-action="Delete" asp-route-id="@item.id_kategorii">Delete</a> <br />
-                    <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edit</a> <br />
+                    <a asp-action="Delete" asp-route-id="@item.id_kategorii">Usuń</a> <br />
+                    <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a> <br />
                 }
             </td>
         </tr>

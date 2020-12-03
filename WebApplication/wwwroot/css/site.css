@@ -72,4 +72,7 @@ body {
 .datepicker-inline {
     float:right;
 }
+.container {
+    max-width: 90%;
+}
 

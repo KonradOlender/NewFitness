@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>AddExercise</h1>
+<h1>Dodaj ćwiczenie do treningu</h1>
 
-<h4>TreningSzczegoly</h4>
+<h4>Trening</h4>
 <hr />
 @using (Html.BeginForm("AddExercise", "Trening", FormMethod.Get, new { id = ViewBag.trainingId }))
 {
@@ -27,7 +27,7 @@
         <form asp-action="AddExercise">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="id_cwiczenia" class="control-label"></label>
+                <label asp-for="id_cwiczenia" class="control-label">Wybierz ćwiczenie:</label>
                 <select asp-for="id_cwiczenia" class ="form-control" asp-items="ViewBag.id_cwiczenia"></select>
             </div>
             <div class="form-group">

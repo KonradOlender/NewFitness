@@ -8,10 +8,10 @@
         burnt_calories += (trening.liczba_powtorzen * trening.cwiczenie.spalone_kalorie);
 }
 
-<h1>Details</h1>
+<h1>Szczegóły</h1>
 
 <div>
-    <h4>Trening</h4>
+    <h4>Treningu</h4>
     <br />
     <a asp-controller="PlanowanieTreningow"  asp-action="Create" asp-route-id_string="@Model.id_treningu">Zaplanuj trening</a> <br />
     <hr />
@@ -56,7 +56,7 @@
             @trening.cwiczenie.opis
             <br />
             Liczba powtórzeń: @trening.liczba_powtorzen
-            @if (ViewBag.userId == ViewBag.treningOwner)//poprawic ten fragment trzeba wysylac dwie wartosci id
+            @if (ViewBag.userId == ViewBag.treningOwner)
             {
                 <form asp-action="DeleteExercise" asp-route-idt="@trening.id_treningu" asp-route-idc="@trening.id_cwiczenia">
                     <input type="submit" value="Usuń ćwiczenie" class="btn btn-danger" />

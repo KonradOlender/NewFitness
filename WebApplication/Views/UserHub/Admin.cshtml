@@ -7,10 +7,6 @@
     if (ViewBag.isadmin)
     {
         <h1>Admin Panel</h1> 
-            foreach(var item in ViewBag.planowanie_trening)
-            {
-                <h4>@item.trening.nazwa</h4>
-            }
         <div class="row">
             <div class="col-2">
                 <div class="list-group" id="list-tab" role="tablist">
@@ -28,7 +24,7 @@
             <div class="col-10">
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="list-cwiczenie" role="tabpanel" aria-labelledby="list-cwiczenie-list">
-                        <a class="btn btn-primary" href="/Cwiczenie" role="button">Manage</a>
+                        <a class="btn btn-primary" href="/Cwiczenie" role="button">Zarządzaj</a>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -54,7 +50,7 @@
 
                     </div>
                     <div class="tab-pane fade" id="list-trening" role="tabpanel" aria-labelledby="list-trening-list">
-                        <a class="btn btn-primary" href="/Trening" role="button">Manage</a>
+                        <a class="btn btn-primary" href="/Trening" role="button">Zarządzaj</a>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -75,7 +71,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="list-skladnik" role="tabpanel" aria-labelledby="list-skladnik-list">
-                        <a class="btn btn-primary" href="/Skladnik" role="button">Manage</a>
+                        <a class="btn btn-primary" href="/Skladnik" role="button">Zarządzaj</a>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -100,7 +96,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="list-posilek" role="tabpanel" aria-labelledby="list-posilek-list">
-                        <a class="btn btn-primary" href="/Posilek" role="button">Manage</a>
+                        <a class="btn btn-primary" href="/Posilek" role="button">Zarządzaj</a>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -125,7 +121,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="list-rola" role="tabpanel" aria-labelledby="list-rola-list">
-                        <a class="btn btn-primary" href="/Rolauzytkownika" role="button">Manage</a>
+                        <a class="btn btn-primary" href="/Rolauzytkownika" role="button">Zarządzaj</a>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -153,6 +149,6 @@
     }
     else
     {
-        <h1>You are not an admin</h1>
+        <h1>Nie jesteś adminem</h1>
     }
 }
