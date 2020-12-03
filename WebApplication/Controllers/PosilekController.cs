@@ -327,18 +327,18 @@ namespace WebApplication.Controllers
         {
             int id_skladnika = pszczegoly.id_skladnika;
             List<Skladnik> skladniki = _context.skladnik.Where(k => k.id_skladnika == id_skladnika).ToList();
-            int waga = skladniki[0].waga;
-            int kalorie = skladniki[0].kalorie;
+            double waga = (double)skladniki[0].waga;
+            double kalorie = (double)skladniki[0].kalorie;
 
             if (dzialanie)
             {
                 //dodwanie
-                pszczegoly.posilek.kalorie += pszczegoly.porcja / waga * kalorie;
+                pszczegoly.posilek.kalorie += (int)((double)pszczegoly.porcja / waga * kalorie);
             }
             else
             {
                 //usuwanie
-                pszczegoly.posilek.kalorie -= pszczegoly.porcja / waga * kalorie;
+                pszczegoly.posilek.kalorie -= (int)((double)pszczegoly.porcja / waga * kalorie);
             }
         }
 }
