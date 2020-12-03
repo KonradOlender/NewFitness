@@ -134,7 +134,7 @@ namespace WebApplication.Controllers
         }
 
         //obliczanie kalorii posiłku 
-        private static int editedwaga=-1, editedkalorie=-1;
+        private static double editedwaga=-1.0, editedkalorie=-1.0;
 
         // GET: Skladnik/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -152,8 +152,8 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
-            editedwaga = skladnik.waga;
-            editedkalorie = skladnik.kalorie;
+            editedwaga = (double)skladnik.waga;
+            editedkalorie = (double)skladnik.kalorie;
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaSkladnikow, "id_kategorii", "nazwa", skladnik.id_kategorii);
             return View(skladnik);
         }
@@ -261,25 +261,25 @@ namespace WebApplication.Controllers
         //dzialanie 0-dodawanie, 1-odejmowanie przy edycji, 2-odejmowanie przy usuwaniu składnika
         public void editCalories(int dzialanie, Skladnik skladnik)
         {
-            int waga = skladnik.waga;
-            int kalorie = skladnik.kalorie;
+            double waga = (double)skladnik.waga;
+            double kalorie = (double)skladnik.kalorie;
             List<PosilekSzczegoly> posilki = _context.posilekSzczegoly.Where(k => k.id_skladnika == skladnik.id_skladnika).Include(c => c.posilek).ToList();
             foreach (PosilekSzczegoly pszczegoly in posilki)
             {
                 if (dzialanie==0)
                 {
                     //dodwanie
-                    pszczegoly.posilek.kalorie += pszczegoly.porcja / waga * kalorie;
+                    pszczegoly.posilek.kalorie += (int)((double)pszczegoly.porcja / waga * kalorie);
                 }
                 else if(dzialanie==1)
                 {
                     //usuwanie
-                    if(editedwaga>0 && editedkalorie>0) pszczegoly.posilek.kalorie -= pszczegoly.porcja / editedwaga * editedkalorie;
+                    if(editedwaga>0 && editedkalorie>0) pszczegoly.posilek.kalorie -= (int)((double)pszczegoly.porcja / editedwaga * editedkalorie);
                 }
                 else if(dzialanie==2)
                 {
                     //usuwanie
-                    pszczegoly.posilek.kalorie -= pszczegoly.porcja / waga * kalorie;
+                    pszczegoly.posilek.kalorie -= (int)((double)pszczegoly.porcja / waga * kalorie);
                 }
             }
         }
