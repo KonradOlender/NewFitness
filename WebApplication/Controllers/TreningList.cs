@@ -1,11 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApplication.Models;
 using WebApplication.Data;
-using Microsoft.AspNet.Identity;
-using System.Data.Entity;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication.Controllers
 {
