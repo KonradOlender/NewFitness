@@ -189,6 +189,23 @@ namespace WebApplication.Data
                 .HasForeignKey(d => d.id_uzytkownika_oceniajacego)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<ProsbyOUprawnienia>(b =>
+            {
+                b.HasKey(t => new { t.id_uzytkownika, t.id_roli });
+            });
+
+            builder.Entity<ProsbyOUprawnienia>()
+                .HasOne<Rola>(t => t.rola)
+                .WithMany(t => t.prosby)
+                .HasForeignKey(d => d.id_roli)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ProsbyOUprawnienia>()
+                .HasOne<Uzytkownik>(t => t.uzytkownik)
+                .WithMany(t => t.prosby)
+                .HasForeignKey(d => d.id_uzytkownika)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<KategoriaCwiczenia>().HasData(
                                 new { id_kategorii = 1, nazwa = "inne" });
 
@@ -225,5 +242,6 @@ namespace WebApplication.Data
         public DbSet<PlanowanieTreningow> planowaneTreningi { get; set; }
         public DbSet<Ocena> oceny { get; set; }
         public IEnumerable<object> Rola { get; internal set; }
+        public DbSet<ProsbyOUprawnienia> prosbyOUprawnienia { get; set; }
     }
 }
