@@ -23,6 +23,7 @@ namespace WebApplication.Areas.Identity.Data
         public virtual ICollection<PlanowaniePosilkow> planowanePosilki { get; set; }
         public virtual ICollection<HistoriaUzytkownika> historiaUzytkownika { get; set; }
         public virtual ICollection<Ocena> oceny { get; set; }
+        public virtual ICollection<ProsbyOUprawnienia> prosby { get; set; }
 
         public override String ToString()
         {
