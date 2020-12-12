@@ -466,6 +466,24 @@ namespace WebApplication.Migrations
                     b.ToTable("posilekSzczegoly");
                 });
 
+            modelBuilder.Entity("WebApplication.Models.ProsbyOUprawnienia", b =>
+                {
+                    b.Property<int>("id_uzytkownika")
+                        .HasColumnType("int");
+
+                    b.Property<int>("id_roli")
+                        .HasColumnType("int");
+
+                    b.Property<string>("prosba_pisemna")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id_uzytkownika", "id_roli");
+
+                    b.HasIndex("id_roli");
+
+                    b.ToTable("ProsbyOUprawnienia");
+                });
+
             modelBuilder.Entity("WebApplication.Models.Rola", b =>
                 {
                     b.Property<int>("id_roli")
@@ -725,6 +743,21 @@ namespace WebApplication.Migrations
                     b.HasOne("WebApplication.Models.Skladnik", "skladnik")
                         .WithMany("posilki")
                         .HasForeignKey("id_skladnika")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApplication.Models.ProsbyOUprawnienia", b =>
+                {
+                    b.HasOne("WebApplication.Models.Rola", "rola")
+                        .WithMany("prosby")
+                        .HasForeignKey("id_roli")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication.Areas.Identity.Data.Uzytkownik", "uzytkownik")
+                        .WithMany("prosby")
+                        .HasForeignKey("id_uzytkownika")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
