@@ -242,6 +242,6 @@ namespace WebApplication.Data
         public DbSet<PlanowanieTreningow> planowaneTreningi { get; set; }
         public DbSet<Ocena> oceny { get; set; }
         public IEnumerable<object> Rola { get; internal set; }
-        public DbSet<ProsbyOUprawnienia> prosbyOUprawnienia { get; set; }
+        //public DbSet<ProsbyOUprawnienia> prosbyOUprawnienia { get; set; }
     }
 }
