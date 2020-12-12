@@ -32,6 +32,18 @@ namespace WebApplication.Controllers
             }
             return View(await _context.role.ToListAsync());
         }
+        
+        public async Task<IActionResult> MyRoles()
+        {
+            int user_id = int.Parse(User.Identity.GetUserId());
+            ViewBag.allRoles = _context.role.ToList();
+            //ViewBag.userRoles = _context.RolaUzytkownika.Include(k => k.rola).Where(k => k.id_uzytkownika == user_id).ToList();
+            List<RolaUzytkownika> userRoles = _context.RolaUzytkownika.Include(k => k.rola).Where(k => k.id_uzytkownika == user_id).ToList();
+            ViewBag.usersRoles = userRoles.ToDictionary<RolaUzytkownika, Rola>(k => k.rola);
+            //ViewBag.userRoles = ViewBag.userRoles.ToDictionary<RolaUzytkownika, Rola>(t => t.rola)
+            return View();
+        }
+
 
         // GET: Rolas/Create
         public IActionResult Create()
