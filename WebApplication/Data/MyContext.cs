@@ -188,7 +188,7 @@ namespace WebApplication.Data
                 .WithMany()
                 .HasForeignKey(d => d.id_uzytkownika_oceniajacego)
                 .OnDelete(DeleteBehavior.NoAction);
-
+                
             builder.Entity<ProsbyOUprawnienia>(b =>
             {
                 b.HasKey(t => new { t.id_uzytkownika, t.id_roli });
@@ -205,6 +205,7 @@ namespace WebApplication.Data
                 .WithMany(t => t.prosby)
                 .HasForeignKey(d => d.id_uzytkownika)
                 .OnDelete(DeleteBehavior.Cascade);
+
 
             builder.Entity<KategoriaCwiczenia>().HasData(
                                 new { id_kategorii = 1, nazwa = "inne" });

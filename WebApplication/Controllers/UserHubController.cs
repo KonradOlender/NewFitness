@@ -37,7 +37,6 @@ namespace WebApplication.Controllers
                 double bmi = 0;
                 int userid = int.Parse(User.Identity.GetUserId());
                 var user = _context.uzytkownicy.Single(e => e.Id == userid);
-                user.limit = 2000;
 
 
                 if (_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id))
@@ -108,6 +107,61 @@ namespace WebApplication.Controllers
             ViewBag.kat_skladnika = kat_skladnika;
             ViewBag.role = role;
             ViewBag.planowanie_trening = planowanie_trening;
+            return View();
+        }
+
+        public IActionResult Kalkulator()
+        {
+            return View();
+        }
+
+        //Do dodania (jeślu bez daty to -500 kcal)
+        [HttpPost]
+        public IActionResult Kalkulator(int waga, int goal, int? wzrost, int? plec, int? aktywnosc, DateTime data)
+        {
+            int userid = int.Parse(User.Identity.GetUserId());
+            var user = _context.uzytkownicy.Single(e => e.Id == userid);
+            int kcal;
+            DateTime data1 = DateTime.Today;
+            double weeks = (data - data1).TotalDays / 7;
+            double roznica = goal - waga;
+            double wynik;
+            if (plec == 1)
+            {
+                if (aktywnosc==1)
+                {
+                    kcal = 2600;
+                }
+                else if(aktywnosc == 2)
+                {
+                    kcal = 2900;
+                }
+                else
+                {
+                    kcal = 3100;
+                }
+            }
+            else
+            {
+                if (aktywnosc == 1)
+                {
+                    kcal = 2000;
+                }
+                else if (aktywnosc == 2)
+                {
+                    kcal = 2200;
+                }
+                else
+                {
+                    kcal = 2500;
+                }
+            }
+            wynik = kcal + 1000*(roznica/weeks);
+            ViewBag.userId = userid;
+            ViewBag.wynik = wynik;
+            user.limit = (int)wynik;
+            _context.SaveChanges();
+
             return View();
         }
 

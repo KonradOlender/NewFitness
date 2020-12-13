@@ -22,7 +22,17 @@ namespace WebApplication.Controllers
             _context = context;
         }
 
-
+        // GET: Rolas
+        public async Task<IActionResult> Index()
+        {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+            return View(await _context.role.ToListAsync());
+        }
+        
         public async Task<IActionResult> MyRoles()
         {
             int user_id = int.Parse(User.Identity.GetUserId());
@@ -34,16 +44,6 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        // GET: Rolas
-        public async Task<IActionResult> Index()
-        {
-            if (!isAdmin())
-            {
-                ViewBag.roleName = "admin";
-                return View("UnableToAccessThisPage");
-            }
-            return View(await _context.role.ToListAsync());
-        }
 
         // GET: Rolas/Create
         public IActionResult Create()

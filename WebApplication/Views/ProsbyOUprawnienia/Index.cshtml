@@ -1,0 +1,41 @@
+﻿@model IEnumerable<WebApplication.Models.ProsbyOUprawnienia>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Prośby o uprawnienia</h1>
+
+<p>
+    <a asp-action="Create">Wyślij prośbę</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.rola)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.prosba_pisemna)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rola.nazwa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.prosba_pisemna)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

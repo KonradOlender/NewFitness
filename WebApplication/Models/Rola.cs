@@ -17,7 +17,6 @@ namespace WebApplication.Models
         public string nazwa { get; set; }
 
         public virtual ICollection<RolaUzytkownika> uzytkownicy { get; set; }
-
         public virtual ICollection<ProsbyOUprawnienia> prosby { get; set; }
     }
 }
