@@ -1,0 +1,58 @@
+﻿<div class="row">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+        <form method="post">
+            <div class="form-group">
+                <label for="waga">Waga</label>
+                <input type="number" class="form-control" id="waga" name="waga" placeholder="Waga">
+            </div>
+            <div class="form-group">
+                <label for="goal">Goal</label>
+                <input type="number" class="form-control" id="goal" name="goal" placeholder="Goal">
+            </div>
+            <div class="form-group">
+                <label for="wzrost">Wzrost</label>
+                <input type="number" class="form-control" id="wzrost" name="wzrost" placeholder="Wzrost">
+            </div>
+            <div class="form-group">
+                <label for="wzrost">Do kiedy</label>
+                <input type="date" class="form-control" id="wzrost" name="data" placeholder="Data">
+            </div>
+            <div class="form-group">
+                <label for="plec">Płeć</label>
+                <select class="form-control" id="plec" name="plec">
+                    <option value="1">Mężczyzna</option>
+                    <option value="2">Kobieta</option>
+                </select>
+            </div>
+            <div>
+                <label for="aktywnosc">Aktywność</label>
+            </div>
+
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary active">
+                    <input type="radio" name="aktywnosc" checked="checked" value="1"> Mała aktywność
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="aktywnosc" value="2"> Średnia aktywność
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="aktywnosc" value="3"> Duża aktywność
+                </label>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <div>
+                <h1>@ViewBag.wynik</h1>
+                <h1>@ViewBag.userId</h1>
+            </div>
+
+        </form>
+    </div>
+    <div class="col-md-3">
+        
+    </div>
+</div>
