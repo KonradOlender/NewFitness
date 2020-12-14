@@ -65,6 +65,44 @@ namespace WebApplication.Controllers
         {
             return _context.prosbyOUprawnienia.Any(e => e.id_uzytkownika == user_id && e.id_roli == role_id);
         }
+        
+
+        //JESZCZE TRZEBA TO POPRAWIĆ BO CZEMUS NIE DZIALA POPRAWNIE
+        // GET: ProsbyOUprawnienia/Delete/5/6
+        public async Task<IActionResult> Delete(int? idt, int? idc)
+        {
+            if (idt == null || idc == null || idt != int.Parse(User.Identity.GetUserId()))
+            {
+                return NotFound();
+            }
+
+            var prosba = await _context.prosbyOUprawnienia.Include(n => n.uzytkownik).Include(r => r.rola)
+                .FirstOrDefaultAsync(k => k.id_roli == idc && k.id_uzytkownika == idt);
+            if (prosba == null)
+            {
+                return NotFound();
+            }
+
+            return View(prosba);
+        }
+        
+        // POST: ProsbyOUprawnienia/Delete/5/6
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int idt, int idc)
+        {
+            var prosba =  _context.prosbyOUprawnienia.Include(n => n.uzytkownik).Include(r => r.rola)
+                .FirstOrDefault(k => k.id_uzytkownika == idt && k.id_roli == idc);
+            if (prosba == null)
+                return RedirectToAction("Index");
+
+            if (prosba.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+                return RedirectToAction("Index");
+
+            _context.prosbyOUprawnienia.Remove(prosba);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
 
     }

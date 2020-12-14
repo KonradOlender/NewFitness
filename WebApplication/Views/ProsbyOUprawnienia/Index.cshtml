@@ -28,14 +28,17 @@
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.rola.nazwa)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.prosba_pisemna)
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.rola.nazwa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.prosba_pisemna)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-users_id="@item.id_uzytkownika" asp-route-role_id="@item.id_roli">Usuń prośbę</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

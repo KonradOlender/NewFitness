@@ -1,0 +1,35 @@
+﻿@model WebApplication.Models.ProsbyOUprawnienia
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Usuwanie prośby</h1>
+
+<h3>Napewno chcesz usunąć prośbę?</h3>
+<div>
+    <h4></h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.rola)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.rola.nazwa)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.prosba_pisemna)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.prosba_pisemna)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id_uzytkownika" />
+        <input type="hidden" asp-for="id_roli" />
+        <input type="submit" value="Usuń" class="btn btn-danger" /> |
+        <a asp-action="Index">Powrót do listy próśb</a>
+    </form>
+</div>
