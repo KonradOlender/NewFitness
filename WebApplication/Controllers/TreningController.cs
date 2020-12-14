@@ -310,7 +310,7 @@ namespace WebApplication.Controllers
 
         private bool ExerciseAlreadyInTraining(int training_id, int exercise_id)
         {
-            return _context.treningSzczegoly.Any(e => e.id_treningu == training_id && e.id_cwiczenia == training_id);
+            return _context.treningSzczegoly.Any(e => e.id_treningu == training_id && e.id_cwiczenia == exercise_id);
         }
 
         private bool TreningExists(int id)

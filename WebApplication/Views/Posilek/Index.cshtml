@@ -6,7 +6,8 @@
 }
 
 <p>
-    <a asp-action="Create">Stwórz nowy posiłek</a>
+    <a asp-action="Create">Stwórz nowy posiłek</a> ||
+    <a asp-controller="Cwiczenie" asp-action="Index">Zobacz dostępne składniki</a>
 </p>
 <hr />
 @using (Html.BeginForm("Index", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
