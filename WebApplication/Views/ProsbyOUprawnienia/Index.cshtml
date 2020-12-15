@@ -1,44 +1,34 @@
-﻿@model IEnumerable<WebApplication.Models.ProsbyOUprawnienia>
-
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+    ViewData["Title"] = "Prośby o uprawnienia";
 }
 
-<h1>Prośby o uprawnienia</h1>
+@{
+    <div class="tab-pane fade show" role="tabpanel">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Uzytkownik</th>
+                    <th scope="col">Rola</th>
+                    <th scope="col">Prosba</th>
+                    <th scope="col">Decyzja</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.allRequests)
+                {
+                <tr>
+                    <td>@item.uzytkownik.login</td>
+                    <td>@item.rola.nazwa</td>
+                    <td>@item.prosba_pisemna</td>
+                    <td>
+                        <a asp-action="Accept" asp-route-idt="@item.id_uzytkownika" asp-route-idc="@item.id_roli">Akceptuj</a> |
+                        <a asp-action="Delete" asp-route-idt="@item.id_uzytkownika" asp-route-idc="@item.id_roli">Odrzuc</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
 
-<p>
-    <a asp-action="Create">Wyślij prośbę</a>
-</p>
+    </div>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.rola)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.prosba_pisemna)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.rola.nazwa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.prosba_pisemna)
-            </td>
-            <td>
-                <a asp-action="Delete" asp-route-users_id="@item.id_uzytkownika" asp-route-role_id="@item.id_roli">Usuń prośbę</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+}

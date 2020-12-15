@@ -25,9 +25,13 @@ namespace WebApplication.Controllers
         // GET: ProsbyOUprawnienia
         public async Task<IActionResult> Index()
         {
-            var myContext = _context.prosbyOUprawnienia.Include(r => r.rola).Include(r => r.uzytkownik);
-
-            return View(await myContext.ToListAsync());
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+            ViewBag.allRequests = _context.prosbyOUprawnienia.Include(k => k.rola).Include(k => k.uzytkownik).ToList();
+            return View();
         }
 
 
@@ -36,6 +40,7 @@ namespace WebApplication.Controllers
         {
             ViewData["id_roli"] = new SelectList(_context.role, "id_roli", "nazwa");
             return View();
+
         }
 
         // POST: ProsbyOUprawnienia/Create
@@ -65,43 +70,68 @@ namespace WebApplication.Controllers
         {
             return _context.prosbyOUprawnienia.Any(e => e.id_uzytkownika == user_id && e.id_roli == role_id);
         }
-        
 
-        //JESZCZE TRZEBA TO POPRAWIĆ BO CZEMUS NIE DZIALA POPRAWNIE
-        // GET: ProsbyOUprawnienia/Delete/5/6
-        public async Task<IActionResult> Delete(int? idt, int? idc)
-        {
-            if (idt == null || idc == null || idt != int.Parse(User.Identity.GetUserId()))
-            {
-                return NotFound();
-            }
-
-            var prosba = await _context.prosbyOUprawnienia.Include(n => n.uzytkownik).Include(r => r.rola)
-                .FirstOrDefaultAsync(k => k.id_roli == idc && k.id_uzytkownika == idt);
-            if (prosba == null)
-            {
-                return NotFound();
-            }
-
-            return View(prosba);
-        }
-        
+        //BŁAD 405 PRZY USUWANIU I AKCEPTOWANIU
         // POST: ProsbyOUprawnienia/Delete/5/6
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int idt, int idc)
+        public async Task<IActionResult> Delete(int idt, int idc)
         {
-            var prosba =  _context.prosbyOUprawnienia.Include(n => n.uzytkownik).Include(r => r.rola)
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+
+            var prosba =  _context.prosbyOUprawnienia
                 .FirstOrDefault(k => k.id_uzytkownika == idt && k.id_roli == idc);
             if (prosba == null)
-                return RedirectToAction("Index");
-
-            if (prosba.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
             _context.prosbyOUprawnienia.Remove(prosba);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // POST: ProsbyOUprawnienia/Accept/5/6
+        [HttpPost, ActionName("Accept")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Accept(int idt, int idc)
+        {
+            if (!isAdmin())
+            {
+                ViewBag.roleName = "admin";
+                return View("UnableToAccessThisPage");
+            }
+
+            var prosba = _context.prosbyOUprawnienia
+                .FirstOrDefault(k => k.id_uzytkownika == idt && k.id_roli == idc);
+            if (prosba == null)
+                return RedirectToAction("Index");
+
+            //dodanie zaakceptowanej roli do tabeli RolaUzytkownika
+            var uzytkownik = _context.uzytkownicy.FirstOrDefault(k => k.Id == idt);
+            var rola = _context.role.FirstOrDefault(k => k.id_roli == idc);
+            RolaUzytkownika rolaUzytkownika = new RolaUzytkownika();
+            rolaUzytkownika.id_uzytkownika = idt;
+            rolaUzytkownika.id_roli = idc;
+            rolaUzytkownika.uzytkownik = uzytkownik;
+            rolaUzytkownika.rola = rola;
+            _context.Add(rolaUzytkownika);
+
+            _context.prosbyOUprawnienia.Remove(prosba);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool isAdmin()
+        {
+            int userId = int.Parse(User.Identity.GetUserId());
+            List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+            foreach (var usersRole in usersRoles)
+                if (usersRole.rola.nazwa == "admin")
+                    return true;
+            return false;
         }
 
 
