@@ -21,8 +21,12 @@
                     <td>@item.rola.nazwa</td>
                     <td>@item.prosba_pisemna</td>
                     <td>
-                        <a asp-action="Accept" asp-route-idt="@item.id_uzytkownika" asp-route-idc="@item.id_roli">Akceptuj</a> |
-                        <a asp-action="Delete" asp-route-idt="@item.id_uzytkownika" asp-route-idc="@item.id_roli">Odrzuc</a>
+                        <form method="POST" asp-action="Accept" asp-route-idu="@item.id_uzytkownika" asp-route-idr="@item.id_roli">
+                                <input type="submit" value="Akceptuj" />
+                        </form>
+                        <form method="POST" asp-action="Delete" asp-route-idu="@item.id_uzytkownika" asp-route-idr="@item.id_roli">
+                            <input type="submit" value="Odrzuc" />
+                        </form>
                     </td>
                 </tr>
                 }

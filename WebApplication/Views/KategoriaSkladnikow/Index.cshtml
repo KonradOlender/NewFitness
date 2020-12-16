@@ -24,9 +24,13 @@
                 @Html.DisplayFor(modelItem => item.nazwa)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a> |
-                <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a> |
-                <a asp-action="Delete" asp-route-id="@item.id_kategorii">Usuń</a>
+                @if (item.nazwa != "inne")
+                {
+                    <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a>
+                    <a asp-action = "Delete" asp-route-id = "@item.id_kategorii" > Usuń </a>
+                }
+                <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a>
+
             </td>
         </tr>
 }

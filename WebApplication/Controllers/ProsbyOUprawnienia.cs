@@ -28,7 +28,7 @@ namespace WebApplication.Controllers
             if (!isAdmin())
             {
                 ViewBag.roleName = "admin";
-                return View("UnableToAccessThisPage");
+                return RedirectToAction(nameof(Create));
             }
             ViewBag.allRequests = _context.prosbyOUprawnienia.Include(k => k.rola).Include(k => k.uzytkownik).ToList();
             return View();
@@ -75,7 +75,7 @@ namespace WebApplication.Controllers
         // POST: ProsbyOUprawnienia/Delete/5/6
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int idt, int idc)
+        public async Task<IActionResult> Delete(int idu, int idr)
         {
             if (!isAdmin())
             {
@@ -83,8 +83,8 @@ namespace WebApplication.Controllers
                 return View("UnableToAccessThisPage");
             }
 
-            var prosba =  _context.prosbyOUprawnienia
-                .FirstOrDefault(k => k.id_uzytkownika == idt && k.id_roli == idc);
+            var prosba = _context.prosbyOUprawnienia
+                .FirstOrDefault(k => k.id_uzytkownika == idu && k.id_roli == idr);
             if (prosba == null)
                 return RedirectToAction("Index");
 
@@ -96,7 +96,7 @@ namespace WebApplication.Controllers
         // POST: ProsbyOUprawnienia/Accept/5/6
         [HttpPost, ActionName("Accept")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Accept(int idt, int idc)
+        public async Task<IActionResult> Accept(int idu, int idr)
         {
             if (!isAdmin())
             {
@@ -105,19 +105,20 @@ namespace WebApplication.Controllers
             }
 
             var prosba = _context.prosbyOUprawnienia
-                .FirstOrDefault(k => k.id_uzytkownika == idt && k.id_roli == idc);
+                .FirstOrDefault(k => k.id_uzytkownika == idu && k.id_roli == idr);
             if (prosba == null)
                 return RedirectToAction("Index");
 
             //dodanie zaakceptowanej roli do tabeli RolaUzytkownika
-            var uzytkownik = _context.uzytkownicy.FirstOrDefault(k => k.Id == idt);
-            var rola = _context.role.FirstOrDefault(k => k.id_roli == idc);
+            var uzytkownik = _context.uzytkownicy.FirstOrDefault(k => k.Id == idu);
+            var rola = _context.role.FirstOrDefault(k => k.id_roli == idr);
             RolaUzytkownika rolaUzytkownika = new RolaUzytkownika();
-            rolaUzytkownika.id_uzytkownika = idt;
-            rolaUzytkownika.id_roli = idc;
+            rolaUzytkownika.id_uzytkownika = idu;
+            rolaUzytkownika.id_roli = idr;
             rolaUzytkownika.uzytkownik = uzytkownik;
             rolaUzytkownika.rola = rola;
             _context.Add(rolaUzytkownika);
+            await _context.SaveChangesAsync();
 
             _context.prosbyOUprawnienia.Remove(prosba);
             await _context.SaveChangesAsync();
