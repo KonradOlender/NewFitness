@@ -8,7 +8,8 @@
 <h1>Treningi</h1>
 
 <p>
-    <a asp-action="Create">Stwórz nowy trening</a>
+    <a asp-action="Create">Stwórz nowy trening</a> ||
+    <a asp-controller="Cwiczenie" asp-action="Index">Zobacz dostępne ćwiczenia</a>
 </p>
 <hr />
 @using (Html.BeginForm("Index", "Trening", FormMethod.Get, new { id = ViewBag.trainingId }))

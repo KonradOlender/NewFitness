@@ -32,7 +32,7 @@ namespace WebApplication.Controllers
                 return View("UnableToAccessThisPage");
             }
                 
-            return View(await myContext.ToListAsync());
+            return View(await myContext.Include(k => k.uzytkownik).ToListAsync());
         }
 
         // GET: RolaUzytkownika/Create

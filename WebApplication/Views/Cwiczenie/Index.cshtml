@@ -5,7 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <p>
-    <a asp-action="Create">Dodaj ćwiczenie</a>
+    <a asp-action="Create">Dodaj ćwiczenie</a> ||
+    <a asp-controller="KategoriaCwiczenia" asp-action="Index">Zobacz kategorie</a>
 </p>
 @using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
 {
