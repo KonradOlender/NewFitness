@@ -88,6 +88,11 @@ namespace WebApplication.Controllers
         public IActionResult Admin()
         {
             bool isadmin = isAdmin();
+            if(!isadmin)
+            {
+                return RedirectToAction("Index");
+            }
+
             ViewBag.isadmin = isadmin;
             var cwiczenie = _context.cwiczenia.ToList();
             var trening = _context.treningi.ToList();

@@ -5,28 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Treningi</h1>
+<div class="text-center">
 
-<p>
-    <a asp-action="Create">Stwórz nowy trening</a> ||
-    <a asp-controller="Cwiczenie" asp-action="Index">Zobacz dostępne ćwiczenia</a>
-</p>
-<hr />
-@using (Html.BeginForm("Index", "Trening", FormMethod.Get, new { id = ViewBag.trainingId }))
-{
-<fieldset>
-    @Html.TextBox("searchString")
-
-    @Html.DropDownList("category")
+    <h1>Treningi</h1>
+    <hr />
 
     <p>
-        <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+        <a asp-action="Create">Stwórz nowy trening</a> ||
+        <a asp-controller="KategoriaTreningu" asp-action="Index">Zobacz kategorie treningów</a> ||
+        <a asp-controller="Cwiczenie" asp-action="Index">Zobacz dostępne ćwiczenia</a>
+
     </p>
 
-</fieldset>
-}
+    <hr />
+    @using (Html.BeginForm("Index", "Trening", FormMethod.Get, new { id = ViewBag.trainingId }))
+    {
+        <fieldset>
+            @Html.TextBox("searchString")
 
-<table class="table">
+            @Html.DropDownList("category")
+
+            <p>
+                <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+            </p>
+
+        </fieldset>
+    }
+</div>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>

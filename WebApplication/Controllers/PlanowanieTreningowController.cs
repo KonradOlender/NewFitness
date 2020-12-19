@@ -90,61 +90,6 @@ namespace WebApplication.Controllers
             return View(planowanieTreningow);
         }
 
-        /*/ GET: PlanowanieTreningow/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var planowanieTreningow = await _context.planowaneTreningi.FindAsync(id);
-            if (planowanieTreningow == null)
-            {
-                return NotFound();
-            }
-            ViewData["id_treningu"] = new SelectList(_context.treningi, "id_treningu", "nazwa", planowanieTreningow.id_treningu);
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", planowanieTreningow.id_uzytkownika);
-            return View(planowanieTreningow);
-        }
-
-        // POST: PlanowanieTreningow/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_uzytkownika,id_treningu,data")] PlanowanieTreningow planowanieTreningow)
-        {
-            if (id != planowanieTreningow.id_treningu)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(planowanieTreningow);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlanowanieTreningowExists(planowanieTreningow.id_treningu))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["id_treningu"] = new SelectList(_context.treningi, "id_treningu", "nazwa", planowanieTreningow.id_treningu);
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", planowanieTreningow.id_uzytkownika);
-            return View(planowanieTreningow);
-        }*/
-
         // GET: PlanowanieTreningow/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
