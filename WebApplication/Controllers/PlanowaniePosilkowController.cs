@@ -132,5 +132,30 @@ namespace WebApplication.Controllers
         {
             return _context.planowanePosilki.Any(e => e.id_posilku == id);
         }
+
+
+        //polecane posilki - najpopulrniejsze danego dnia
+        private int PolecanyPosilek(DateTime date)
+        {
+            int count = 0, max = -1;
+            var meals = _context.planowanePosilki.Where(x => x.data.Day == date.Day);
+            List<PlanowaniePosilkow> list = meals.ToList();
+            
+            foreach (PlanowaniePosilkow p in list)
+            {
+                if (p.id_posilku > count) count = p.id_posilku;
+            }
+            int[] tab = new int[count + 1];
+            foreach (PlanowaniePosilkow p in list)
+            {
+                tab[p.id_posilku]++;
+            }
+            max = tab.Max();
+            for(int i=0; i<tab.Count();i++)
+            {
+                if(tab[i]==max) return i;
+            }
+            return -1;
+        }
     }
 }
