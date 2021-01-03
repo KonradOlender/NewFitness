@@ -66,6 +66,12 @@ namespace WebApplication.Controllers
                 PlanowaniePosilkow meal = new PlanowaniePosilkow();
                 meal.id_posilku = id;
                 meal.data = DateTime.Now;
+
+                //polecany posilek
+                int id_polecany = this.PolecanyPosilek(meal.data);
+                if(id_polecany != -1)
+                ViewBag.polecany = _context.posilki.FirstOrDefault(x => x.id_posilku == id_polecany);
+                
                 return View(meal);
             }
 
@@ -135,12 +141,15 @@ namespace WebApplication.Controllers
 
 
         //polecane posilki - najpopulrniejsze danego dnia
+        //zwraca indeks najpopularniejszego posilku lub -1 jeśli nie ma żadnych zaplanowanych posiłków na dany dzień
         private int PolecanyPosilek(DateTime date)
         {
             int count = 0, max = -1;
-            var meals = _context.planowanePosilki.Where(x => x.data.Day == date.Day);
+            var meals = _context.planowanePosilki.Where(x => x.data.Date == date.Date);
             List<PlanowaniePosilkow> list = meals.ToList();
-            
+
+            if (list.Count() < 1) return -1;
+
             foreach (PlanowaniePosilkow p in list)
             {
                 if (p.id_posilku > count) count = p.id_posilku;

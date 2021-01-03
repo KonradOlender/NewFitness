@@ -66,6 +66,12 @@ namespace WebApplication.Controllers
                 training.id_treningu = id;
                 training.data = DateTime.Now;
                 //training.trening = _context.treningi.Where(x => x.id_treningu == id).FirstOrDefault();
+
+                //polecany trening
+                int id_polecany = this.PolecanyTrening(training.data);
+                if (id_polecany != -1)
+                    ViewBag.polecany = _context.treningi.FirstOrDefault(x => x.id_treningu == id_polecany);
+
                 return View(training);
             }
 
@@ -134,11 +140,14 @@ namespace WebApplication.Controllers
         }
 
         //polecane treningi - najpopularniejsze danego dnia
+        //zwraca indeks najpopularniejszego treningu lub -1 jeśli nie ma żadnych zaplanowanych treningów na dany dzień
         private int PolecanyTrening(DateTime date)
         {
             int count = 0, max = -1;
             var training = _context.planowaneTreningi.Where(x => x.data.Day == date.Day);
             List<PlanowanieTreningow> list = training.ToList();
+
+            if (list.Count() < 1) return -1;
 
             foreach (PlanowanieTreningow p in list)
             {
