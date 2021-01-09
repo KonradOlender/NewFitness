@@ -144,7 +144,7 @@ namespace WebApplication.Controllers
         private int PolecanyTrening(DateTime date)
         {
             int count = 0, max = -1;
-            var training = _context.planowaneTreningi.Where(x => x.data.Day == date.Day);
+            var training = _context.planowaneTreningi.Where(x => x.data.Date == date.Date);
             List<PlanowanieTreningow> list = training.ToList();
 
             if (list.Count() < 1) return -1;
