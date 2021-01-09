@@ -17,18 +17,7 @@
                 <label asp-for="id_treningu" class="control-label">Wybierz trening</label>
                 <select asp-for="id_treningu" class="form-control" asp-items="ViewBag.id_treningu"></select>
             </div>
-            @{
-                if (ViewBag.polecany == null)
-                {
-                    <a>null, id_polecany = @ViewBag.idpol</a>
-
-                }
-                else
-                {
-                    <h4>Polecany trening: @ViewBag.polecany.nazwa</h4>
-                }
-            }
-
+            
 
             <div class="form-group">
                 <label asp-for="data" class="control-label"></label>
@@ -44,6 +33,9 @@
                 <input type="submit" value="Planuj" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+    <div>
+        <a class="btn btn-primary" href="~/TreningList/Polecany" role="button">Dodaj polecany trening</a>
     </div>
 </div>
 

@@ -75,8 +75,11 @@ namespace WebApplication.Controllers
                 else
                     ViewBag.polecany = _context.treningi.First();
 
+
                 return View(training);
             }
+
+            
 
             return View();
         }
