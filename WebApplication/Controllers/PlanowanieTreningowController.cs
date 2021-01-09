@@ -69,6 +69,7 @@ namespace WebApplication.Controllers
 
                 //polecany trening
                 int id_polecany = this.PolecanyTrening(training.data);
+                ViewBag.idpol = id_polecany;
                 if (id_polecany != -1)
                     ViewBag.polecany = _context.treningi.Where(x => x.id_treningu == id_polecany);
                 else
