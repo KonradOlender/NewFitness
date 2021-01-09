@@ -5,28 +5,30 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Składniki</h1>
+<div class="text-center">
+    <h1>Składniki</h1>
 
-<p>
-    <a asp-action="Create">Dodaj nowy</a> ||
-    <a asp-controller="KategoriaSkladnikow" asp-action="Index">Zobacz kategorie</a>
-</p>
+    <p>
+        <a asp-action="Create">Dodaj nowy</a> ||
+        <a asp-controller="KategoriaSkladnikow" asp-action="Index">Zobacz kategorie</a>
+    </p>
 
-@using (Html.BeginForm("Index", "Skladnik", FormMethod.Get))
-{
-    <fieldset>
-        @Html.TextBox("searchString")
+    @using (Html.BeginForm("Index", "Skladnik", FormMethod.Get))
+    {
+        <fieldset>
+            @Html.TextBox("searchString")
 
-        @Html.DropDownList("category")
+            @Html.DropDownList("category")
 
-        <p>
-            <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
-        </p>
+            <p>
+                <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+            </p>
 
-    </fieldset>
-}
+        </fieldset>
+    }
+</div>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>

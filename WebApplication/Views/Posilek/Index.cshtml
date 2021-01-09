@@ -4,25 +4,29 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="text-center">
+    <h1>Posiłki</h1>
+    <hr />
 
-<p>
-    <a asp-action="Create">Stwórz nowy posiłek</a> ||
-    <a asp-controller="Cwiczenie" asp-action="Index">Zobacz dostępne składniki</a>
-</p>
-<hr />
-@using (Html.BeginForm("Index", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
-{
-    <fieldset>
-        @Html.TextBox("searchString")
+    <p>
+        <a asp-action="Create">Stwórz nowy posiłek</a> ||
+        <a asp-controller="KategoriaPosiłkow" asp-action="Index">Zobacz kategorie posiłków</a> ||
+        <a asp-controller="Skladnik" asp-action="Index">Zobacz dostępne składniki</a>
+    </p>
+    <hr />
+    @using (Html.BeginForm("Index", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
+    {
+        <fieldset>
+            @Html.TextBox("searchString")
 
-        <p>
-            <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
-        </p>
+            <p>
+                <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+            </p>
 
-    </fieldset>
-}
-
-<table class="table">
+        </fieldset>
+    }
+</div>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>

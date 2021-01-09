@@ -66,6 +66,12 @@ namespace WebApplication.Controllers
                 training.id_treningu = id;
                 training.data = DateTime.Now;
                 //training.trening = _context.treningi.Where(x => x.id_treningu == id).FirstOrDefault();
+
+                //polecany trening
+                int id_polecany = this.PolecanyTrening(training.data);
+                if (id_polecany != -1)
+                    ViewBag.polecany = _context.treningi.FirstOrDefault(x => x.id_treningu == id_polecany);
+
                 return View(training);
             }
 
@@ -89,61 +95,6 @@ namespace WebApplication.Controllers
             ViewData["id_treningu"] = new SelectList(_context.treningi, "id_treningu", "nazwa", planowanieTreningow.id_treningu);
             return View(planowanieTreningow);
         }
-
-        /*/ GET: PlanowanieTreningow/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var planowanieTreningow = await _context.planowaneTreningi.FindAsync(id);
-            if (planowanieTreningow == null)
-            {
-                return NotFound();
-            }
-            ViewData["id_treningu"] = new SelectList(_context.treningi, "id_treningu", "nazwa", planowanieTreningow.id_treningu);
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", planowanieTreningow.id_uzytkownika);
-            return View(planowanieTreningow);
-        }
-
-        // POST: PlanowanieTreningow/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_uzytkownika,id_treningu,data")] PlanowanieTreningow planowanieTreningow)
-        {
-            if (id != planowanieTreningow.id_treningu)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(planowanieTreningow);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlanowanieTreningowExists(planowanieTreningow.id_treningu))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["id_treningu"] = new SelectList(_context.treningi, "id_treningu", "nazwa", planowanieTreningow.id_treningu);
-            ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id", planowanieTreningow.id_uzytkownika);
-            return View(planowanieTreningow);
-        }*/
 
         // GET: PlanowanieTreningow/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -186,6 +137,33 @@ namespace WebApplication.Controllers
         private bool PlanowanieTreningowExists(int id)
         {
             return _context.planowaneTreningi.Any(e => e.id_treningu == id);
+        }
+
+        //polecane treningi - najpopularniejsze danego dnia
+        //zwraca indeks najpopularniejszego treningu lub -1 jeśli nie ma żadnych zaplanowanych treningów na dany dzień
+        private int PolecanyTrening(DateTime date)
+        {
+            int count = 0, max = -1;
+            var training = _context.planowaneTreningi.Where(x => x.data.Date == date.Date);
+            List<PlanowanieTreningow> list = training.ToList();
+
+            if (list.Count() < 1) return -1;
+
+            foreach (PlanowanieTreningow p in list)
+            {
+                if (p.id_treningu > count) count = p.id_treningu;
+            }
+            int[] tab = new int[count + 1];
+            foreach (PlanowanieTreningow p in list)
+            {
+                tab[p.id_treningu]++;
+            }
+            max = tab.Max();
+            for (int i = 0; i < tab.Count(); i++)
+            {
+                if (tab[i] == max) return i;
+            }
+            return -1;
         }
     }
 }

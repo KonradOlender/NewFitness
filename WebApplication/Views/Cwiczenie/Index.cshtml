@@ -4,25 +4,27 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<p>
-    <a asp-action="Create">Dodaj ćwiczenie</a> ||
-    <a asp-controller="KategoriaCwiczenia" asp-action="Index">Zobacz kategorie</a>
-</p>
-@using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
-{
-<fieldset>
-    @Html.TextBox("searchString")
+<div class="text-center">
+    <p>
+        <a asp-action="Create">Dodaj ćwiczenie</a> ||
+        <a asp-controller="KategoriaCwiczenia" asp-action="Index">Zobacz kategorie</a>
+    </p>
+    @using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
+    {
+        <fieldset>
+            @Html.TextBox("searchString")
 
-    @Html.DropDownList("category")
+            @Html.DropDownList("category")
 
-    <div style="padding: 5px">
-        <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
-    </div>
+            <div style="padding: 5px">
+                <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+            </div>
 
-</fieldset>
-}
+        </fieldset>
+    }
+</div>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>

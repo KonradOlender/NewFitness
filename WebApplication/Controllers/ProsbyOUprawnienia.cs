@@ -71,7 +71,6 @@ namespace WebApplication.Controllers
             return _context.prosbyOUprawnienia.Any(e => e.id_uzytkownika == user_id && e.id_roli == role_id);
         }
 
-        //BŁAD 405 PRZY USUWANIU I AKCEPTOWANIU
         // POST: ProsbyOUprawnienia/Delete/5/6
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
