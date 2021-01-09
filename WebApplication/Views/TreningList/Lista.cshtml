@@ -3,21 +3,21 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">Nazwa</th>
-                <th scope="col">Apalone Kalorie</th>
+                <th scope="col">Opis</th>
+                <th scope="col">Liczba powtórzeń</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in ViewBag.trening)
+            @foreach (var item in ViewBag.trainingDetails)
             {
-            <tr>
-                <th scope="row">@item.id_treningu</th>
-                <td>@item</td>
-                @*<td>@item.spalone_kalorie</td>*@
-            </tr>
+                    <tr>
+                        <th scope="row">@item.cwiczenie.nazwa</th>
+                        <td>@item.cwiczenie.opis</td>
+                        <td>@item.liczba_powtorzen</td>
+                    </tr>
             }
-            
+
         </tbody>
     </table>
 </div>

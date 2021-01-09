@@ -50,14 +50,32 @@ namespace WebApplication.Controllers
             return View();
         }
         //nie działa
-        public IActionResult Lista(int index)
+        public async Task<IActionResult> Lista(int? id)
         {
-            var trening = _context.treningSzczegoly.Where(k => k.id_treningu == index)
-                                        .Include(k => k.cwiczenie)
-                                        .ToList(); ;
-            ViewBag.trening = trening;
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return View();
+            var trening = await _context.treningi
+                .Include(t => t.kategoria)
+                .Include(t => t.uzytkownik)
+                .FirstOrDefaultAsync(m => m.id_treningu == id);
+
+            ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == id)
+                                        .Include(k => k.cwiczenie)
+                                        .ToList();
+
+            ViewBag.userId = int.Parse(this.User.Identity.GetUserId());
+            ViewBag.treningOwner = trening.id_uzytkownika;
+            ViewBag.index = id;
+
+            if (trening == null)
+            {
+                return NotFound();
+            }
+
+            return View(trening);
         }
 
     }
