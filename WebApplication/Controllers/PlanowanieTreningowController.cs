@@ -70,7 +70,9 @@ namespace WebApplication.Controllers
                 //polecany trening
                 int id_polecany = this.PolecanyTrening(training.data);
                 if (id_polecany != -1)
-                    ViewBag.polecany = _context.treningi.FirstOrDefault(x => x.id_treningu == id_polecany);
+                    ViewBag.polecany = _context.treningi.Where(x => x.id_treningu == id_polecany);
+                else
+                    ViewBag.polecany = _context.treningi.First();
 
                 return View(training);
             }

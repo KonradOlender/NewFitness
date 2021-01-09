@@ -23,6 +23,17 @@
             <select asp-for="id_posilku" multiple class="form-control form-control-lg" style="min-height: 50vh" asp-items="ViewBag.id_posilku"></select>
         </div>
 
+        @{
+            if (ViewBag.polecany == null)
+            {
+                <a>null</a>
+            }
+            else
+            {
+                <h4>Polecany trening: @ViewBag.polecany.nazwa</h4>
+            }
+        }
+
         <div class="form-group">
             <input type="submit" value="Stwórz" class="btn btn-primary" />
         </div>

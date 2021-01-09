@@ -17,6 +17,18 @@
                 <label asp-for="id_treningu" class="control-label">Wybierz trening</label>
                 <select asp-for="id_treningu" class="form-control" asp-items="ViewBag.id_treningu"></select>
             </div>
+            @{
+                if (ViewBag.polecany == null)
+                {
+                    <a>null</a>
+                }
+                else
+                {
+                    <h4>Polecany trening: @ViewBag.polecany.nazwa</h4>
+                }
+            }
+
+
             <div class="form-group">
                 <label asp-for="data" class="control-label"></label>
                 <input asp-for="data" class="form-control" />
