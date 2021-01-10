@@ -82,7 +82,12 @@ namespace WebApplication.Controllers
         public IActionResult Polecany()
         {
             var polecay_id = PolecanyTrening(DateTime.Now.Date);
-            var polecany = _context.treningi.Single(e => e.id_treningu == polecay_id);
+            Trening polecany = _context.treningi.First();
+            if (polecay_id != -1)
+            {
+                polecany = _context.treningi.Single(e => e.id_treningu == polecay_id);
+            }
+
             ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == polecay_id)
                                         .Include(k => k.cwiczenie)
                                         .ToList();

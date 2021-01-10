@@ -27,6 +27,30 @@ namespace WebApplication.Controllers
             return View();
         }
 
+        public async Task<IActionResult> User(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+
+            ViewBag.profil = _context.uzytkownicy.Where(k => k.Id == id)
+                                        .Include(k => k.oceny);
+            ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).ToList();
+            ViewBag.treningi = _context.treningi.Where(e => e.id_uzytkownika == id).ToList();
+
+            ViewBag.index = id;
+            ViewBag.isTrainer = isTrainer(id);
+            ViewBag.isDietician = isDietician(id);
+
+            //ViewBag.t_rating = trainersRating(id);
+            //ViewBag.d_rating = dieticianRating(id);
+
+            return View();
+        }
+
+
         private bool userExists(int user)
         {
             return _context.uzytkownicy.Any(k => k.Id == user);
