@@ -12,14 +12,14 @@
         @foreach (var item in ViewBag.profil)
         {
             <h3>Użytkownik: @item.imie</h3>
-            @*if (@ViewBag.isTrainer)
+            if (@ViewBag.isTrainer)
             {
                 <h5>Ocena Trenera: @ViewBag.t_rating</h5>
             }
             if (@ViewBag.isDietician)
             {
                 <h5>Ocena Dietetyka: @ViewBag.d_rating</h5>
-            }*@
+            }
 
             <h5>Opis</h5>
         }
