@@ -1,0 +1,215 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4">
+        <div>
+            <img style="height: 300px; width: 300px;" src="~/images/Profil.svg" />
+        </div>
+        @foreach (var item in ViewBag.profil)
+        {
+            <h3>Użytkownik: @item.imie</h3>
+            if (@ViewBag.isTrainer)
+            {
+                <h5>Ocena Trenera: @ViewBag.t_rating</h5>
+            }
+            if (@ViewBag.isDietician)
+            {
+                <h5>Ocena Dietetyka: @ViewBag.d_rating</h5>
+            }
+            <style>
+                .txt-center {
+                    text-align: center;
+                }
+
+                .hide {
+                    display: none;
+                }
+
+                .clear {
+                    float: none;
+                    clear: both;
+                }
+
+                .rating {
+                    width: 90px;
+                    unicode-bidi: bidi-override;
+                    direction: rtl;
+                    text-align: center;
+                    position: relative;
+                }
+
+                    .rating > label {
+                        float: right;
+                        display: inline;
+                        padding: 0;
+                        margin: 0;
+                        position: relative;
+                        width: 1.1em;
+                        cursor: pointer;
+                        color: #000;
+                    }
+
+                        .rating > label:hover,
+                        .rating > label:hover ~ label,
+                        .rating > input.radio-btn:checked ~ label {
+                            color: transparent;
+                        }
+
+                            .rating > label:hover:before,
+                            .rating > label:hover ~ label:before,
+                            .rating > input.radio-btn:checked ~ label:before,
+                            .rating > input.radio-btn:checked ~ label:before {
+                                content: "\2605";
+                                position: absolute;
+                                left: 0;
+                                color: #FFD700;
+                            }
+            </style>
+            @if (@ViewBag.isTrainer)
+            {
+                <div class="txt-center">
+                    <form method="post">
+                        <input type="hidden" name="oceniany_id" value="@ViewBag.id" />
+                        <input type="hidden" name="rola" value="trener" />
+                        <div class="rating">
+                            <input id="star5" name="rating" type="radio" value="5" class="radio-btn hide" />
+                            <label for="star5">☆</label>
+                            <input id="star4" name="rating" type="radio" value="4" class="radio-btn hide" />
+                            <label for="star4">☆</label>
+                            <input id="star3" name="rating" type="radio" value="3" class="radio-btn hide" />
+                            <label for="star3">☆</label>
+                            <input id="star2" name="rating" type="radio" value="2" class="radio-btn hide" />
+                            <label for="star2">☆</label>
+                            <input id="star1" name="rating" type="radio" value="1" class="radio-btn hide" />
+                            <label for="star1">☆</label>
+                            <div class="clear"></div>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            }
+            @if (@ViewBag.isDietician)
+            {
+                <div class="txt-center">
+                    <form method="post">
+                        <input type="hidden" name="oceniany_id" value="@ViewBag.id" />
+                        <input type="hidden" name="rola" value="dietetyk" />
+                        <div class="rating">
+                            <input id="starr5" name="rating" type="radio" value="5" class="radio-btn hide" />
+                            <label for="starr5">☆</label>
+                            <input id="starr4" name="rating" type="radio" value="4" class="radio-btn hide" />
+                            <label for="starr4">☆</label>
+                            <input id="starr3" name="rating" type="radio" value="3" class="radio-btn hide" />
+                            <label for="starr3">☆</label>
+                            <input id="starr2" name="rating" type="radio" value="2" class="radio-btn hide" />
+                            <label for="starr2">☆</label>
+                            <input id="starr1" name="rating" type="radio" value="1" class="radio-btn hide" />
+                            <label for="starr1">☆</label>
+                            <div class="clear"></div>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            }
+
+
+            <div>
+                <h5>Opis</h5>
+                <a>
+                    Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt
+                    ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute
+                    irure dolor in reprehenderit in voluptate
+                    velit esse cillum dolore eu fugiat nulla
+                    pariatur. Excepteur sint occaecat cupidatat
+                    non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </a>
+            </div>
+
+        }
+
+
+
+    </div>
+    <div class="col-md-4">
+        @if (ViewBag.isTrainer)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 50px; vertical-align: central;" scope="col">#</th>
+                        <th scope="col">Treningi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.treningi)
+                    {
+                        <tr>
+                            <th scope="row" style="vertical-align: middle;">@item.id_treningu</th>
+                            <td>
+                                <div class="row">
+                                    <div>
+                                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/meal.jpg" />
+                                    </div>
+                                    <div style="margin: auto; width: 50%; padding: 10px; ">
+                                        <h5>@item.nazwa</h5>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-primary" href="~/TreningList/Lista/@item.id_treningu" role="button">Zobacz</a>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-md-4">
+        @if (ViewBag.isDietician)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 50px; vertical-align: central;" scope="col">#</th>
+                        <th scope="col">Posiłki</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.posilki)
+                    {
+                        <tr>
+                            <th scope="row" style="vertical-align: middle;">@item.id_posilku</th>
+                            <td>
+                                <div class="row">
+                                    <div>
+                                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/meal.jpg" />
+                                    </div>
+                                    <div style="margin: auto; width: 50%; padding: 10px; ">
+                                        <h5>@item.nazwa</h5>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-primary" href="~/Posilek/Details/@item.id_posilku" role="button">Zobacz</a>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+</div>
+

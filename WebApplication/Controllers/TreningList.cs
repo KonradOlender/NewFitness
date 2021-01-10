@@ -99,7 +99,6 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        //Do dodania (jeślu bez daty to -500 kcal)
         [HttpPost]
         public IActionResult Polecany(string dzien)
         {

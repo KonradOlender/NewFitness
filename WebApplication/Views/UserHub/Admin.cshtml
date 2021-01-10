@@ -15,6 +15,7 @@
                     <a class="list-group-item list-group-item-action" id="list-skladnik-list" data-toggle="list" href="#list-skladnik" role="tab" aria-controls="skladniki">Składniki</a>
                     <a class="list-group-item list-group-item-action" id="list-posilek-list" data-toggle="list" href="#list-posilek" role="tab" aria-controls="posilki">Posiłki</a>
                     <a class="list-group-item list-group-item-action" id="list-rola-list" data-toggle="list" href="#list-rola" role="tab" aria-controls="rola">Role</a>
+                    <a class="list-group-item list-group-item-action" id="list-oceny-list" data-toggle="list" href="#list-oceny" role="tab" aria-controls="oceny">Oceny</a>
                     <a href="/Historia" class="list-group-item list-group-item-action">Historia Użytkownika</a>
                     <a href="/KategoriaCwiczenia" class="list-group-item list-group-item-action">Kategorie Ćwiczeń</a>
                     <a href="/KategoriaTreningu" class="list-group-item list-group-item-action">Kategorie Treningów</a>
@@ -143,6 +144,32 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="tab-pane fade" id="list-oceny" role="tabpanel" aria-labelledby="list-oceny-list">
+                        <a class="btn btn-primary" href="/Rolauzytkownika" role="button">Zarządzaj</a>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Oceniający</th>
+                                    <th scope="col">Oceniany</th>
+                                    <th scope="col">Ocena</th>
+                                    <th scope="col">Rola</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.oceny)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.id_uzytkownika_oceniajacego</th>
+                                            <td>@item.id_uzytkownika_ocenianego</td>
+                                            <td>@item.ocena</td>
+                                            <td>@item.id_roli</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>

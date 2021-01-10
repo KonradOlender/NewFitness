@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - FitnessFriend</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-datepicker.css" />
+
+    @*<link rel="stylesheet" href="~/lib/jquery-bar-rating-master/dist/themes/bootstrap-stars.css">*@
     <link rel="stylesheet" href="~/css/site.css" />
     @*<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">*@
 
@@ -19,8 +21,8 @@
                 <div> <a href="/" /><img style="width: 200px" src="~/images/Logo.svg" /></div>
 
                 @*<div>
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
-        </div>*@
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
+                    </div>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -99,8 +101,18 @@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/jquery-bar-rating-master/jquery.barrating.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#example').barrating({
+                theme: 'fontawesome-stars'
+            });
+        });
+    </script>
 </body>
 </html>

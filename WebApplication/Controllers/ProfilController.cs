@@ -11,6 +11,7 @@ using WebApplication.Areas.Identity.Data;
 using WebApplication.Data;
 using WebApplication.Models;
 
+
 namespace WebApplication.Controllers
 {
     [Authorize]
@@ -27,14 +28,15 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public async Task<IActionResult> User(int id)
+        //musi zapamiętywać aktualną ocene
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-
+            ViewBag.id = id;
             ViewBag.profil = _context.uzytkownicy.Where(k => k.Id == id)
                                         .Include(k => k.oceny);
             ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).ToList();
@@ -47,8 +49,43 @@ namespace WebApplication.Controllers
             //ViewBag.t_rating = trainersRating(id);
             //ViewBag.d_rating = dieticianRating(id);
 
+
+
             return View();
         }
+
+        //wywala jak jest już dana ocena, do zrobienia
+        [HttpPost]
+        public IActionResult Details(int oceniany_id, double rating, string rola)
+        {
+            
+            int userid = int.Parse(User.Identity.GetUserId());  
+            Uzytkownik user = _context.uzytkownicy.Single(e => e.Id == userid);
+
+            var oceniany = _context.uzytkownicy.Single(e => e.Id == oceniany_id);
+            var role = _context.role.Single(e=>e.nazwa == rola);
+
+            Ocena ocena = new Ocena();
+
+            ocena.id_uzytkownika_oceniajacego = userid;
+            ocena.id_uzytkownika_ocenianego = oceniany.Id;
+            ocena.ocena = rating;
+            ocena.oceniajacy = user;
+            ocena.oceniany = oceniany;
+            ocena.rola = role;
+            ocena.id_roli = role.id_roli;
+
+
+
+            _context.Add(ocena);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Details));
+
+            //return View();
+        }
+
+
 
 
         private bool userExists(int user)

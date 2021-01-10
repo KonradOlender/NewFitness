@@ -103,6 +103,7 @@ namespace WebApplication.Controllers
             var kat_skladnika = _context.kategoriaSkladnikow.ToList();
             var role = _context.RolaUzytkownika.Include(e=>e.rola).ToList();
             var planowanie_trening = _context.planowaneTreningi.ToList();
+            var oceny = _context.oceny.ToList();
             ViewBag.cwiczenie = cwiczenie;
             ViewBag.trening = trening;
             ViewBag.kat_treningu = kat_treningu;
@@ -112,6 +113,7 @@ namespace WebApplication.Controllers
             ViewBag.kat_skladnika = kat_skladnika;
             ViewBag.role = role;
             ViewBag.planowanie_trening = planowanie_trening;
+            ViewBag.oceny = oceny;
             return View();
         }
 
