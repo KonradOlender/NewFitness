@@ -36,6 +36,18 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
+            int userid = int.Parse(User.Identity.GetUserId());
+            Uzytkownik user = _context.uzytkownicy.Single(e => e.Id == userid);
+
+            if (isTrainer(id))
+            {
+                ViewBag.ocenaTrener = _context.oceny.Single(e => e.id_uzytkownika_oceniajacego == userid && e.id_uzytkownika_ocenianego == id && e.id_roli == 2);
+            }
+            if (isDietician(id))
+            {
+                ViewBag.ocenaDietetyk = _context.oceny.Single(e => e.id_uzytkownika_oceniajacego == userid && e.id_uzytkownika_ocenianego == id && e.id_roli == 3);
+            }
+
             ViewBag.id = id;
             ViewBag.profil = _context.uzytkownicy.Where(k => k.Id == id)
                                         .Include(k => k.oceny);
@@ -59,25 +71,41 @@ namespace WebApplication.Controllers
         public IActionResult Details(int oceniany_id, double rating, string rola)
         {
             
+
             int userid = int.Parse(User.Identity.GetUserId());  
             Uzytkownik user = _context.uzytkownicy.Single(e => e.Id == userid);
 
             var oceniany = _context.uzytkownicy.Single(e => e.Id == oceniany_id);
             var role = _context.role.Single(e=>e.nazwa == rola);
 
-            Ocena ocena = new Ocena();
+            if(_context.oceny.Any(e=> e.id_uzytkownika_oceniajacego == userid && e.id_uzytkownika_ocenianego == oceniany.Id))
+            {
+                Ocena ocena = new Ocena();
 
-            ocena.id_uzytkownika_oceniajacego = userid;
-            ocena.id_uzytkownika_ocenianego = oceniany.Id;
-            ocena.ocena = rating;
-            ocena.oceniajacy = user;
-            ocena.oceniany = oceniany;
-            ocena.rola = role;
-            ocena.id_roli = role.id_roli;
+                ocena.id_uzytkownika_oceniajacego = userid;
+                ocena.id_uzytkownika_ocenianego = oceniany.Id;
+                ocena.ocena = rating;
+                ocena.oceniajacy = user;
+                ocena.oceniany = oceniany;
+                ocena.rola = role;
+                ocena.id_roli = role.id_roli;
 
+                _context.Update(ocena);
+            }
+            else
+            {
+                Ocena ocena = new Ocena();
 
+                ocena.id_uzytkownika_oceniajacego = userid;
+                ocena.id_uzytkownika_ocenianego = oceniany.Id;
+                ocena.ocena = rating;
+                ocena.oceniajacy = user;
+                ocena.oceniany = oceniany;
+                ocena.rola = role;
+                ocena.id_roli = role.id_roli;
 
-            _context.Add(ocena);
+                _context.Add(ocena);
+            }
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Details));
