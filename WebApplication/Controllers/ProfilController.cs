@@ -46,8 +46,8 @@ namespace WebApplication.Controllers
             ViewBag.isTrainer = isTrainer(id);
             ViewBag.isDietician = isDietician(id);
 
-            //ViewBag.t_rating = trainersRating(id);
-            //ViewBag.d_rating = dieticianRating(id);
+            ViewBag.t_rating = trainersRating(id);
+            ViewBag.d_rating = dieticianRating(id);
 
 
 
@@ -120,6 +120,8 @@ namespace WebApplication.Controllers
                                       .Where(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli)
                                       .Count();
             return ratings_sum / (double)ratings_count;*/
+            if (!_context.oceny.Any(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli))
+                return 0;
             double ratings_avg = _context.oceny
                                       .Where(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli)
                                       .Average(k => k.ocena);
@@ -134,6 +136,8 @@ namespace WebApplication.Controllers
             if (!isDietician(user)) return -1;
 
             Rola role = _context.role.FirstOrDefault(k => k.nazwa == "dietetyk");
+            if (!_context.oceny.Any(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli))
+                return 0;
             double ratings_avg = _context.oceny
                                       .Where(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli)
                                       .Average(k => k.ocena);
