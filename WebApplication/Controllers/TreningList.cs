@@ -106,7 +106,13 @@ namespace WebApplication.Controllers
             var user = _context.uzytkownicy.Single(e => e.Id == userid);
 
             var polecay_id = PolecanyTrening(DateTime.Now.Date);
-            var polecany = _context.treningi.Single(e => e.id_treningu == polecay_id);
+            Trening polecany = _context.treningi.First();
+
+            if (polecay_id != -1)
+            {
+                polecany = _context.treningi.Single(e => e.id_treningu == polecay_id);
+            }
+            
 
             PlanowanieTreningow planowany = new PlanowanieTreningow();
 
