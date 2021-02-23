@@ -22,7 +22,7 @@ namespace WebApplication.Models
         public string GetImageDataUrl()
         {
             string imageBase64Data = Convert.ToBase64String(obraz);
-            return string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+            return string.Format("data:image-training" + id_obrazu.ToString() + "/jpg;base64,{0}", imageBase64Data);
         }
     }
 }
