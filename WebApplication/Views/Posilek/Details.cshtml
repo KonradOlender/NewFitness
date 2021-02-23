@@ -36,7 +36,17 @@
     @if (ViewBag.userId == ViewBag.posilekOwner)
     {
         <a asp-action="AddComponent" asp-route-id="@Model.id_posilku">Dodaj składnik</a> <br />
+        <a asp-action="AddImage" asp-route-id="@Model.id_posilku">Dodaj obraz</a> <br />
     }
+    @if (ViewBag.image == null)
+    {
+        //default image
+    }
+    else
+    {
+        <img src="@ViewBag.image" />
+    }
+
 
 </div>
 

@@ -13,7 +13,7 @@
 <div>
     <h4>Treningu</h4>
     <br />
-    <a asp-controller="PlanowanieTreningow"  asp-action="Create" asp-route-id_string="@Model.id_treningu">Zaplanuj trening</a> <br />
+    <a asp-controller="PlanowanieTreningow" asp-action="Create" asp-route-id_string="@Model.id_treningu">Zaplanuj trening</a> <br />
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -41,8 +41,16 @@
     @if (ViewBag.userId == ViewBag.treningOwner)
     {
         <a asp-action="AddExercise" asp-route-id="@Model.id_treningu">Dodaj ćwiczenie</a> <br />
+        <a asp-action="AddImage" asp-route-id="@Model.id_treningu">Dodaj obraz</a> <br />
     }
-
+    @if (ViewBag.image == null)
+    {
+        //default image
+    }
+    else
+    {
+        <img src="@ViewBag.image" />
+    }
 </div>
 <div>
     <h5>Cwiczenia</h5>

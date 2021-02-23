@@ -317,6 +317,11 @@ namespace WebApplication.Controllers
                 ViewBag.meal = false;
                 return View("AddImage");
             }
+
+            var meal = _context.posilki.FirstOrDefault(t => t.id_posilku == id);
+            if (meal.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+                return RedirectToAction("Details", new { id = meal.id_posilku });
+
             ViewBag.Message = "";
             ViewBag.meal = true;
             return View();
@@ -332,10 +337,15 @@ namespace WebApplication.Controllers
                 ViewBag.meal = false;
                 return View("AddImage");
             }
+
+            var meal = _context.posilki.FirstOrDefault(t => t.id_posilku == id);
+            if (meal.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+                return RedirectToAction("Details", new { id = meal.id_posilku });
+
             ViewBag.Message = "";
             ViewBag.meal = true;
 
-            var file = Request.Form.Files[0];
+            var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
             if (file == null)
             {
                 ViewBag.Message = "Nie wybrano obrazu do przesłania";

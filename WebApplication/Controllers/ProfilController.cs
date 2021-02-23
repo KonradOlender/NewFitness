@@ -95,8 +95,10 @@ namespace WebApplication.Controllers
             int userId = int.Parse(User.Identity.GetUserId());
             if (userId != id)
             {
-                return RedirectToAction(nameof(Details));
+                int newId = id;
+                return RedirectToAction("Details", new { id = newId });
             }
+            
             ViewBag.Message = "";
             ViewBag.user = true;
             return View();
@@ -109,10 +111,11 @@ namespace WebApplication.Controllers
             int userId = int.Parse(User.Identity.GetUserId());
             if (userId != id)
             {
-                return RedirectToAction(nameof(Details));
+                int newId = id;
+                return RedirectToAction("Details", new { id = newId });
             }
             ViewBag.user = true;
-            var file = Request.Form.Files[0];
+            var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
             if (file == null)
             {
                 ViewBag.Message = "Nie wybrano obrazu do przesłania";

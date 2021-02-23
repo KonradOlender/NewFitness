@@ -324,6 +324,10 @@ namespace WebApplication.Controllers
                 ViewBag.training = false;
                 return View("AddImage");
             }
+            var trening = _context.treningi.FirstOrDefault(t => t.id_treningu == id);
+            if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+                return RedirectToAction("Details", new { id = trening.id_treningu });
+
             ViewBag.Message = "";
             ViewBag.training = true;
             return View();
@@ -339,8 +343,13 @@ namespace WebApplication.Controllers
                 ViewBag.training = false;
                 return View("AddImage");
             }
+
+            var trening = _context.treningi.FirstOrDefault(t => t.id_treningu == id);
+            if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+                return RedirectToAction("Details", new { id = trening.id_treningu });
+
             ViewBag.training = true;
-            var file = Request.Form.Files[0];
+            var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
 
             if(file == null)
             {
