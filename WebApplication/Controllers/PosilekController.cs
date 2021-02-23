@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -63,6 +64,7 @@ namespace WebApplication.Controllers
 
             var posilek = await _context.posilki
                 .Include(p => p.uzytkownik)
+                .Include(p => p.obrazy)
                 .FirstOrDefaultAsync(m => m.id_posilku == id);
 
             ViewBag.mealsDetails = _context.posilekSzczegoly.Where(k => k.id_posilku == id)
@@ -71,11 +73,18 @@ namespace WebApplication.Controllers
 
             ViewBag.userId = int.Parse(this.User.Identity.GetUserId());
             ViewBag.posilekOwner = posilek.id_uzytkownika;
-
+            
             if (posilek == null)
             {
                 return NotFound();
             }
+
+            if (posilek.obrazy.Count <= 0)
+                ViewBag.image = null;
+            else
+                ViewBag.image = posilek.obrazy
+                                    .Last()
+                                    .GetImageDataUrl();
 
             return View(posilek);
         }
@@ -298,8 +307,56 @@ namespace WebApplication.Controllers
             ViewData["id_skladnika"] = new SelectList(_context.skladnik, "id_skladnika", "nazwa", pszczegoly.id_skladnika);
             return View(pszczegoly);
 
+        }
+
+        public IActionResult AddImage(int id)
+        {
+            if (!_context.posilki.Any(t => t.id_posilku == id))
+            {
+                ViewBag.Message = "Nie ma takiego posilku";
+                ViewBag.meal = false;
+                return View("AddImage");
+            }
+            ViewBag.Message = "";
+            ViewBag.meal = true;
+            return View();
+        }
+
+        [HttpPost, ActionName("AddImage")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImagePost(int id)
+        {
+            if (!_context.posilki.Any(t => t.id_posilku == id))
+            {
+                ViewBag.Message = "Nie ma takiego posilku";
+                ViewBag.meal = false;
+                return View("AddImage");
+            }
+            ViewBag.Message = "";
+            ViewBag.meal = true;
+
+            var file = Request.Form.Files[0];
+            if (file == null)
+            {
+                ViewBag.Message = "Nie wybrano obrazu do przesłania";
+                return View("AddImage");
             }
 
+            ObrazyPosilku image = new ObrazyPosilku();
+            image.id_posilku = id;
+
+            MemoryStream memeoryStream = new MemoryStream();
+            file.CopyTo(memeoryStream);
+            image.obraz = memeoryStream.ToArray();
+
+            memeoryStream.Close();
+            memeoryStream.Dispose();
+
+            _context.obrazyPosilkow.Add(image);
+            _context.SaveChanges();
+            ViewBag.Message = "Obraz został dodany";
+            return View("AddImage");
+        }
 
         private bool isDietician()
         {

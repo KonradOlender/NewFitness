@@ -24,6 +24,7 @@ namespace WebApplication.Areas.Identity.Data
         public virtual ICollection<HistoriaUzytkownika> historiaUzytkownika { get; set; }
         public virtual ICollection<Ocena> oceny { get; set; }
         public virtual ICollection<ProsbyOUprawnienia> prosby { get; set; }
+        public virtual ObrazProfilowe profilowe { get; set; }
 
         public override String ToString()
         {

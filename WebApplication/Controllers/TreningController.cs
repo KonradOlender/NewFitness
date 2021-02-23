@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
@@ -78,6 +79,7 @@ namespace WebApplication.Controllers
             var trening = await _context.treningi
                 .Include(t => t.kategoria)
                 .Include(t => t.uzytkownik)
+                .Include(t => t.obrazy)
                 .FirstOrDefaultAsync(m => m.id_treningu == id);
 
             ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == id)
@@ -92,6 +94,12 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
+            if (trening.obrazy.Count <= 0)
+                ViewBag.image = null;
+            else
+                ViewBag.image = trening.obrazy
+                                    .Last()
+                                    .GetImageDataUrl();
             return View(trening);
         }
 
@@ -306,6 +314,54 @@ namespace WebApplication.Controllers
             ViewBag.trainingId = id;
             ViewData["id_cwiczenia"] = new SelectList(_context.cwiczenia, "id_cwiczenia", "nazwa", tszczegoly.id_cwiczenia);
             return View(tszczegoly);
+        }
+
+        public IActionResult AddImage(int id)
+        {
+            if (!_context.treningi.Any(t => t.id_treningu == id))
+            {
+                ViewBag.Message = "Nie ma takiego treningu";
+                ViewBag.training = false;
+                return View("AddImage");
+            }
+            ViewBag.Message = "";
+            ViewBag.training = true;
+            return View();
+        }
+
+        [HttpPost, ActionName("AddImage")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImagePost(int id)
+        {
+            if(!_context.treningi.Any(t => t.id_treningu == id))
+            {
+                ViewBag.Message = "Nie ma takiego treningu";
+                ViewBag.training = false;
+                return View("AddImage");
+            }
+            ViewBag.training = true;
+            var file = Request.Form.Files[0];
+
+            if(file == null)
+            {
+                ViewBag.Message = "Nie wybrano obrazu do przesłania";
+                return View("AddImage");
+            }
+
+            ObrazyTreningu image = new ObrazyTreningu();
+            image.id_treningu = id;
+
+            MemoryStream memeoryStream = new MemoryStream();
+            file.CopyTo(memeoryStream);
+            image.obraz = memeoryStream.ToArray();
+
+            memeoryStream.Close();
+            memeoryStream.Dispose();
+
+            _context.obrazyTreningow.Add(image);
+            _context.SaveChanges();
+            ViewBag.Message = "Obraz został dodany";
+            return View("AddImage");
         }
 
         private bool ExerciseAlreadyInTraining(int training_id, int exercise_id)

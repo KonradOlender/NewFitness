@@ -1,0 +1,19 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    
+    id="file1"
+               name="file1"
+*@
+@{
+    <h1>TO JEST TEST, tu obraz musi sie pojawic wczytany</h1>
+    <img src="@ViewBag.ImageDataUrl" />
+
+    <form asp-action="UploadImage"
+          asp-controller="Home"
+          method="post"
+          enctype="multipart/form-data">
+        <input type="file"
+               multiple="multiple" />
+        <button type="submit">Upload File</button>
+    </form>
+}

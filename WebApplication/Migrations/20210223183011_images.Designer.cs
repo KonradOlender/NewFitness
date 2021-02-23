@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication.Data;
 
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20210223183011_images")]
+    partial class images
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,20 +345,6 @@ namespace WebApplication.Migrations
                             id_kategorii = 1,
                             nazwa = "inne"
                         });
-                });
-
-            modelBuilder.Entity("WebApplication.Models.ObrazProfilowe", b =>
-                {
-                    b.Property<int>("id_uzytkownika")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("obraz")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("id_uzytkownika");
-
-                    b.ToTable("obrazyProfilowe");
                 });
 
             modelBuilder.Entity("WebApplication.Models.ObrazyPosilku", b =>
@@ -724,15 +712,6 @@ namespace WebApplication.Migrations
                     b.HasOne("WebApplication.Areas.Identity.Data.Uzytkownik", "uzytkownik")
                         .WithMany("historiaUzytkownika")
                         .HasForeignKey("id_uzytkownika")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WebApplication.Models.ObrazProfilowe", b =>
-                {
-                    b.HasOne("WebApplication.Areas.Identity.Data.Uzytkownik", "uzytkownik")
-                        .WithOne("profilowe")
-                        .HasForeignKey("WebApplication.Models.ObrazProfilowe", "id_uzytkownika")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

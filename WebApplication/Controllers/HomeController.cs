@@ -9,8 +9,7 @@ using WebApplication.Models;
 using WebApplication.Data;
 
 using Microsoft.AspNetCore.Mvc.Rendering;
-
-
+using System.IO;
 
 namespace WebApplication.Controllers
 {
@@ -25,9 +24,35 @@ namespace WebApplication.Controllers
         {
             _logger = logger;
             _context = context;
+        }
 
-            //_context.Add(new HistoriaUzytkownika());
-            //hahahahahah
+        public IActionResult TestImage()
+        {
+            if(!_context.obrazyTreningow.Any()) return View();
+            ObrazyTreningu image = _context.obrazyTreningow.SingleOrDefault(t => t.id_obrazu==1);
+            ViewBag.ImageDataUrl = image.GetImageDataUrl();
+            return View();
+        }
+
+        [HttpPost, ActionName("UploadImage")]
+        [ValidateAntiForgeryToken]
+        public IActionResult UploadImage()
+        {
+            var file = Request.Form.Files[0];
+            ObrazyTreningu image = new ObrazyTreningu();
+            image.id_treningu = 1;
+
+            MemoryStream memeoryStream = new MemoryStream();
+            file.CopyTo(memeoryStream);
+            image.obraz = memeoryStream.ToArray();
+
+            memeoryStream.Close();
+            memeoryStream.Dispose();
+
+            _context.obrazyTreningow.Add(image);
+            _context.SaveChanges();
+
+            return View("TestImage");
         }
 
         public IActionResult Index()

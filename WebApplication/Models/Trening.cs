@@ -25,5 +25,6 @@ namespace WebApplication.Models
         public virtual ICollection<TreningSzczegoly> cwiczenia { get; set; }
         public virtual Uzytkownik uzytkownik { get; set; }
 
+        public virtual ICollection<ObrazyTreningu> obrazy { get; set; }
     }
 }

@@ -25,5 +25,7 @@ namespace WebApplication.Models
 
         public virtual ICollection<PosilekSzczegoly> skladniki { get; set; }
         public virtual Uzytkownik uzytkownik { get; set; }
+
+        public virtual ICollection<ObrazyPosilku> obrazy { get; set; }
     }
 }

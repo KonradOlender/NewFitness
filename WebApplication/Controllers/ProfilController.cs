@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -38,7 +39,8 @@ namespace WebApplication.Controllers
 
             ViewBag.id = id;
             ViewBag.profil = _context.uzytkownicy.Where(k => k.Id == id)
-                                        .Include(k => k.oceny);
+                                        .Include(k => k.oceny)
+                                        .Include(k => k.profilowe);
             ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).ToList();
             ViewBag.treningi = _context.treningi.Where(e => e.id_uzytkownika == id).ToList();
 
@@ -49,7 +51,10 @@ namespace WebApplication.Controllers
             ViewBag.t_rating = trainersRating(id);
             ViewBag.d_rating = dieticianRating(id);
 
-
+            if (ViewBag.profil.profilowe == null)
+                ViewBag.image = null;
+            else
+                ViewBag.image = ViewBag.profil.profilowe.GetImageDataUrl();
 
             return View();
         }
@@ -85,7 +90,50 @@ namespace WebApplication.Controllers
             //return View();
         }
 
+        public IActionResult AddImage(int id)
+        {
+            int userId = int.Parse(User.Identity.GetUserId());
+            if (userId != id)
+            {
+                return RedirectToAction(nameof(Details));
+            }
+            ViewBag.Message = "";
+            ViewBag.user = true;
+            return View();
+        }
 
+        [HttpPost, ActionName("AddImage")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImagePost(int id)
+        {
+            int userId = int.Parse(User.Identity.GetUserId());
+            if (userId != id)
+            {
+                return RedirectToAction(nameof(Details));
+            }
+            ViewBag.user = true;
+            var file = Request.Form.Files[0];
+            if (file == null)
+            {
+                ViewBag.Message = "Nie wybrano obrazu do przesłania";
+                return View("AddImage");
+            }
+
+            ObrazyTreningu image = new ObrazyTreningu();
+            image.id_treningu = id;
+
+            MemoryStream memeoryStream = new MemoryStream();
+            file.CopyTo(memeoryStream);
+            image.obraz = memeoryStream.ToArray();
+
+            memeoryStream.Close();
+            memeoryStream.Dispose();
+
+            _context.obrazyTreningow.Add(image);
+            _context.SaveChanges();
+            ViewBag.Message = "Obraz został dodany";
+            return View("AddImage");
+        }
 
 
         private bool userExists(int user)

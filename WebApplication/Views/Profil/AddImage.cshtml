@@ -1,0 +1,18 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <p>@ViewBag.Message</p>
+    @if(ViewBag.user)
+    {
+        <form asp-action="AddImage"
+              asp-controller="Trening"
+              method="post"
+              enctype="multipart/form-data">
+            <input type="file"
+                   multiple="multiple" />
+            <button type="submit">Prześlij obraz</button>
+        </form>
+    }
+    
+}
