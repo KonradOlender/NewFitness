@@ -74,21 +74,26 @@
             </style>
             @if (@ViewBag.isTrainer)
             {
+                <h5>Oceń Trenera</h5>
                 <div class="txt-center">
                     <form method="post">
                         <input type="hidden" name="oceniany_id" value="@ViewBag.id" />
                         <input type="hidden" name="rola" value="trener" />
                         <div class="rating">
-                            <input id="star5" name="rating" type="radio" value="5" class="radio-btn hide" />
-                            <label for="star5">☆</label>
-                            <input id="star4" name="rating" type="radio" value="4" class="radio-btn hide" />
-                            <label for="star4">☆</label>
-                            <input id="star3" name="rating" type="radio" value="3" class="radio-btn hide" />
-                            <label for="star3">☆</label>
-                            <input id="star2" name="rating" type="radio" value="2" class="radio-btn hide" />
-                            <label for="star2">☆</label>
-                            <input id="star1" name="rating" type="radio" value="1" class="radio-btn hide" />
-                            <label for="star1">☆</label>
+                            @for (int i = 5; i > 0; i--)
+                            {
+                                if (i == @ViewBag.ocenaTrener.ocena)
+                                {
+                                    <input id="star @i" name="rating" type="radio" checked="checked" value="@i" class="radio-btn hide" />
+                                    <label for="star @i">☆</label>
+                                }
+                                else
+                                {
+                                    <input id="star @i" name="rating" type="radio" value="@i" class="radio-btn hide" />
+                                    <label for="star @i">☆</label>
+                                }
+
+                            }
                             <div class="clear"></div>
                         </div>
                         <div>
@@ -99,21 +104,26 @@
             }
             @if (@ViewBag.isDietician)
             {
+                <h5>Oceń Dietetyka</h5>
                 <div class="txt-center">
                     <form method="post">
                         <input type="hidden" name="oceniany_id" value="@ViewBag.id" />
                         <input type="hidden" name="rola" value="dietetyk" />
                         <div class="rating">
-                            <input id="starr5" name="rating" type="radio" value="5" class="radio-btn hide" />
-                            <label for="starr5">☆</label>
-                            <input id="starr4" name="rating" type="radio" value="4" class="radio-btn hide" />
-                            <label for="starr4">☆</label>
-                            <input id="starr3" name="rating" type="radio" value="3" class="radio-btn hide" />
-                            <label for="starr3">☆</label>
-                            <input id="starr2" name="rating" type="radio" value="2" class="radio-btn hide" />
-                            <label for="starr2">☆</label>
-                            <input id="starr1" name="rating" type="radio" value="1" class="radio-btn hide" />
-                            <label for="starr1">☆</label>
+                            @for (int i = 5; i > 0; i--)
+                            {
+                                if (i == ViewBag.ocenaDietetyk.ocena)
+                                {
+                                    <input id="starr @i" name="rating" type="radio" checked="checked" value="@i" class="radio-btn hide" />
+                                    <label for="starr @i">☆</label>
+                                }
+                                else
+                                {
+                                    <input id="starr @i" name="rating" type="radio" value="@i" class="radio-btn hide" />
+                                    <label for="starr @i">☆</label>
+                                }
+
+                            }
                             <div class="clear"></div>
                         </div>
                         <div>

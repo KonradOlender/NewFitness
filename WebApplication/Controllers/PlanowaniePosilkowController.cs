@@ -119,6 +119,55 @@ namespace WebApplication.Controllers
             return View(planowaniePosilkow);
         }
 
+        public IActionResult Polecany()
+        {
+            var polecay_id = PolecanyPosilek(DateTime.Now.Date);
+            Posilek polecany = _context.posilki.First();
+            if (polecay_id != -1)
+            {
+                polecany = _context.posilki.Single(e => e.id_posilku == polecay_id);
+            }
+
+            ViewBag.mealDetails = _context.posilekSzczegoly.Where(k => k.id_posilku == polecay_id)
+                                        .Include(k => k.skladnik)
+                                        .ToList();
+
+            ViewBag.polecany = polecany;
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Polecany(int i)
+        {
+            int userid = int.Parse(User.Identity.GetUserId());
+            var user = _context.uzytkownicy.Single(e => e.Id == userid);
+
+            var polecay_id = PolecanyPosilek(DateTime.Now.Date);
+            Posilek polecany = _context.posilki.First();
+            if (polecay_id != -1)
+            {
+                polecany = _context.posilki.Single(e => e.id_posilku == polecay_id);
+            }
+
+            PlanowaniePosilkow planowany = new PlanowaniePosilkow();
+
+            planowany.data = DateTime.Now;
+            planowany.posilek = polecany;
+            planowany.uzytkownik = user;
+            planowany.id_posilku = polecany.id_posilku;
+            planowany.id_uzytkownika = user.Id;
+
+            _context.Add(planowany);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+
+            //return View();
+        }
+
         // POST: PlanowaniePosilkow/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
