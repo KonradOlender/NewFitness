@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
 
             ViewBag.userId = int.Parse(this.User.Identity.GetUserId());
             ViewBag.posilekOwner = posilek.id_uzytkownika;
-            
+
             if (posilek == null)
             {
                 return NotFound();
@@ -274,16 +274,16 @@ namespace WebApplication.Controllers
         // POST: Posilek/AddComponent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddComponent (int id, [Bind("id_skladnika,porcja")] PosilekSzczegoly pszczegoly)
+        public async Task<IActionResult> AddComponent(int id, [Bind("id_skladnika,porcja")] PosilekSzczegoly pszczegoly)
         {
             Posilek posilek = _context.posilki.FirstOrDefault(x => x.id_posilku == id);
-            if(posilek == null)
+            if (posilek == null)
             {
                 return NotFound();
             }
 
             if (posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
-                return RedirectToAction("Details", new { id = posilek.id_posilku});
+                return RedirectToAction("Details", new { id = posilek.id_posilku });
 
             if (ComponentAlreadyInMeal(posilek.id_posilku, pszczegoly.id_skladnika))
                 return View("AlreadyExists");
@@ -408,5 +408,48 @@ namespace WebApplication.Controllers
                 pszczegoly.posilek.kalorie -= (int)((double)pszczegoly.porcja / waga * kalorie);
             }
         }
-}
+
+        public int getWeglowodany(int meal_id)
+        {
+            List<PosilekSzczegoly> meals = _context.posilekSzczegoly.Include(t => t.skladnik).Where(t => t.id_posilku == meal_id).ToList();
+            int sum = 0;
+            foreach (var ps in meals)
+            {
+                sum += ps.skladnik.weglowodany * ps.porcja / 100;
+            }
+            return sum;
+        }
+
+        public int getBialko(int meal_id)
+        {
+            List<PosilekSzczegoly> meals = _context.posilekSzczegoly.Include(t => t.skladnik).Where(t => t.id_posilku == meal_id).ToList();
+            int sum = 0;
+            foreach (var ps in meals)
+            {
+                sum += ps.skladnik.bialko * ps.porcja / 100;
+            }
+            return sum;
+        }
+
+        public int getTluszcze(int meal_id)
+        {
+            List<PosilekSzczegoly> meals = _context.posilekSzczegoly.Include(t => t.skladnik).Where(t => t.id_posilku == meal_id).ToList();
+            int sum = 0;
+            foreach (var ps in meals)
+            {
+                sum += ps.skladnik.tluszcze * ps.porcja / 100;
+            }
+            return sum;
+        }
+
+        private double mealRating(int meal_id)
+        {
+            if (!_context.ocenyPosilkow.Any(k => k.id_posilku == meal_id))
+                return 0;
+            double ratings_avg = _context.ocenyPosilkow
+                                      .Where(k => k.id_posilku == meal_id)
+                                      .Average(k => k.ocena);
+            return ratings_avg;
+        }
+    }
 }

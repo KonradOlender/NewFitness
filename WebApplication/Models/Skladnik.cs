@@ -21,6 +21,12 @@ namespace WebApplication.Models
         public int kalorie { get; set; }
         [Required, ForeignKey("kategoria")]
         public int id_kategorii { get; set; }
+        [Required]
+        public int bialko { get; set; }
+        [Required]
+        public int tluszcze { get; set; }
+        [Required]
+        public int weglowodany { get; set; }
 
         public virtual KategoriaSkladnikow kategoria { get; set; }
         public virtual ICollection<PosilekSzczegoly> posilki { get; set; }

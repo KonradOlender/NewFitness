@@ -11,6 +11,7 @@ namespace WebApplication.Models
     [Table("Posilki")]
     public class Posilek
     {
+
         [Key]
         public int id_posilku { get; set; }
         [Required]
@@ -24,6 +25,7 @@ namespace WebApplication.Models
         public int id_uzytkownika { get; set; }
 
         public virtual ICollection<PosilekSzczegoly> skladniki { get; set; }
+        public virtual ICollection<OcenaPosilku> oceny { get; set; }
         public virtual Uzytkownik uzytkownik { get; set; }
 
         public virtual ICollection<ObrazyPosilku> obrazy { get; set; }

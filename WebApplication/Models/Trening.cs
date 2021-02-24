@@ -22,6 +22,7 @@ namespace WebApplication.Models
         public int id_uzytkownika { get; set; }
 
         public virtual KategoriaTreningu kategoria { get; set; }
+        public virtual ICollection<OcenaTreningu> oceny { get; set; }
         public virtual ICollection<TreningSzczegoly> cwiczenia { get; set; }
         public virtual Uzytkownik uzytkownik { get; set; }
 

@@ -223,6 +223,19 @@ namespace WebApplication.Data
                 .HasOne<Uzytkownik>(t => t.uzytkownik)
                 .WithOne(t => t.profilowe);
 
+            builder.Entity<OcenaPosilku>().HasKey(t => new { t.id_posilku, t.id_uzytkownika });
+            builder.Entity<OcenaPosilku>()
+                .HasOne<Uzytkownik>(t => t.oceniajacy)
+                .WithMany()
+                .HasForeignKey(d => d.id_uzytkownika)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<OcenaTreningu>()
+                .HasOne<Uzytkownik>(t => t.oceniajacy)
+                .WithMany()
+                .HasForeignKey(d => d.id_uzytkownika)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<OcenaTreningu>().HasKey(t => new { t.id_treningu, t.id_uzytkownika });
+
             builder.Entity<KategoriaCwiczenia>().HasData(
                                 new { id_kategorii = 1, nazwa = "inne" });
 
@@ -258,6 +271,8 @@ namespace WebApplication.Data
         public DbSet<PlanowaniePosilkow> planowanePosilki { get; set; }
         public DbSet<PlanowanieTreningow> planowaneTreningi { get; set; }
         public DbSet<Ocena> oceny { get; set; }
+        public DbSet<OcenaTreningu> ocenyTreningow { get; set; }
+        public DbSet<OcenaPosilku> ocenyPosilkow { get; set; }
         public DbSet<ObrazProfilowe> obrazyProfilowe { get; set; }
         public DbSet<ObrazyPosilku> obrazyPosilkow { get; set; }
         public DbSet<ObrazyTreningu> obrazyTreningow { get; set; }

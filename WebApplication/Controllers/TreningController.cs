@@ -394,5 +394,15 @@ namespace WebApplication.Controllers
             return false;
         }
 
+        private double trainingRating(int traning_id)
+        {
+            if (!_context.ocenyTreningow.Any(k => k.id_treningu == traning_id))
+                return 0;
+            double ratings_avg = _context.ocenyTreningow
+                                      .Where(k => k.id_treningu == traning_id)
+                                      .Average(k => k.ocena);
+            return ratings_avg;
+        }
+
     }
 }
