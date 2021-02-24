@@ -55,6 +55,8 @@ namespace WebApplication.Controllers
             return View("TestImage");
         }
 
+
+
         public IActionResult Index()
         {                
             return View();
