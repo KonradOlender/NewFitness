@@ -42,17 +42,35 @@ namespace WebApplication.Controllers
 
             if (isTrainer(id))
             {
-                ViewBag.ocenaTrener = _context.oceny.Single(e => e.id_uzytkownika_oceniajacego == userid && e.id_uzytkownika_ocenianego == id && e.id_roli == 2);
+                try
+                {
+                    ViewBag.ocenaTrener = _context.oceny.Single(e => e.id_uzytkownika_oceniajacego == userid && e.id_uzytkownika_ocenianego == id && e.id_roli == 2);
+                }
+                catch
+                {
+                    ViewBag.ocenaTrener = new Ocena();
+                }
             }
             if (isDietician(id))
             {
-                ViewBag.ocenaDietetyk = _context.oceny.Single(e => e.id_uzytkownika_oceniajacego == userid && e.id_uzytkownika_ocenianego == id && e.id_roli == 3);
+                try
+                {
+                    ViewBag.ocenaDietetyk = _context.oceny.Single(e => e.id_uzytkownika_oceniajacego == userid && e.id_uzytkownika_ocenianego == id && e.id_roli == 3);
+                }
+                catch
+                {
+                    ViewBag.ocenaDietetyk = new Ocena();
+                }
+                
             }
 
             ViewBag.id = id;
-            ViewBag.profil = _context.uzytkownicy.Where(k => k.Id == id)
+            var usersProfile = _context.uzytkownicy.Where(k => k.Id == id)
                                         .Include(k => k.oceny)
                                         .Include(k => k.profilowe);
+            ViewBag.profil = usersProfile;
+
+            if (ViewBag.profil == null) return RedirectToAction("Index");
             ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).ToList();
             ViewBag.treningi = _context.treningi.Where(e => e.id_uzytkownika == id).ToList();
 
@@ -63,10 +81,10 @@ namespace WebApplication.Controllers
             ViewBag.t_rating = trainersRating(id);
             ViewBag.d_rating = dieticianRating(id);
 
-            if (ViewBag.profil.profilowe == null)
+            if (usersProfile.First().profilowe == null)
                 ViewBag.image = null;
             else
-                ViewBag.image = ViewBag.profil.profilowe.GetImageDataUrl();
+                ViewBag.image = usersProfile.First().profilowe.GetImageDataUrl();
 
             return View();
         }
@@ -174,12 +192,14 @@ namespace WebApplication.Controllers
 
         private bool isTrainer(int user)
         {
+            if (!_context.role.Any(k => k.nazwa == "trener")) return false;
             Rola role = _context.role.FirstOrDefault(k => k.nazwa == "trener");
             return _context.RolaUzytkownika.Any(k => k.id_uzytkownika == user && k.id_roli == role.id_roli);
         }
 
         private bool isDietician(int user)
         {
+            if (!_context.role.Any(k => k.nazwa == "dietetyk")) return false;
             Rola role = _context.role.FirstOrDefault(k => k.nazwa == "dietetyk");
             return _context.RolaUzytkownika.Any(k => k.id_uzytkownika == user && k.id_roli == role.id_roli);
         }
