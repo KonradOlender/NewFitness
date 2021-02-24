@@ -65,6 +65,7 @@ namespace WebApplication.Controllers
             }
 
             ViewBag.id = id;
+            
             var usersProfile = _context.uzytkownicy.Where(k => k.Id == id)
                                         .Include(k => k.oceny)
                                         .Include(k => k.profilowe);
@@ -81,10 +82,18 @@ namespace WebApplication.Controllers
             ViewBag.t_rating = trainersRating(id);
             ViewBag.d_rating = dieticianRating(id);
 
-            if (usersProfile.First().profilowe == null)
-                ViewBag.image = null;
-            else
-                ViewBag.image = usersProfile.First().profilowe.GetImageDataUrl();
+            try
+            {
+                if (usersProfile.First().profilowe == null)
+                    ViewBag.image = null;
+                else
+                    ViewBag.image = usersProfile.First().profilowe.GetImageDataUrl();
+            }
+            catch(Exception e)
+            {
+                return RedirectToAction("Index");
+            }
+            
 
             return View();
         }
