@@ -6,6 +6,7 @@
     int burnt_calories = 0;
     foreach(var trening in ViewBag.trainingDetails)
         burnt_calories += (trening.liczba_powtorzen * trening.cwiczenie.spalone_kalorie);
+    //https://www.youtube.com/embed/qiDoBnh6URU
 }
 
 <h1>Szczegóły</h1>
@@ -13,44 +14,58 @@
 <div>
     <h4>Treningu</h4>
     <br />
-    <a asp-controller="PlanowanieTreningow" asp-action="Create" asp-route-id_string="@Model.id_treningu">Zaplanuj trening</a> <br />
+    <div style="display: flex; justify-content: center; ">
+        @if (ViewBag.userId == ViewBag.treningOwner)
+        {
+            <a asp-action="AddExercise" asp-route-id="@Model.id_treningu">Dodaj ćwiczenie</a><p> || </p>
+            <a asp-action="AddImage" asp-route-id="@Model.id_treningu">Dodaj obraz</a><p> || </p>
+            <a asp-action="AddLink" asp-route-id="@Model.id_treningu">Dodaj filmik z youtube</a><p> || </p>
+        }
+        <a asp-controller="PlanowanieTreningow" asp-action="Create" asp-route-id_string="@Model.id_treningu">Zaplanuj trening</a> <br />
+    </div>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.nazwa)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.nazwa)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.kategoria)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.kategoria.nazwa)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.uzytkownik)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.uzytkownik.login)
-        </dd>
-        <dd class="col-sm-10">
-            Spala @burnt_calories kalorii
-        </dd>
-    </dl>
-    @if (ViewBag.userId == ViewBag.treningOwner)
-    {
-        <a asp-action="AddExercise" asp-route-id="@Model.id_treningu">Dodaj ćwiczenie</a> <br />
-        <a asp-action="AddImage" asp-route-id="@Model.id_treningu">Dodaj obraz</a> <br />
-    }
-    @if (ViewBag.image == null)
-    {
-        //default image
-    }
-    else
-    {
-        <img src="@ViewBag.image" />
-    }
+    <div style="float:left">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.nazwa)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.nazwa)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.kategoria)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.kategoria.nazwa)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.uzytkownik)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.uzytkownik.login)
+            </dd>
+            <dd class="col-sm-10">
+                Spala @burnt_calories kalorii
+            </dd>
+        </dl>
+    </div>
+
+    <div style="float:left">
+        @if (ViewBag.youtube != null)
+        {
+            <iframe width="560" height="315" src="@ViewBag.youtube"
+                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+        }
+        else if (ViewBag.image != null)
+        {
+            <img src="@ViewBag.image" style="width:600px; height:500px" />
+        }
+        else
+        {
+            //default image
+        }
+    </div>
 </div>
 <div>
     <h5>Cwiczenia</h5>

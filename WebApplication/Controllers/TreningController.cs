@@ -100,6 +100,9 @@ namespace WebApplication.Controllers
                 ViewBag.image = trening.obrazy
                                     .Last()
                                     .GetImageDataUrl();
+
+            var link = generateYoutubeEmbededLink(trening.youtube_link);
+            ViewBag.youtube = link =="" || link == null ? null : link ;
             return View(trening);
         }
 
@@ -373,6 +376,47 @@ namespace WebApplication.Controllers
             return View("AddImage");
         }
 
+        public IActionResult AddLink(int id)
+        {
+            if (!_context.treningi.Any(t => t.id_treningu == id))
+            {
+                ViewBag.Message = "Nie ma takiego treningu";
+                ViewBag.training = false;
+                return View("AddLink");
+            }
+            var trening = _context.treningi.FirstOrDefault(t => t.id_treningu == id);
+            if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+                return RedirectToAction("Details", new { id = trening.id_treningu });
+
+            ViewBag.Message = "";
+            ViewBag.training = true;
+            return View();
+        }
+
+        [HttpPost, ActionName("AddLink")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddLink(int id, string link)
+        {
+            if (!_context.treningi.Any(t => t.id_treningu == id))
+            {
+                ViewBag.Message = "Nie ma takiego treningu";
+                ViewBag.training = false;
+                return View("AddLink");
+            }
+
+            var trening = _context.treningi.FirstOrDefault(t => t.id_treningu == id);
+            if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+                return RedirectToAction("Details", new { id = trening.id_treningu });
+
+            ViewBag.training = true;
+            trening.youtube_link = link;
+
+            _context.treningi.Update(trening);
+            _context.SaveChanges();
+            ViewBag.Message = "Trening został zaktualizowany";
+            return View("AddLink");
+        }
+
         private bool ExerciseAlreadyInTraining(int training_id, int exercise_id)
         {
             return _context.treningSzczegoly.Any(e => e.id_treningu == training_id && e.id_cwiczenia == exercise_id);
@@ -402,6 +446,31 @@ namespace WebApplication.Controllers
                                       .Where(k => k.id_treningu == traning_id)
                                       .Average(k => k.ocena);
             return ratings_avg;
+        }
+
+        public string generateYoutubeEmbededLink(string orginalLink)
+        {
+            if (orginalLink == null) return "";
+            string embededLink = "https://www.youtube.com/embed/{0}";
+            if(orginalLink.Contains("https://youtu.be/"))
+            {
+                string[] seperated_link = orginalLink.Split('/');
+                embededLink = string.Format(embededLink, seperated_link[seperated_link.Length - 1]);
+                return embededLink;
+            }
+            else
+            {
+                if (orginalLink.Contains("watch?v="))
+                {
+                    int first_element_equals = orginalLink.IndexOf('=');
+                    int first_element_and = orginalLink.Contains("&") ? orginalLink.IndexOf('&') : orginalLink.Length - 1;
+                    embededLink = string.Format(embededLink,
+                        orginalLink.Substring(first_element_equals + 1, first_element_and - first_element_equals));
+                    return embededLink;
+                }
+                else return "";
+            }
+            
         }
 
     }

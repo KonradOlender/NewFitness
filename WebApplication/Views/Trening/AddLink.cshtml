@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <p>@ViewBag.Message</p>
+    @if (ViewBag.training)
+    {
+        <form asp-action="AddLink"
+              asp-controller="Trening"
+              method="post">
+            <input type="text" id="link" name="link" />
+            <button type="submit">Dołącz link</button>
+        </form>
+        <br />
+        <hr/>
+        <form asp-action="AddLink"
+              asp-controller="Trening"
+              method="post">
+            <button type="submit" id="link" name="link" value="">Usun link</button>
+        </form>
+    }
+}
+

@@ -20,6 +20,7 @@ namespace WebApplication.Models
         public int id_kategorii { get; set; }
         [Required, ForeignKey("uzytkownik")]
         public int id_uzytkownika { get; set; }
+        public string youtube_link { get; set; } 
 
         public virtual KategoriaTreningu kategoria { get; set; }
         public virtual ICollection<OcenaTreningu> oceny { get; set; }
