@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApplication.Areas;
 using WebApplication.Areas.Identity.Data;
 using WebApplication.Data;
+using WebApplication.Entities;
 
 namespace WebApplication
 {
@@ -34,8 +37,10 @@ namespace WebApplication
             services.AddDefaultIdentity<Uzytkownik>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<MyContext>().AddDefaultTokenProviders();
 
-            services.AddRazorPages();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
 
+            services.AddRazorPages();
+            services.AddSingleton<IEmailSender, EmailSender>();
             /*services.Configure<MyContext>(o =>
             {
                 o.Database.Migrate();
