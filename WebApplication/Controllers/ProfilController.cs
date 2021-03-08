@@ -72,12 +72,18 @@ namespace WebApplication.Controllers
             ViewBag.profil = usersProfile;
 
             if (ViewBag.profil == null) return RedirectToAction("Index");
-            ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).ToList();
+            ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).Include(k => k.obrazy).ToList();
+
+            ViewBag.obrazyP = _context.obrazyPosilkow.ToList();
+            ViewBag.obrazyT = _context.obrazyTreningow.ToList();
+
             ViewBag.treningi = _context.treningi.Where(e => e.id_uzytkownika == id).ToList();
 
             ViewBag.index = id;
             ViewBag.isTrainer = isTrainer(id);
             ViewBag.isDietician = isDietician(id);
+
+            ViewBag.falsee = false;
 
             ViewBag.t_rating = trainersRating(id);
             ViewBag.d_rating = dieticianRating(id);
