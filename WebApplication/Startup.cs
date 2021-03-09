@@ -15,6 +15,7 @@ using WebApplication.Areas;
 using WebApplication.Areas.Identity.Data;
 using WebApplication.Data;
 using WebApplication.Entities;
+using WebApplication.Hubs;
 
 namespace WebApplication
 {
@@ -36,6 +37,9 @@ namespace WebApplication
 
             services.AddDefaultIdentity<Uzytkownik>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<MyContext>().AddDefaultTokenProviders();
+
+            //chat
+            services.AddSignalR();
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
 
@@ -89,6 +93,12 @@ namespace WebApplication
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //chat
+            app.UseSignalR(route =>
+            {
+                route.MapHub<ChatHub>("/Profil/Chat");
+            });
 
             app.UseEndpoints(endpoints =>
             {

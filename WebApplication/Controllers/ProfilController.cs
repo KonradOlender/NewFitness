@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,9 +20,13 @@ namespace WebApplication.Controllers
     public class ProfilController : Controller
     {
         private readonly MyContext _context;
-        public ProfilController(MyContext context)
+        //chat 
+        //czy tu IdentityUser?
+        public readonly UserManager<IdentityUser> _userManager;
+        public ProfilController(MyContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -281,5 +286,34 @@ namespace WebApplication.Controllers
                                     dieticianRating(usersRole.id_uzytkownika));
             }
         }
+
+        //chat
+        public async Task<IActionResult> Chat()
+        {
+            //var currentUser = await _userManager.GetUserAsync(User);
+            int userid = int.Parse(User.Identity.GetUserId());
+            var currentUser = _context.uzytkownicy.Single(e => e.Id == userid);
+            ViewBag.CurrentUserName = currentUser.UserName;
+            //var messages = await _context.Messages.ToListAsync();
+            return View();
+        }
+        /*public async Task<IActionResult> Create(Messages message)
+        {
+            if (ModelState.IsValid)
+            {
+                message.UserName = User.Identity.Name;
+                //var sender = await _userManager.GetUserAsync(User);
+                int userid = int.Parse(User.Identity.GetUserId());
+                var sender = _context.uzytkownicy.Single(e => e.Id == userid);
+                message.UserID = sender.Id;
+                await _context.Messages.AddAsync(message);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return Error();
+        }*/
+
+
+
     }
 }
