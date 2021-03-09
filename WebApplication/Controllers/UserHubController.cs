@@ -115,6 +115,7 @@ namespace WebApplication.Controllers
             var role = _context.RolaUzytkownika.Include(e=>e.rola).ToList();
             var planowanie_trening = _context.planowaneTreningi.ToList();
             var oceny = _context.oceny.ToList();
+            var ocenyTrening = _context.ocenyTreningow.ToList();
             ViewBag.cwiczenie = cwiczenie;
             ViewBag.trening = trening;
             ViewBag.kat_treningu = kat_treningu;
@@ -125,6 +126,7 @@ namespace WebApplication.Controllers
             ViewBag.role = role;
             ViewBag.planowanie_trening = planowanie_trening;
             ViewBag.oceny = oceny;
+            ViewBag.ocenyTrening = ocenyTrening;
             return View();
         }
 

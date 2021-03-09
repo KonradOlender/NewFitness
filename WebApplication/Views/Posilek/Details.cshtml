@@ -5,73 +5,182 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Szczegóły</h1>
+<h1>@Html.DisplayFor(model => model.nazwa)</h1>
+@if (ViewBag.userId == ViewBag.posilekOwner)
+{
+    <a asp-action="AddComponent" asp-route-id="@Model.id_posilku">Dodaj składnik</a>
+    <br />
+    <a asp-action="AddImage" asp-route-id="@Model.id_posilku">Dodaj obraz</a>
+    <br />
+}
 
-<div>
-    <h4>Posiłku</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.nazwa)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.nazwa)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.opis)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.opis)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.uzytkownik)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.uzytkownik.login)
-        </dd>
-        <dd class="col-sm-10">
-            Ma @Model.kalorie kalorii
-        </dd>
-    </dl>
-    @if (ViewBag.userId == ViewBag.posilekOwner)
-    {
-        <a asp-action="AddComponent" asp-route-id="@Model.id_posilku">Dodaj składnik</a> <br />
-        <a asp-action="AddImage" asp-route-id="@Model.id_posilku">Dodaj obraz</a> <br />
-    }
-    @if (ViewBag.image == null)
-    {
-        //default image
-    }
-    else
-    {
-        <img src="@ViewBag.image" />
+<style>
+    .txt-center {
+        text-align: center;
     }
 
+    .hide {
+        display: none;
+    }
 
-</div>
+    .clear {
+        float: none;
+        clear: both;
+    }
 
-<div>
-    <h5>Składniki</h5>
-    <ul>
-        @foreach (var posilek in ViewBag.mealsDetails)
-        {
-            <li>
-                @posilek.skladnik.nazwa
-                <br />
-                Waga/kalorie: <br />
-                @posilek.skladnik.waga g / @posilek.skladnik.kalorie kcal 
-                <br />
-                Porcja: @posilek.porcja g 
-                @if (ViewBag.userId == ViewBag.posilekOwner)
-                {
-                    <form asp-action="DeleteComponent" asp-route-idt="@posilek.id_posilku" asp-route-idc="@posilek.id_skladnika">
-                        <input type="submit" value="Usuń składnik" class="btn btn-danger" />
-                    </form>
-                }
-            </li>
+    .rating {
+        width: 90px;
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
+        position: relative;
+    }
+
+        .rating > label {
+            float: right;
+            display: inline;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            width: 1.1em;
+            cursor: pointer;
+            color: #000;
         }
-    </ul>
+
+            .rating > label:hover,
+            .rating > label:hover ~ label,
+            .rating > input.radio-btn:checked ~ label {
+                color: transparent;
+            }
+
+                .rating > label:hover:before,
+                .rating > label:hover ~ label:before,
+                .rating > input.radio-btn:checked ~ label:before,
+                .rating > input.radio-btn:checked ~ label:before {
+                    content: "\2605";
+                    position: absolute;
+                    left: 0;
+                    color: #FFD700;
+                }
+</style>
+
+<div class="row">
+    <div class="col-md-4">
+        @if (ViewBag.image == null)
+        {
+            //default image
+        }
+        else
+        {
+            <img style="height: 400px; width:400px;" src="@ViewBag.image" />
+        }
+        <hr />
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.opis)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.opis)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.uzytkownik)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.uzytkownik.login)
+            </dd>
+            <dd>
+                Ma @Model.kalorie kalorii
+            </dd>
+        </dl>
+
+        <div class="txt-center">
+            <form method="post">
+                <input type="hidden" name="id" value="@ViewBag.id" />
+                <div class="rating">
+                    @for (int i = 5; i > 0; i--)
+                    {
+                        if (i == ViewBag.ocena.ocena)
+                        {
+                            <input id="star @i" name="rating" type="radio" checked="checked" value="@i" class="radio-btn hide" />
+                            <label for="star @i">☆</label>
+                        }
+                        else
+                        {
+                            <input id="star @i" name="rating" type="radio" value="@i" class="radio-btn hide" />
+                            <label for="star @i">☆</label>
+                        }
+
+                    }
+                    <div class="clear"></div>
+                </div>
+                <div style="text-align:left;">
+                    <h3>Ocena: @ViewBag.srednia</h3>
+                </div>
+                <div style="text-align:left;">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="col-md-8">
+        <h5>Składniki</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Waga</th>
+                    <th scope="col">Kalorie</th>
+                    <th scope="col">Porcja</th>
+                    <th scope="col">.</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var posilek in ViewBag.mealsDetails)
+                {
+                <tr>
+                    <td>@posilek.skladnik.nazwa</td>
+                    <td>@posilek.skladnik.waga</td>
+                    <td>@posilek.skladnik.kalorie</td>
+                    <td>@posilek.porcja</td>
+                    <td>
+                        @if (ViewBag.userId == ViewBag.posilekOwner)
+                        {
+                            <form asp-action="DeleteComponent" asp-route-idt="@posilek.id_posilku" asp-route-idc="@posilek.id_skladnika">
+                                <input type="submit" value="Usuń składnik" class="btn btn-danger" />
+                            </form>
+                        }
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+        @*<ul>
+            @foreach (var posilek in ViewBag.mealsDetails)
+            {
+                <li>
+                    @posilek.skladnik.nazwa
+                    <br />
+                    Waga/kalorie: <br />
+                    @posilek.skladnik.waga g / @posilek.skladnik.kalorie kcal
+                    <br />
+                    Porcja: @posilek.porcja g
+                    @if (ViewBag.userId == ViewBag.posilekOwner)
+                    {
+                        <form asp-action="DeleteComponent" asp-route-idt="@posilek.id_posilku" asp-route-idc="@posilek.id_skladnika">
+                            <input type="submit" value="Usuń składnik" class="btn btn-danger" />
+                        </form>
+                    }
+                </li>
+            }
+        </ul>*@
+    </div>
 </div>
+
+
+
 
 <div>
     @if (ViewBag.userId == ViewBag.posilekOwner)
