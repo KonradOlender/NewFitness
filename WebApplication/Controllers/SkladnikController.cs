@@ -118,7 +118,7 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_skladnika,nazwa,waga,kalorie,id_kategorii")] Skladnik skladnik)
+        public async Task<IActionResult> Create([Bind("id_skladnika,nazwa,waga,kalorie,bialko,tluszcze,weglowodany,id_kategorii")] Skladnik skladnik)
         {
             if (!this.isDietician())
                 return RedirectToAction("Index");

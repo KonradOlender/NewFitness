@@ -29,6 +29,21 @@
                 <span asp-validation-for="kalorie" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="bialko" class="control-label"></label>
+                <input asp-for="bialko" class="form-control" />
+                <span asp-validation-for="bialko" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="tluszcze" class="control-label"></label>
+                <input asp-for="tluszcze" class="form-control" />
+                <span asp-validation-for="tluszcze" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="weglowodany" class="control-label"></label>
+                <input asp-for="weglowodany" class="form-control" />
+                <span asp-validation-for="weglowodany" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="id_kategorii" class="control-label">Wybierz kategorie:</label>
                 <select asp-for="id_kategorii" class="form-control" asp-items="ViewBag.id_kategorii"></select>
             </div>

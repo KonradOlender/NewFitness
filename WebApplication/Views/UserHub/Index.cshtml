@@ -3,70 +3,76 @@
 }
 <div class="col-md-12">
     <div class="row">
-        @{ if (User.Identity.Name != null)
-            {
-                @using (Html.BeginForm())
+        <div class="col-md-3">
+            @{ if (User.Identity.Name != null)
                 {
-                    <h4>@ViewBag.selected</h4>
-                    <div id="datepicker" data-date=""></div>
-                    <input type="hidden" id="my_hidden_input" name="sellected_date">
-                    <h4>@ViewBag.name</h4>
+                    @using (Html.BeginForm())
+                    {
+                        <h4>@ViewBag.selected</h4>
+                        <div id="datepicker" data-date=""></div>
+                        <input type="hidden" id="my_hidden_input" name="sellected_date">
+                        <h4>@ViewBag.name</h4>
+                    }
+
                 }
 
             }
-
-        }
-
-
-    <div class="col-md-6">
-        @{if (User.Identity.Name != null)
-            {
-                <div class="text-center">
-                    <h1 class="display-4">Witaj @User.Identity.Name</h1>
-                    <h4>Aktualne BMI: @ViewBag.bmi</h4>
-                    <h4>@ViewBag.user.limit</h4>
-                    <a class="btn btn-primary" href="/historia/create" role="button">Dodaj dane</a>
-                    <br />
-                    <br />
-                    <a class="btn btn-primary" href="/Planowanieposilkow" role="button">Zarządzaj planowanymi posiłkami</a>
-                </div>
-                <div>
-                    <a class="btn btn-primary" href="/Planowanieposilkow/Create" role="button">Dodaj</a>
-                </div>
-                <div class="text-center">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Nazwa</th>
-                                <th scope="col">Kalorie</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{ foreach (var item in ViewBag.posilki)
-                                {
-                                    <tr>
-                                        <th scope="row">@item.id</th>
-                                        @{
-                                            if (item.posilek != null)
-                                            {
-                                                <td>@item.posilek.nazwa</td>
+        </div>
+        <div class="col-md-6">
+            @{if (User.Identity.Name != null)
+                {
+                    <div class="text-center">
+                        <h1 class="display-4">Witaj @User.Identity.Name</h1>
+                        <h4>Aktualne BMI: @ViewBag.bmi</h4>
+                        <h4>@ViewBag.user.limit</h4>
+                        <a class="btn btn-primary" href="/historia/create" role="button">Dodaj dane</a>
+                        <br />
+                        <br />
+                        <a class="btn btn-primary" href="/Planowanieposilkow" role="button">Zarządzaj planowanymi posiłkami</a>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary" href="/Planowanieposilkow/Create" role="button">Dodaj</a>
+                    </div>
+                    <div class="text-center">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nazwa</th>
+                                    <th scope="col">Kalorie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.posilki)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.id</th>
+                                            @{
+                                                if (item.posilek != null)
+                                                {
+                                                    <td>@item.posilek.nazwa</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Brak</td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td>Brak</td>
-                                            }
-                                        }
-                                        <td>@item.posilek.kalorie</td>
-                                    </tr>
+                                            <td>@item.posilek.kalorie</td>
+                                        </tr>
+                                    }
                                 }
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                }
             }
-        }
-    </div>
+        </div>
+        <div class="col-md-3">
+            <h3>Białko: @ViewBag.bialko</h3>
+            <h3>Tłuszcze: @ViewBag.tluszcz</h3>
+            <h3>Wenglowodany: @ViewBag.weng</h3>
+
+        </div>
 
 
     </div>
