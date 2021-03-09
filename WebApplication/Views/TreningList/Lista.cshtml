@@ -11,13 +11,91 @@
         <tbody>
             @foreach (var item in ViewBag.trainingDetails)
             {
-                    <tr>
-                        <th scope="row">@item.cwiczenie.nazwa</th>
-                        <td>@item.cwiczenie.opis</td>
-                        <td>@item.liczba_powtorzen</td>
-                    </tr>
+                <tr>
+                    <th scope="row">@item.cwiczenie.nazwa</th>
+                    <td>@item.cwiczenie.opis</td>
+                    <td>@item.liczba_powtorzen</td>
+                </tr>
             }
 
         </tbody>
     </table>
+    <style>
+        .txt-center {
+            text-align: center;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .clear {
+            float: none;
+            clear: both;
+        }
+
+        .rating {
+            width: 90px;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: center;
+            position: relative;
+        }
+
+            .rating > label {
+                float: right;
+                display: inline;
+                padding: 0;
+                margin: 0;
+                position: relative;
+                width: 1.1em;
+                cursor: pointer;
+                color: #000;
+            }
+
+                .rating > label:hover,
+                .rating > label:hover ~ label,
+                .rating > input.radio-btn:checked ~ label {
+                    color: transparent;
+                }
+
+                    .rating > label:hover:before,
+                    .rating > label:hover ~ label:before,
+                    .rating > input.radio-btn:checked ~ label:before,
+                    .rating > input.radio-btn:checked ~ label:before {
+                        content: "\2605";
+                        position: absolute;
+                        left: 0;
+                        color: #FFD700;
+                    }
+    </style>
+    <h5>Oceń</h5>
+    <div class="txt-center">
+        <form method="post">
+            <input type="hidden" name="id" value="@ViewBag.index" />
+            <div class="rating">
+                @for (int i = 5; i > 0; i--)
+                {
+                    if (i == ViewBag.ocena.ocena)
+                    {
+                        <input id="star @i" name="rating" type="radio" checked="checked" value="@i" class="radio-btn hide" />
+                        <label for="star @i">☆</label>
+                    }
+                    else
+                    {
+                        <input id="star @i" name="rating" type="radio" value="@i" class="radio-btn hide" />
+                        <label for="star @i">☆</label>
+                    }
+
+                }
+                <div class="clear"></div>
+            </div>
+            <div style="text-align:left;">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <div style="text-align:left;">
+                <h3>@ViewBag.srednia</h3>
+            </div>
+        </form>
+    </div>
 </div>

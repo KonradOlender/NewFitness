@@ -63,11 +63,24 @@ namespace WebApplication.Controllers
                 .Include(t => t.uzytkownik)
                 .FirstOrDefaultAsync(m => m.id_treningu == id);
 
+            var userId = int.Parse(this.User.Identity.GetUserId());
+
+            try
+            {
+                ViewBag.ocena = _context.ocenyTreningow.Single(e => e.id_treningu == id && e.id_uzytkownika == userId);
+            }
+            catch 
+            {
+                ViewBag.ocena = new OcenaTreningu();
+            }
+
+            ViewBag.srednia = avgRating(trening.id_treningu);
             ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == id)
                                         .Include(k => k.cwiczenie)
                                         .ToList();
 
-            ViewBag.userId = int.Parse(this.User.Identity.GetUserId());
+            
+            ViewBag.userId = userId;
             ViewBag.treningOwner = trening.id_uzytkownika;
             ViewBag.index = id;
 
@@ -79,7 +92,44 @@ namespace WebApplication.Controllers
             return View(trening);
         }
 
-        public IActionResult Polecany()
+        [HttpPost]
+        public IActionResult Lista(int id, double rating)
+        {
+            var trening = _context.treningi
+                .Include(t => t.kategoria)
+                .Include(t => t.uzytkownik)
+                .FirstOrDefault(m => m.id_treningu == id);
+
+            var userId = int.Parse(this.User.Identity.GetUserId());
+
+            if (_context.ocenyTreningow.Any(e => e.id_uzytkownika == userId && e.id_treningu == trening.id_treningu))
+            {
+                OcenaTreningu ocena = new OcenaTreningu();
+                ocena.id_uzytkownika = userId;
+                ocena.id_treningu = trening.id_treningu;
+                ocena.ocena = rating;
+                ocena.oceniajacy = _context.uzytkownicy.First(e => e.Id == userId);
+                ocena.trening = trening;
+
+                _context.Update(ocena);
+            }
+            else
+            {
+                OcenaTreningu ocena = new OcenaTreningu();
+                ocena.id_uzytkownika = userId;
+                ocena.id_treningu = trening.id_treningu;
+                ocena.ocena = rating;
+                ocena.oceniajacy = _context.uzytkownicy.First(e => e.Id == userId);
+                ocena.trening = trening;
+
+                _context.Add(ocena);
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Lista));
+        }
+
+            public IActionResult Polecany()
         {
             var polecay_id = PolecanyTrening(DateTime.Now.Date);
             Trening polecany = _context.treningi.First();
@@ -154,6 +204,21 @@ namespace WebApplication.Controllers
                 if (tab[i] == max) return i;
             }
             return -1;
+        }
+
+        private double avgRating(int id)
+        {
+            double avg = 0;
+            double sum = 0;
+            int index = 0;
+            var oceny = _context.ocenyTreningow.Where(e => e.id_treningu == id).ToList();
+            foreach (var item in oceny)
+            {
+                sum += item.ocena;
+                index++;
+            }
+            avg = sum / index;
+            return avg;
         }
 
     }

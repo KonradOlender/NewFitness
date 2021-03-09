@@ -62,16 +62,31 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
+            ViewBag.id = id;
+
             var posilek = await _context.posilki
                 .Include(p => p.uzytkownik)
                 .Include(p => p.obrazy)
                 .FirstOrDefaultAsync(m => m.id_posilku == id);
 
+            int userId = int.Parse(this.User.Identity.GetUserId());
+            ViewBag.userId = userId;
+
+            try
+            {
+                ViewBag.ocena = _context.ocenyPosilkow.Single(e => e.id_uzytkownika == userId && e.id_posilku == posilek.id_posilku);
+            }
+            catch
+            {
+                ViewBag.ocena = new OcenaPosilku();
+            }
+            ViewBag.srednia = avgRating(posilek.id_posilku);
+            
             ViewBag.mealsDetails = _context.posilekSzczegoly.Where(k => k.id_posilku == id)
                                         .Include(k => k.skladnik)
                                         .ToList();
 
-            ViewBag.userId = int.Parse(this.User.Identity.GetUserId());
+            
             ViewBag.posilekOwner = posilek.id_uzytkownika;
 
             if (posilek == null)
@@ -87,6 +102,41 @@ namespace WebApplication.Controllers
                                     .GetImageDataUrl();
 
             return View(posilek);
+        }
+
+        [HttpPost]
+        public IActionResult Details(int id, double rating)
+        {
+            var posilek = _context.posilki
+                .FirstOrDefault(m => m.id_posilku == id);
+
+            var userId = int.Parse(this.User.Identity.GetUserId());
+
+            if (_context.ocenyPosilkow.Any(e => e.id_uzytkownika == userId && e.id_posilku == posilek.id_posilku))
+            {
+                OcenaPosilku ocena = new OcenaPosilku();
+                ocena.id_uzytkownika = userId;
+                ocena.id_posilku = posilek.id_posilku;
+                ocena.ocena = rating;
+                ocena.oceniajacy = _context.uzytkownicy.First(e => e.Id == userId);
+                ocena.posilek = posilek;
+
+                _context.Update(ocena);
+            }
+            else
+            {
+                OcenaPosilku ocena = new OcenaPosilku();
+                ocena.id_uzytkownika = userId;
+                ocena.id_posilku = posilek.id_posilku;
+                ocena.ocena = rating;
+                ocena.oceniajacy = _context.uzytkownicy.First(e => e.Id == userId);
+                ocena.posilek = posilek;
+
+                _context.Add(ocena);
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Details));
         }
 
         // GET: Posilek/Create
@@ -450,6 +500,21 @@ namespace WebApplication.Controllers
                                       .Where(k => k.id_posilku == meal_id)
                                       .Average(k => k.ocena);
             return ratings_avg;
+        }
+
+        private double avgRating(int id)
+        {
+            double avg = 0;
+            double sum = 0;
+            int index = 0;
+            var oceny = _context.ocenyPosilkow.Where(e => e.id_posilku == id).ToList();
+            foreach (var item in oceny)
+            {
+                sum += item.ocena;
+                index++;
+            }
+            avg = sum / index;
+            return avg;
         }
     }
 }
