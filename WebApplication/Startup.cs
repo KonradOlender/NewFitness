@@ -16,6 +16,7 @@ using WebApplication.Areas.Identity.Data;
 using WebApplication.Data;
 using WebApplication.Entities;
 using WebApplication.Hubs;
+using WebApplication.Services;
 
 namespace WebApplication
 {
@@ -42,9 +43,10 @@ namespace WebApplication
             services.AddSignalR();
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-
+            //services.AddHostedService<Notifications>();
             services.AddRazorPages();
             services.AddSingleton<IEmailSender, EmailSender>();
+            //services.AddSingleton<Notifications>();
             /*services.Configure<MyContext>(o =>
             {
                 o.Database.Migrate();

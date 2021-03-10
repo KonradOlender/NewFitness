@@ -13,6 +13,9 @@ namespace WebApplication.Data
 {
     public class MyContext: IdentityDbContext<Uzytkownik, IdentityRole<int>, int>
     {
+        public MyContext(): base()
+        { }
+
         public MyContext(DbContextOptions<MyContext> options)
             : base(options)
         {
