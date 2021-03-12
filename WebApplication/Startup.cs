@@ -43,10 +43,10 @@ namespace WebApplication
             services.AddSignalR();
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-            //services.AddHostedService<Notifications>();
+            services.AddHostedService<Notifications>();
             services.AddRazorPages();
             services.AddSingleton<IEmailSender, EmailSender>();
-            //services.AddSingleton<Notifications>();
+            services.AddSingleton<IHostedService, Notifications>();
             /*services.Configure<MyContext>(o =>
             {
                 o.Database.Migrate();
