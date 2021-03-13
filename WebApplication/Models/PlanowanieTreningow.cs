@@ -20,6 +20,7 @@ namespace WebApplication.Models
         [Required]
         public DateTime data { get; set; }
         public string dzien { get; set; }
+        public bool notification_sent { get; set; }
 
         public virtual Uzytkownik uzytkownik { get; set; }
         public virtual Trening trening { get; set; }

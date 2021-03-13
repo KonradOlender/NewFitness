@@ -65,6 +65,7 @@ namespace WebApplication.Controllers
                 PlanowanieTreningow training = new PlanowanieTreningow();
                 training.id_treningu = id;
                 training.data = DateTime.Now;
+                training.notification_sent = false;
                 //training.trening = _context.treningi.Where(x => x.id_treningu == id).FirstOrDefault();
 
                 //polecany trening
@@ -94,6 +95,7 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 planowanieTreningow.id_uzytkownika = int.Parse(User.Identity.GetUserId());
+                planowanieTreningow.notification_sent = false;
                 _context.Add(planowanieTreningow);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

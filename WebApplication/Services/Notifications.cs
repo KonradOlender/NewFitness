@@ -21,7 +21,7 @@ namespace WebApplication.Services
     {
         IEmailSender emailSender;
         private readonly IServiceScopeFactory scopeFactory;
-        private bool active = false;
+        private bool active = true;
 
         public Notifications(
             IOptions<EmailSettings> emailSettings, IServiceScopeFactory scopeFactory,
@@ -38,25 +38,32 @@ namespace WebApplication.Services
                 var dbContext = scope.ServiceProvider.GetRequiredService<MyContext>();
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    if (!active) continue;
+                    if (!active) {
+                        await Task.Delay(60000, stoppingToken); 
+                    }
                     DateTime currentTime = DateTime.Now;
                     DateTime dateAhead = currentTime.Add(TimeSpan.FromMinutes(30));
                     DateTime dateBehind = currentTime.Subtract(TimeSpan.FromMinutes(30));
+                    if (!dbContext.planowaneTreningi.Any(t => t.data < dateAhead && dateBehind < t.data && t.notification_sent == false))
+                        await Task.Delay(60000, stoppingToken);
+
                     List<PlanowanieTreningow> listy = await dbContext.planowaneTreningi
                                                                .Include(t => t.uzytkownik)
-                                                               .Where(t => t.data < dateAhead && dateBehind <t.data)
+                                                               .Where(t => t.data < dateAhead && dateBehind < t.data && t.notification_sent == false)
                                                                .ToListAsync();
 
                     foreach (PlanowanieTreningow trening in listy)
                     {
+                        trening.notification_sent = true;
                         string message = string.Format("<h1>Masz zaplanowany trening o godzinie {0}</h1><br>" +
                             "<p> Po więcej informacji zaloguj się na nasz protal</p>  ", trening.data);
                         await emailSender.SendEmailAsync(
                             trening.uzytkownik.Email,
                             "Zaplanowany trening",
                             message);
+                        await dbContext.SaveChangesAsync();
                     }
-                    await Task.Delay(5, stoppingToken);
+                    await Task.Delay(60000, stoppingToken);
                 }
             }   
             
