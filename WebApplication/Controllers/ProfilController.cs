@@ -293,7 +293,10 @@ namespace WebApplication.Controllers
             //var currentUser = await _userManager.GetUserAsync(User);
             int userid = int.Parse(User.Identity.GetUserId());
             var currentUser = _context.uzytkownicy.Single(e => e.Id == userid);
-            ViewBag.CurrentUserName = currentUser.UserName;
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.CurrentUserName = currentUser.UserName;
+            }
             //var messages = await _context.Messages.ToListAsync();
             return View();
         }
