@@ -17,6 +17,8 @@
                     <a class="list-group-item list-group-item-action" id="list-rola-list" data-toggle="list" href="#list-rola" role="tab" aria-controls="rola">Role</a>
                     <a class="list-group-item list-group-item-action" id="list-oceny-list" data-toggle="list" href="#list-oceny" role="tab" aria-controls="oceny">Oceny</a>
                     <a class="list-group-item list-group-item-action" id="list-ocenyT-list" data-toggle="list" href="#list-ocenyT" role="tab" aria-controls="ocenyT">Oceny Treningów</a>
+                    <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Wiadomości</a>
+                    <a class="list-group-item list-group-item-action" id="list-chats-list" data-toggle="list" href="#list-chats" role="tab" aria-controls="chats">Chaty</a>
                     <a href="/Historia" class="list-group-item list-group-item-action">Historia Użytkownika</a>
                     <a href="/KategoriaCwiczenia" class="list-group-item list-group-item-action">Kategorie Ćwiczeń</a>
                     <a href="/KategoriaTreningu" class="list-group-item list-group-item-action">Kategorie Treningów</a>
@@ -186,6 +188,62 @@
                                             <th scope="row">@item.id_uzytkownika</th>
                                             <td>@item.id_treningu</td>
                                             <td>@item.ocena</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                        <a class="btn btn-primary" href="/Rolauzytkownika" role="button">Zarządzaj</a>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Użutkownik</th>
+                                    <th scope="col">Wiadomość</th>
+                                    <th scope="col">Czas</th>
+                                    <th scope="col">Room</th>
+                                    <th scope="col">Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.messages)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.Name</th>
+                                            <td>@item.Text</td>
+                                            <td>@item.Timestamp</td>
+                                            <td>@item.ChatId</td>
+                                            <td>@item.Id</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-chats" role="tabpanel" aria-labelledby="list-chats-list">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ChatId</th>
+                                    <th scope="col">UserOne</th>
+                                    <th scope="col">UserTwo</th>
+                                    <th scope="col">Usuń</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ foreach (var item in ViewBag.chats)
+                                    {
+                                        <tr>
+                                            <th scope="row">@item.Id</th>
+                                            <td>@item.NameOne</td>
+                                            <td>@item.NameTwo</td>
+                                            <td>
+                                                <form method="post" action="/Chat/DeleteRoom">
+                                                    <input type="hidden" name="chatId" value="@item.Id" />
+                                                    <button type="submit" class="btn btn-danger">Usuń</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     }
                                 }

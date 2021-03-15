@@ -22,7 +22,7 @@
             @{if (User.Identity.Name != null)
                 {
                     <div class="text-center">
-                        <h1 class="display-4">Witaj @User.Identity.Name</h1>
+                        <h1 class="display-4">Witaj @ViewBag.user.imie</h1>
                         <h4>Aktualne BMI: @ViewBag.bmi</h4>
                         <h4>@ViewBag.user.limit</h4>
                         <a class="btn btn-primary" href="/historia/create" role="button">Dodaj dane</a>

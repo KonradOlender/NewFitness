@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication.Data
 {
-    public class MyContext: IdentityDbContext<Uzytkownik, IdentityRole<int>, int>
+    public class MyContext : IdentityDbContext<Uzytkownik, IdentityRole<int>, int>
     {
         public MyContext(DbContextOptions<MyContext> options)
             : base(options)
@@ -22,7 +22,7 @@ namespace WebApplication.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-         
+
             //mapowanie kluczy głównych i obcych
             builder.Entity<Uzytkownik>(b =>
             {
@@ -156,7 +156,7 @@ namespace WebApplication.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            builder.Entity<PlanowanieTreningow>().HasKey(t => t.id );
+            builder.Entity<PlanowanieTreningow>().HasKey(t => t.id);
             builder.Entity<PlanowanieTreningow>()
                 .HasOne<Uzytkownik>(t => t.uzytkownik)
                 .WithMany(t => t.planowaneTreningi)
@@ -188,7 +188,7 @@ namespace WebApplication.Data
                 .WithMany()
                 .HasForeignKey(d => d.id_uzytkownika_oceniajacego)
                 .OnDelete(DeleteBehavior.NoAction);
-                
+
             builder.Entity<ProsbyOUprawnienia>(b =>
             {
                 b.HasKey(t => new { t.id_uzytkownika, t.id_roli });
@@ -253,6 +253,7 @@ namespace WebApplication.Data
 
             builder.Entity<Rola>().HasData(
                                 new { id_roli = 3, nazwa = "dietetyk" });
+            builder.Entity<ChatUser>().HasKey(x => new { x.ChatId, x.UserId });
         }
 
         public DbSet<Cwiczenie> cwiczenia { get; set; }
@@ -278,5 +279,8 @@ namespace WebApplication.Data
         public DbSet<ObrazyTreningu> obrazyTreningow { get; set; }
         public IEnumerable<object> Rola { get; internal set; }
         public DbSet<ProsbyOUprawnienia> prosbyOUprawnienia { get; set; }
+        public DbSet<Message> messages { get; set; }
+        public DbSet<Chat> chats { get; set; }
+        public DbSet<ChatUser> chatUsers { get; set; }
     }
 }

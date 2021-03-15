@@ -21,7 +21,7 @@ namespace WebApplication.Services
     {
         IEmailSender emailSender;
         private readonly IServiceScopeFactory scopeFactory;
-        private bool active = fasle;
+        private bool active = false;
 
         public Notifications(
             IOptions<EmailSettings> emailSettings, IServiceScopeFactory scopeFactory,

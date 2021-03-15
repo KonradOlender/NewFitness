@@ -116,6 +116,8 @@ namespace WebApplication.Controllers
             var planowanie_trening = _context.planowaneTreningi.ToList();
             var oceny = _context.oceny.ToList();
             var ocenyTrening = _context.ocenyTreningow.ToList();
+            var messages = _context.messages.ToList();
+            var chats = _context.chats.ToList();
             ViewBag.cwiczenie = cwiczenie;
             ViewBag.trening = trening;
             ViewBag.kat_treningu = kat_treningu;
@@ -127,6 +129,8 @@ namespace WebApplication.Controllers
             ViewBag.planowanie_trening = planowanie_trening;
             ViewBag.oceny = oceny;
             ViewBag.ocenyTrening = ocenyTrening;
+            ViewBag.messages = messages;
+            ViewBag.chats = chats;
             return View();
         }
 

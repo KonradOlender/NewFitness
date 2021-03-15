@@ -149,6 +149,16 @@
                     deserunt mollit anim id est laborum.
                 </a>
             </div>
+            <h5>Wyślij wiadomość</h5>
+            <div class="txt-center">
+                <form method="post" action="/Chat/CrateRoom">
+                    <input type="hidden" name="userId" value="@ViewBag.user.Id" />
+                    <input type="hidden" name="specialistId" value="@ViewBag.id" />
+                    <div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
 
         }
 

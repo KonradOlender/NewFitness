@@ -1,0 +1,13 @@
+﻿@foreach(var item in ViewBag.chat.Messages)
+{
+    <p>@item.Name @item.Text @item.Timestamp</p>
+}
+<form method="post">
+    <input type="hidden" name="name" value="@ViewBag.user.imie" />
+    <input type="hidden" name="chatId" value="@ViewBag.chat.Id" />
+    <input type="text" name="text" placeholder="Message"/>
+    <div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+

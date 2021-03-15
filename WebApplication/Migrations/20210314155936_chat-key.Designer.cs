@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication.Data;
 
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20210314155936_chat-key")]
+    partial class chatkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,6 +165,9 @@ namespace WebApplication.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ChatId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -218,6 +223,8 @@ namespace WebApplication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChatId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -239,30 +246,9 @@ namespace WebApplication.Migrations
                     b.Property<int>("ChatType")
                         .HasColumnType("int");
 
-                    b.Property<string>("NameOne")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameTwo")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("chats");
-                });
-
-            modelBuilder.Entity("WebApplication.Models.ChatUser", b =>
-                {
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ChatId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("chatUsers");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Cwiczenie", b =>
@@ -388,7 +374,7 @@ namespace WebApplication.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ChatId")
+                    b.Property<int?>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -823,19 +809,11 @@ namespace WebApplication.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApplication.Models.ChatUser", b =>
+            modelBuilder.Entity("WebApplication.Areas.Identity.Data.Uzytkownik", b =>
                 {
-                    b.HasOne("WebApplication.Models.Chat", "Chat")
+                    b.HasOne("WebApplication.Models.Chat", null)
                         .WithMany("Users")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication.Areas.Identity.Data.Uzytkownik", "User")
-                        .WithMany("chats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChatId");
                 });
 
             modelBuilder.Entity("WebApplication.Models.Cwiczenie", b =>
@@ -858,11 +836,9 @@ namespace WebApplication.Migrations
 
             modelBuilder.Entity("WebApplication.Models.Message", b =>
                 {
-                    b.HasOne("WebApplication.Models.Chat", "Chat")
+                    b.HasOne("WebApplication.Models.Chat", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChatId");
                 });
 
             modelBuilder.Entity("WebApplication.Models.ObrazProfilowe", b =>

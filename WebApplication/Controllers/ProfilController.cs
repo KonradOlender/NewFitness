@@ -22,11 +22,9 @@ namespace WebApplication.Controllers
         private readonly MyContext _context;
         //chat 
         //czy tu IdentityUser?
-        public readonly UserManager<IdentityUser> _userManager;
-        public ProfilController(MyContext context, UserManager<IdentityUser> userManager)
+        public ProfilController(MyContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -35,6 +33,7 @@ namespace WebApplication.Controllers
         }
 
         //musi zapamiętywać aktualną ocene
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             if (id == null)
@@ -70,6 +69,7 @@ namespace WebApplication.Controllers
             }
 
             ViewBag.id = id;
+            ViewBag.user = user;
             
             var usersProfile = _context.uzytkownicy.Where(k => k.Id == id)
                                         .Include(k => k.oceny)

@@ -1,0 +1,18 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+<div class="col-md-3">
+    @foreach (var item in ViewBag.chat)
+    {
+        if (ViewBag.user.imie == item.Chat.NameOne)
+        {
+            <a style=" width: 100%" class="btn btn-primary" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameTwo</a>
+        }
+        else
+        {
+            <a style=" width: 100%" class="btn btn-primary" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameOne</a>
+        }
+
+    }
+</div>
+}
+
