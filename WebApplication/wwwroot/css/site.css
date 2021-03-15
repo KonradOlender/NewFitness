@@ -76,3 +76,75 @@ body {
     max-width: 90%;
 }
 
+/* ZMIANY PONIZEJ */
+html {
+    min-height: 100%;
+    position: relative;
+    --bg: #FCFCFC;
+    --bg-panel: #EBEBEB;
+    --color-headings: #0077FF;
+    --color-text: #333333;
+}
+
+    html[data-theme='dark'] {
+        --bg: #333333;
+        --bg-panel: #434343;
+        --color-headings: #3694FF;
+        --color-text: #B5B5B5;
+    }
+
+body {
+    background-color: var(--bg);
+    color: var(--color-text);
+}
+
+input[type=checkbox] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+
+#darkmodeswitch {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 52px;
+    height: 27px;
+    background: grey;
+    float: right;
+    border-radius: 100px;
+    position: relative;
+}
+
+    #darkmodeswitch:after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 90px;
+        transition: 0.3s;
+    }
+
+input:checked + #darkmodeswitch {
+    background: var(--color-headings);
+}
+
+    input:checked + #darkmodeswitch:after {
+        left: calc(100% - 5px);
+        transform: translateX(-100%);
+    }
+
+#darkmodeswitch:active:after {
+    width: 45px;
+}
+
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+    transition: all 750ms !important;
+    transition-delay: 0 !important;
+}
