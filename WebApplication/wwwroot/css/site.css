@@ -92,13 +92,23 @@ html {
         --color-headings: #3694FF;
         --color-text: #B5B5B5;
     }
+    /*
+#backgroundImage {
+    background-image: url(../images/GradientMain.svg);
+}
+
+    #backgroundImage[data-theme='dark'] {
+        background-image: url(../images/GradientMain.svg);
+        filter: brightness(0.2);
+    }
+*/
 
 body {
     background-color: var(--bg);
     color: var(--color-text);
 }
 
-input[type=checkbox] {
+#switch {
     height: 0;
     width: 0;
     visibility: hidden;
