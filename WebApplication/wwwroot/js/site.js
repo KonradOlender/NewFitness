@@ -14,3 +14,30 @@ $('#datepicker').on('changeDate', function () {
     $('form').submit();
 });
 $('#my_hidden_input')
+
+const darkmodeCheckbox = document.getElementById('darkmode-checkbox');
+if (localStorage.getItem('checkbox') == 'true') {
+    document.body.classList.add('dark');
+    darkmodeCheckbox.checked = true;
+}
+else {
+    document.body.classList.remove('dark');
+}
+
+
+darkmodeCheckbox.addEventListener('change', () => {
+    if (localStorage.getItem('checkbox') == 'true') {
+        localStorage.setItem('checkbox', 'false');
+    }
+    else {
+        localStorage.setItem('checkbox', 'true');
+    }
+
+    if (localStorage.getItem('checkbox') == 'true') {
+        document.body.classList.add('dark');
+    }
+    else {
+        document.body.classList.remove('dark');
+    }
+    
+});
