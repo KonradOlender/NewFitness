@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApplication.Models;
 using WebApplication.Data;
-
+using WebApplication.Areas;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
+using WebApplication.Entities;
+using Microsoft.Extensions.Options;
+
 
 namespace WebApplication.Controllers
 {
@@ -18,9 +21,12 @@ namespace WebApplication.Controllers
         private readonly ILogger<HomeController> _logger;
 
         private readonly MyContext _context;
+        private EmailSender emailSender;
 
 
-        public HomeController(ILogger<HomeController> logger, MyContext context)
+        public HomeController(ILogger<HomeController> logger, MyContext context, 
+            IOptions<EmailSettings> emailSettings,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             _logger = logger;
             _context = context;
@@ -64,6 +70,20 @@ namespace WebApplication.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }
+
+        public IActionResult ContactUs()
+        {
+            ViewBag.message = "";
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ContactUs(string name, string subject, string message)
+        {
+            ViewBag.message = "Wiadomość została wysłana";
             return View();
         }
 

@@ -1,0 +1,56 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <style>
+        .contactContainer {
+            background: #e2f4fa;
+            width: 80%;
+            margin: auto;
+            border-radius: 25px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        input, textarea {
+            width: 100%;
+            border-radius: 5px;
+            border: 2px solid #007bff;
+            margin-bottom: 10px;
+        }
+
+            
+        input[type=submit] {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        label{
+            font-weight: bold;
+        }
+    </style>
+
+    <p style="color: lawngreen">@ViewBag.message</p>
+    <div class="contactContainer">
+        <div style="margin:auto">
+            <form asp-controller="Home" asp-action="ContactUs" method="post">
+                <label for="name">Imie i nazwisko:</label>
+                <br />
+                <input type="text" id="name" placeholder="Imie i nazwisko" />
+                <br />
+                <label for="subject">Temat:</label>
+                <br />
+                <input type="text" id="subject" placeholder="Temat wiadomości" />
+                <br />
+                <label for="message">Wiadomość:</label>
+                <br />
+                <textarea id="message" placeholder="Tutaj wpisz wiadomość..."  style="height:250px"> </textarea>
+                <input type="submit" value="Wyślij" />
+            </form>
+
+        </div>
+    </div>
+
+}
