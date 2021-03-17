@@ -19,8 +19,8 @@
             border-radius: 5px;
             border: 2px solid #007bff;
             margin-bottom: 10px;
+            background-color: white;
         }
-
             
         input[type=submit] {
             background-color: #007bff;
@@ -30,23 +30,33 @@
         label{
             font-weight: bold;
         }
+
+        input[type=submit]:hover {
+            background-color: #85b5e9;
+            border: 2px solid #85b5e9;
+        }
+        input[type=submit]:focus {
+            background-color: #0053ac;
+            border: 2px solid #0053ac;
+        }
     </style>
 
-    <p style="color: lawngreen">@ViewBag.message</p>
+    <p style="text-align:center;color: limegreen">@ViewBag.message</p>
+    <p style="text-align:center;color: red">@ViewBag.ErrorMessage</p>
     <div class="contactContainer">
         <div style="margin:auto">
             <form asp-controller="Home" asp-action="ContactUs" method="post">
                 <label for="name">Imie i nazwisko:</label>
                 <br />
-                <input type="text" id="name" placeholder="Imie i nazwisko" />
+                <input type="text" id="name" name="name" placeholder="Imie i nazwisko" />
                 <br />
                 <label for="subject">Temat:</label>
                 <br />
-                <input type="text" id="subject" placeholder="Temat wiadomości" />
+                <input type="text" id="subject" name="subject" placeholder="Temat wiadomości" />
                 <br />
                 <label for="message">Wiadomość:</label>
                 <br />
-                <textarea id="message" placeholder="Tutaj wpisz wiadomość..."  style="height:250px"> </textarea>
+                <textarea id="message" name="message" placeholder="Tutaj wpisz wiadomość..."  style="height:250px"> </textarea>
                 <input type="submit" value="Wyślij" />
             </form>
 
