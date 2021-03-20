@@ -1,0 +1,27 @@
+﻿nav.navigation {
+    background: #e2f4fa;
+    width: 100%;
+    margin: auto;
+    align-content: stretch;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+button.navigation {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    background: #e2f4fa;
+    color: #0053ac;
+    border: 0px;
+    font-weight: bold;
+}
+
+    button.navigation:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    button.navigation:focus {
+        background-color: #0053ac;
+        color: white;
+    }

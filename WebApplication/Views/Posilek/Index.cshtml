@@ -4,64 +4,70 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="text-center">
-    <h1>Posiłki</h1>
-    <hr />
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
+</head>
+<body>
+    <div class="text-center">
+        <h1>Posiłki</h1>
+        <hr />
 
-    <p>
-        <a asp-action="Create">Stwórz nowy posiłek</a> ||
-        <a asp-controller="KategoriaPosiłkow" asp-action="Index">Zobacz kategorie posiłków</a> ||
-        <a asp-controller="Skladnik" asp-action="Index">Zobacz dostępne składniki</a>
-    </p>
-    <hr />
-    @using (Html.BeginForm("Index", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
-    {
-        <fieldset>
-            @Html.TextBox("searchString")
-
-            <p>
-                <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
-            </p>
-
-        </fieldset>
-    }
-</div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.nazwa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.opis)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-
-
-        @foreach (var item in Model)
+        <nav class="navigation">
+            <a asp-action="Create" style="text-decoration:none"><button class="navigation">Stwórz nowy posiłek</button></a>
+            <a asp-controller="Skladnik" asp-action="Index" style="text-decoration:none"><button class="navigation">Zobacz dostępne składniki</button></a>
+        </nav>
+        <hr />
+        @using (Html.BeginForm("Index", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
         {
-            @if (ViewBag.dieticiansIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
-            {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.nazwa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.opis)
-            </td>
-            <td>
-                @if (ViewBag.userId == item.id_uzytkownika)
-                {
-                <a asp-action="Delete" asp-route-id="@item.id_posilku">Usuń</a> <br />
-                <a asp-action="Edit" asp-route-id="@item.id_posilku">Edytuj</a> <br />
-                }
-                <a asp-action="Details" asp-route-id="@item.id_posilku">Szczegóły</a> <br />
-            </td>
-        </tr>
-            }
+            <fieldset>
+                @Html.TextBox("searchString")
+
+                <p>
+                    <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+                </p>
+
+            </fieldset>
         }
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.nazwa)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.opis)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                @if (ViewBag.dieticiansIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nazwa)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.opis)
+                        </td>
+                        <td>
+                            @if (ViewBag.userId == item.id_uzytkownika)
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.id_posilku">Usuń</a> <br />
+                                <a asp-action="Edit" asp-route-id="@item.id_posilku">Edytuj</a> <br />
+                            }
+                            <a asp-action="Details" asp-route-id="@item.id_posilku">Szczegóły</a> <br />
+                        </td>
+                    </tr>
+                }
+            }
         </tbody>
-</table>
+    </table>
+    </body>
+</html>
