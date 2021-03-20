@@ -25,13 +25,14 @@
                     <a asp-action="AddExercise" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj ćwiczenie</button></a>
                     <a asp-action="AddImage" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj obraz</button></a>
                     <a asp-action="AddLink" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj filmik z youtube</button></a>
+                    <a asp-action="Edit" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Edytuj</button></a>
                 }
                 <a asp-controller="PlanowanieTreningow" asp-action="Create" asp-route-id_string="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Zaplanuj trening</button></a>
             </nav>
             <br />
         </div>
         <hr />
-        <div style="float:left">
+        <div style="float:left; width:50%">
             <dl class="row">
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.nazwa)
@@ -55,9 +56,31 @@
                     Spala @burnt_calories kalorii
                 </dd>
             </dl>
+            <div>
+                <h5>Cwiczenia</h5>
+                <ul>
+                    @foreach (var trening in ViewBag.trainingDetails)
+                    {
+                        <li>
+                            @trening.cwiczenie.nazwa
+                            <br />
+                            Opis: <br />
+                            @trening.cwiczenie.opis
+                            <br />
+                            Liczba powtórzeń: @trening.liczba_powtorzen
+                            @if (ViewBag.userId == ViewBag.treningOwner)
+                            {
+                                <form asp-action="DeleteExercise" asp-route-idt="@trening.id_treningu" asp-route-idc="@trening.id_cwiczenia">
+                                    <input type="submit" value="Usuń ćwiczenie" class="btn btn-danger" />
+                                </form>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
         </div>
 
-        <div style="float:left">
+        <div style="float:left; width:50%">
             @if (ViewBag.youtube != null)
             {
                 <iframe width="560" height="315" src="@ViewBag.youtube"
@@ -74,34 +97,6 @@
             }
         </div>
     </div>
-    <div>
-        <h5>Cwiczenia</h5>
-        <ul>
-            @foreach (var trening in ViewBag.trainingDetails)
-            {
-                <li>
-                    @trening.cwiczenie.nazwa
-                    <br />
-                    Opis: <br />
-                    @trening.cwiczenie.opis
-                    <br />
-                    Liczba powtórzeń: @trening.liczba_powtorzen
-                    @if (ViewBag.userId == ViewBag.treningOwner)
-                    {
-                        <form asp-action="DeleteExercise" asp-route-idt="@trening.id_treningu" asp-route-idc="@trening.id_cwiczenia">
-                            <input type="submit" value="Usuń ćwiczenie" class="btn btn-danger" />
-                        </form>
-                    }
-                </li>
-            }
-        </ul>
-    </div>
-    <div>
-        @if (ViewBag.userId == ViewBag.treningOwner)
-        {
-            <a asp-action="Edit" asp-route-id="@Model.id_treningu">Edytuj</a> <br />
-        }
-        @*<a asp-action="Index">Powrot do listy</a>*@
-    </div>
+    
 </body>
 </html>
