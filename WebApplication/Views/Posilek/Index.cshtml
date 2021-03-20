@@ -34,6 +34,9 @@
         <thead>
             <tr>
                 <th>
+                    obraz
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.nazwa)
                 </th>
                 <th>
@@ -50,6 +53,16 @@
                 @if (ViewBag.dieticiansIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
                 {
                     <tr>
+                        <td>
+                            @if (item.obrazy.Count > 0)
+                            {
+                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyPosilku>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                            }
+                            else
+                            {
+                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/meal.jpg" />
+                            }
+                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.nazwa)
                         </td>

@@ -50,7 +50,7 @@ namespace WebApplication.Controllers
                 meals = meals.Where(k => k.nazwa.Contains(searchString));
             }
 
-            return View(await meals.Include(t => t.uzytkownik).ToListAsync());
+            return View(await meals.Include(t => t.uzytkownik).Include(k => k.obrazy).ToListAsync());
 
         }
 

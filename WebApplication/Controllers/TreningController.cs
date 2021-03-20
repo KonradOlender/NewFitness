@@ -64,7 +64,7 @@ namespace WebApplication.Controllers
                     trainings = trainings.Where(k => k.id_kategorii == category_id);
             }
                 
-            return View(await trainings.Include(t => t.kategoria).Include(t => t.uzytkownik).ToListAsync());
+            return View(await trainings.Include(t => t.kategoria).Include(t => t.obrazy).Include(t => t.uzytkownik).ToListAsync());
 
         }
 
