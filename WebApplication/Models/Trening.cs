@@ -11,6 +11,10 @@ namespace WebApplication.Models
     [Table("Treningi")]
     public class Trening
     {
+        public Trening()
+        {
+            obrazy = new List<ObrazyTreningu>();
+        }
         [Key]
         public int id_treningu { get; set; }
         [Required]
