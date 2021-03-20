@@ -9,14 +9,18 @@
     <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
 </head>
 <body>
+
     <div class="text-center">
+        <h1>Ćwiczenia</h1>
+        <hr />
+
         <nav class="navigation">
-            <a asp-action="Create"style="text-decoration:none"><button class="navigation">Dodaj ćwiczenie</button></a>
+            <a asp-action="Create" style="text-decoration:none"><button class="navigation">Dodaj ćwiczenie</button></a>
             <a asp-controller="KategoriaCwiczenia" asp-action="Index" style="text-decoration:none"><button class="navigation">Zobacz kategorie</button></a>
         </nav>
         @using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
         {
-            <fieldset>
+            <fieldset style="display:inline">
                 @Html.TextBox("searchString")
 
                 @Html.DropDownList("category")
@@ -88,5 +92,5 @@
             }
         </tbody>
     </table>
-    </body>
+</body>
 </html>

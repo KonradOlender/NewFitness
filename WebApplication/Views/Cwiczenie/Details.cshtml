@@ -14,6 +14,11 @@
     <div>
         <h4>Cwiczenie</h4>
         <hr />
+        <nav class="navigation text-center">
+            <a asp-action="Edit" asp-route-id="@Model.id_cwiczenia" style="text-decoration:none"><button class="navigation">Edytuj</button></a> @*|
+        <a asp-action="Index">Powrót do listy ćwiczeń</a>*@
+        </nav>
+        <hr />
         <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.nazwa)
@@ -40,10 +45,6 @@
                 @Html.DisplayFor(model => model.kategoria.nazwa)
             </dd>
         </dl>
-    </div>
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.id_cwiczenia">Edytuj</a> @*|
-            <a asp-action="Index">Powrót do listy ćwiczeń</a>*@
     </div>
     </body>
 </html>

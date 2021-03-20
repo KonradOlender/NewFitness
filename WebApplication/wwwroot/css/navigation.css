@@ -25,3 +25,11 @@ button.navigation {
         background-color: #0053ac;
         color: white;
     }
+
+ul li.training::marker {
+    content: "🏃‍♀️";
+}
+
+ul li.food::marker {
+    content: "🍽️";
+}
