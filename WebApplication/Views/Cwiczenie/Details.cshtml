@@ -4,40 +4,47 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
+</head>
+<body>
+    <h1>Szczegóły</h1>
 
-<h1>Szczegóły</h1>
-
-<div>
-    <h4>Cwiczenie</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.nazwa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.nazwa)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.opis)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.opis)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.spalone_kalorie)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.spalone_kalorie)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.kategoria)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.kategoria.nazwa)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.id_cwiczenia">Edytuj</a> @*|
-    <a asp-action="Index">Powrót do listy ćwiczeń</a>*@
-</div>
+    <div>
+        <h4>Cwiczenie</h4>
+        <hr />
+        <nav class="navigation text-center">
+            <a asp-action="Edit" asp-route-id="@Model.id_cwiczenia" style="text-decoration:none"><button class="navigation">Edytuj</button></a> @*|
+        <a asp-action="Index">Powrót do listy ćwiczeń</a>*@
+        </nav>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.nazwa)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.nazwa)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.opis)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.opis)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.spalone_kalorie)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.spalone_kalorie)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.kategoria)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.kategoria.nazwa)
+            </dd>
+        </dl>
+    </div>
+    </body>
+</html>

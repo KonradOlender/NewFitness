@@ -10,6 +10,11 @@
 <div>
     <h4>Składnika</h4>
     <hr />
+    <nav class="navigation text-center">
+        <a asp-action="Edit" asp-route-id="@Model.id_skladnika" style="text-decoration:none"><button class="navigation">Edytuj</button></a> @*|
+        <a asp-action="Index">Powrót do listy składników</a>*@
+    </nav>
+    <hr />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.waga)
@@ -48,8 +53,4 @@
             @Html.DisplayFor(model => model.kategoria.nazwa)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.id_skladnika">Edytuj</a> @*|
-        <a asp-action="Index">Powrót do listy składników</a>*@
 </div>

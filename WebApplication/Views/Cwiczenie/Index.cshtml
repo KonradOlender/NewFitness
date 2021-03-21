@@ -4,81 +4,93 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="text-center">
-    <p>
-        <a asp-action="Create">Dodaj ćwiczenie</a> ||
-        <a asp-controller="KategoriaCwiczenia" asp-action="Index">Zobacz kategorie</a>
-    </p>
-    @using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
-    {
-        <fieldset>
-            @Html.TextBox("searchString")
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
+</head>
+<body>
 
-            @Html.DropDownList("category")
+    <div class="text-center">
+        <h1>Ćwiczenia</h1>
+        <hr />
 
-            <div style="padding: 5px">
-                <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
-            </div>
+        <nav class="navigation">
+            <a asp-action="Create" style="text-decoration:none"><button class="navigation">Dodaj ćwiczenie</button></a>
+            <a asp-controller="KategoriaCwiczenia" asp-action="Index" style="text-decoration:none"><button class="navigation">Zobacz kategorie</button></a>
+        </nav>
+        @using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
+        {
+            <fieldset style="display:inline">
+                @Html.TextBox("searchString")
 
-        </fieldset>
-    }
-</div>
+                @Html.DropDownList("category")
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.nazwa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.opis)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sort="@ViewData["currentSort"]" asp-route-searchString="@ViewData["currentSearchString"]">
-                    @Html.DisplayNameFor(model => model.spalone_kalorie)
-                    @if ((int)ViewData["currentSort"] == 0)
-                    {
-                        <p>▲</p>
-                    }
-                    else if ((int)ViewData["currentSort"] == 2)
-                    {
-                        <p>▼</p>
-                    }
-                    
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.kategoria)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.nazwa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.opis)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.spalone_kalorie)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.kategoria.nazwa)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.id_cwiczenia">Szczegóły</a> <br />
+                <div style="padding: 5px">
+                    <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
+                </div>
 
-                @if (ViewBag.isTrainer)
-                {
-                    <a asp-action="Edit" asp-route-id="@item.id_cwiczenia">Edytuj</a> <br />
-                    <a asp-action="Delete" asp-route-id="@item.id_cwiczenia">Usuń</a> <br />
-                }
+            </fieldset>
+        }
+    </div>
 
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.nazwa)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.opis)
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sort="@ViewData["currentSort"]" asp-route-searchString="@ViewData["currentSearchString"]">
+                        @Html.DisplayNameFor(model => model.spalone_kalorie)
+                        @if ((int)ViewData["currentSort"] == 0)
+                        {
+                            <p>▲</p>
+                        }
+                        else if ((int)ViewData["currentSort"] == 2)
+                        {
+                            <p>▼</p>
+                        }
+
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.kategoria)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nazwa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.opis)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.spalone_kalorie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.kategoria.nazwa)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.id_cwiczenia">Szczegóły</a> <br />
+
+                        @if (ViewBag.isTrainer)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.id_cwiczenia">Edytuj</a> <br />
+                            <a asp-action="Delete" asp-route-id="@item.id_cwiczenia">Usuń</a> <br />
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

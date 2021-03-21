@@ -4,52 +4,59 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div class="text-center">
-    <h1>Kategorie Treningu</h1>
-    <hr />
-    <p>
-        <a asp-action="Create">Stwórz nową kategorie</a>
-    </p>
-</div>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.nazwa)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Szukaj: <input type="text" name="SearchString" value="@ViewData["currentSearchString"]" />
-            <input type="submit" value="Szukaj" class="btn btn-default" /> |
-            <a asp-action="Index">Wyczyść wyszukiwanie</a>
-        </p>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
+</head>
+<body>
+    <div class="text-center">
+        <h1>Kategorie Treningu</h1>
+        <hr />
+        <nav class="navigation">
+            <a asp-action="Create" style="text-decoration:none"><button class="navigation">Stwórz nową kategorie</button></a>
+        </nav>
     </div>
-</form>
 
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.nazwa)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a> <br />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.nazwa)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
 
-                @if (item.id_kategorii != ViewBag.DefaultCategory.id_kategorii && ViewBag.isTrainer)
-                {
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <p>
+                        Szukaj: <input type="text" name="SearchString" value="@ViewData["currentSearchString"]" />
+                        <input type="submit" value="Szukaj" class="btn btn-default" /> |
+                        <a asp-action="Index">Wyczyść wyszukiwanie</a>
+                    </p>
+                </div>
+            </form>
 
-                    <a asp-action="Delete" asp-route-id="@item.id_kategorii">Usuń</a> <br />
-                    <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a> <br />
-                }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nazwa)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a> <br />
+
+                        @if (item.id_kategorii != ViewBag.DefaultCategory.id_kategorii && ViewBag.isTrainer)
+                        {
+
+                            <a asp-action="Delete" asp-route-id="@item.id_kategorii">Usuń</a> <br />
+                            <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a> <br />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </body>
+</html>

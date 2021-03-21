@@ -4,40 +4,47 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
+</head>
+<body>
+    <div class="text-center">
+        <h1>Kategorie Składników</h1>
+        <hr />
+        <nav class="navigation">
+            <a asp-action="Create" style="text-decoration:none"><button class="navigation">Stwórz nową kategorie</button></a>
+        </nav>
+    </div>
 
-<div class="text-center">
-    <h1>Kategorie Składników</h1>
-    <hr />
-    <p>
-        <a asp-action="Create">Stwórz nową kategorie</a>
-    </p>
-</div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.nazwa)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nazwa)
+                    </td>
+                    <td>
+                        @if (item.nazwa != "inne")
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a>
+                            <a asp-action="Delete" asp-route-id="@item.id_kategorii"> Usuń </a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.nazwa)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.nazwa)
-            </td>
-            <td>
-                @if (item.nazwa != "inne")
-                {
-                    <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a>
-                    <a asp-action = "Delete" asp-route-id = "@item.id_kategorii" > Usuń </a>
-                }
-                <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a>
-
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </body>
+</html>

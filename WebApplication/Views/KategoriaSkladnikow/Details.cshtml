@@ -9,17 +9,21 @@
 
 <div>
     <h4>Kategoria Składników</h4>
+    <hr/>
+    <nav class="navigation">
+        <a asp-action="Edit" asp-route-id="@Model.id_kategorii" style="text-decoration:none"><button class="navigation">Edytuj</button></a> @*|
+        <a asp-action="Index">Powrót do listy kategorii</a>*@
+    </nav>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.nazwa)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.nazwa)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.id_kategorii">Edytuj</a> @*|
-        <a asp-action="Index">Powrót do listy kategorii</a>*@
+    
 </div>

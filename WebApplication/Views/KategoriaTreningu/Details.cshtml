@@ -4,42 +4,48 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
+</head>
+<body>
+    <h1>Szczegóły</h1>
+    <div>
+        <h4>Kategorii Treningu</h4>
+        <hr />
+        <nav class="navigation text-center">
+            <a asp-action="Edit" asp-route-id="@Model.id_kategorii" style="text-decoration:none"><button class="navigation">Edytuj</button></a> @*|
+            <a asp-action="Index">Powrót do listy kategorii</a>*@
+        </nav>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.nazwa)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.nazwa)
+            </dd>
+        </dl>
+        <hr />
+    </div>
 
-<h1>Szczegóły</h1>
-
-<div>
-    <h4>Kategorii Treningu</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.nazwa)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.nazwa)
-        </dd>
-    </dl>
-    <hr />
-</div>
-
-<div>
-    <ul>
-        @foreach (Trening t in ViewBag.trainings)
-        {
-            @if (t.id_uzytkownika == ViewBag.userId || ViewBag.trainersIds.Contains(t.id_uzytkownika))
+    <div>
+        <h5>Treningi oznaczone tą kategorią:</h5>
+        <ul class="training">
+            @foreach (Trening t in ViewBag.trainings)
             {
-            <li>
-                Nazwa: 
-                <a asp-controller="Trening" asp-action="Details" asp-route-id="@t.id_treningu">
-                    @t.nazwa
-                </a>
-            </li>
+                @if (t.id_uzytkownika == ViewBag.userId || ViewBag.trainersIds.Contains(t.id_uzytkownika))
+                {
+                    <li class="training">
+                        Nazwa:
+                        <a asp-controller="Trening" asp-action="Details" asp-route-id="@t.id_treningu">
+                            @t.nazwa
+                        </a>
+                    </li>
+                }
             }
-         }
-    </ul>
+        </ul>
 
-</div>
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.id_kategorii">Edytuj</a> @*|
-    <a asp-action="Index">Powrót do listy kategorii</a>*@
-</div>
+    </div>
+    </body>
+</html>
