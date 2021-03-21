@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+    <h1> PDF</h1>
+
+
+    @{Html.BeginForm("ExportToPDF", "UserHub", FormMethod.Post);
+        {
+            <div>
+                <input type="submit" value="Zapisz" style="width:150px;height:27px" />
+            </div>
+        }
+        Html.EndForm();
+    }
+</body>
+</html>

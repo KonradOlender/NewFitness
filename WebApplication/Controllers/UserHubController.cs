@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Models;
 using WebApplication.Data;
-
+using Microsoft.AspNetCore.Hosting;
+using Syncfusion.HtmlConverter;
+using Syncfusion.Pdf;
+using System.IO;
 
 
 namespace WebApplication.Controllers
@@ -17,10 +20,12 @@ namespace WebApplication.Controllers
 
 
         private readonly MyContext _context;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public UserHubController(MyContext context)
+        public UserHubController(IHostingEnvironment hostingEnvironment, MyContext context )
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index(DateTime sellected_date)
@@ -186,6 +191,63 @@ namespace WebApplication.Controllers
             user.limit = (int)wynik;
             _context.SaveChanges();
 
+            return View();
+        }
+
+        /*public IActionResult Pdf()
+        {
+            //var Renderer = new IronPdf.HtmlToPdf();
+            //var PDF = Renderer.RenderHTMLFileAsPdf("Views/UserHub/Pdf.cshtml");
+            //var PDF = Renderer.RenderHTMLFileAsPdf("Pdf.cshtml");
+            //var OutputPath = @"C:\Users\Ewa\Desktop\Report.pdf";
+            //PDF.SaveAs(OutputPath);
+
+            HtmlToPdfConverter converter = new HtmlToPdfConverter();
+            WebKitConverterSettings settings = new WebKitConverterSettings();
+            settings.WebKitPath = Path.Combine(_hostingEnvironment.ContentRootPath, "QtBinariesWindows");
+            converter.ConverterSettings = settings;
+
+            PdfDocument document = converter.Convert("https://www.google.com");
+
+            MemoryStream ms = new MemoryStream();
+            document.Save(ms);
+            document.Close(true);
+
+            ms.Position = 0;
+
+            FileStreamResult fileStreamResult = new FileStreamResult(ms, "application/pdf");
+            fileStreamResult.FileDownloadName = "Report.pdf";
+
+
+            //return View();
+            return fileStreamResult;
+        }*/
+
+        public IActionResult ExportToPDF()
+        {
+            //Set Environment variable for OpenSSL assemblies folder 
+            //string SSLPath = Server.MapPath("~/OpenSSL");
+            string SSLPath = Path.Combine(_hostingEnvironment.ContentRootPath, "OpenSSL");
+            Environment.SetEnvironmentVariable("Path", SSLPath);
+
+            //Initialize HTML to PDF converter 
+            HtmlToPdfConverter htmlConverter = new HtmlToPdfConverter();
+            WebKitConverterSettings settings = new WebKitConverterSettings();
+            //Set WebKit path
+            settings.WebKitPath = Path.Combine(_hostingEnvironment.ContentRootPath, "QtBinariesWindows");
+            //Assign WebKit settings to HTML converter
+            htmlConverter.ConverterSettings = settings;
+            //Convert URL to PDF
+            PdfDocument document = htmlConverter.Convert("https://localhost:44327/UserHub/Pdf");
+
+            MemoryStream stream = new MemoryStream();
+            document.Save(stream);
+            DateTime today = DateTime.Today;
+            return File(stream.ToArray(), System.Net.Mime.MediaTypeNames.Application.Pdf, "Raport-" + today.ToShortDateString() + ".pdf");
+        }
+
+        public IActionResult Pdf()
+        {
             return View();
         }
 
