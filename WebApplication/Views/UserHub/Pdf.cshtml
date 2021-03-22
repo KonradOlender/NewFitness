@@ -1,19 +1,33 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 
 </head>
 <body>
-    <h1> PDF</h1>
+
+    <h2>Raport - @ViewBag.date.Day / @ViewBag.date.Month / @ViewBag.date.Year</h2>
+
+    <div style=" display: flex;">
+        <picture>
+            <source style="height: 300px; " srcset=@ViewBag.image>
+            <img src="~/images/Profil.svg" alt="Profile picture" style="height: 300px; ">
+        </picture>
+
+        <div>
+            <h4>@ViewBag.user.imie</h4>
+            <p>@ViewBag.user.Email</p>
+            <p>@ViewBag.roles</p>
+        </div>
+    </div>
+
+    <div>
+        <h6>Aktualne wymiary:</h6>
+        <p>Wzrost: @ViewBag.now.wzrost</p>
+        <p>Waga: @ViewBag.now.waga</p>
+        <p>BMI: @ViewBag.bmi</p>
+    </div>
 
 
-    @{Html.BeginForm("ExportToPDF", "UserHub", FormMethod.Post);
-        {
-            <div>
-                <input type="submit" value="Zapisz" style="width:150px;height:27px" />
-            </div>
-        }
-        Html.EndForm();
-    }
+
 </body>
 </html>

@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+    <h1> report</h1>
+
+
+    @{Html.BeginForm("ExportToPDF", "UserHub", FormMethod.Post);
+        {
+            <div>
+                <input type="submit" value="Zapisz" style="width:150px;height:27px" />
+            </div>
+        }
+        Html.EndForm();
+    }
+
+    <iframe src="https://localhost:44327/UserHub/Pdf" height="1123" width=" 794"</iframe>
+
+</body>
+</html>

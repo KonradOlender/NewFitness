@@ -194,34 +194,10 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        /*public IActionResult Pdf()
+        public IActionResult Report()
         {
-            //var Renderer = new IronPdf.HtmlToPdf();
-            //var PDF = Renderer.RenderHTMLFileAsPdf("Views/UserHub/Pdf.cshtml");
-            //var PDF = Renderer.RenderHTMLFileAsPdf("Pdf.cshtml");
-            //var OutputPath = @"C:\Users\Ewa\Desktop\Report.pdf";
-            //PDF.SaveAs(OutputPath);
-
-            HtmlToPdfConverter converter = new HtmlToPdfConverter();
-            WebKitConverterSettings settings = new WebKitConverterSettings();
-            settings.WebKitPath = Path.Combine(_hostingEnvironment.ContentRootPath, "QtBinariesWindows");
-            converter.ConverterSettings = settings;
-
-            PdfDocument document = converter.Convert("https://www.google.com");
-
-            MemoryStream ms = new MemoryStream();
-            document.Save(ms);
-            document.Close(true);
-
-            ms.Position = 0;
-
-            FileStreamResult fileStreamResult = new FileStreamResult(ms, "application/pdf");
-            fileStreamResult.FileDownloadName = "Report.pdf";
-
-
-            //return View();
-            return fileStreamResult;
-        }*/
+            return View();
+        }
 
         public IActionResult ExportToPDF()
         {
@@ -248,8 +224,45 @@ namespace WebApplication.Controllers
 
         public IActionResult Pdf()
         {
+            int userid = int.Parse(User.Identity.GetUserId());
+            var user = _context.uzytkownicy.Single(e => e.Id == userid);
+            ViewBag.user = user;
+            DateTime today = DateTime.Today;
+            ViewBag.date = today;
+
+
+            var usersProfile = _context.uzytkownicy.Where(k => k.Id == userid)
+                                        .Include(k => k.profilowe);
+            try
+            {
+                if (usersProfile.First().profilowe == null)
+                    ViewBag.image = null;
+                else
+                    ViewBag.image = usersProfile.First().profilowe.GetImageDataUrl();
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Index");
+            }
+
+            List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userid).Include(c => c.rola).ToList();
+            String roles = "";
+            foreach (var usersRole in usersRoles)
+            {
+                roles += usersRole.rola.nazwa + " ";
+            }
+            ViewBag.roles = roles;
+
+            var his = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id && e.data.Date == today).ToList();
+            var now = his.Single(e => e.data == his.Select(e => e.data).Max());
+            double bmi = now.waga / ((now.wzrost / 100) ^ 2);
+            ViewBag.now = now;
+            ViewBag.bmi = bmi;
+
+
             return View();
         }
+
 
         private bool isAdmin()
         {
