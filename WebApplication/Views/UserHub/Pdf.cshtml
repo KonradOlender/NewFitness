@@ -4,8 +4,9 @@
 
 </head>
 <body>
-
-    <h2>Raport - @ViewBag.date.Day / @ViewBag.date.Month / @ViewBag.date.Year</h2>
+    <header>
+        <h2>Raport - @ViewBag.date.Day / @ViewBag.date.Month / @ViewBag.date.Year</h2>
+    </header>
 
     <div style=" display: flex;">
         <picture>
@@ -27,6 +28,42 @@
         <p>BMI: @ViewBag.bmi</p>
     </div>
 
+    <div class="text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Godzina</th>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Kalorie</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ foreach (var item in ViewBag.posilki)
+                    {
+                        <tr>
+                            <th scope="row">@item.data</th>
+                            @{
+                                if (item.posilek != null)
+                                {
+                                    <td>@item.posilek.nazwa</td>
+                                }
+                                else
+                                {
+                                    <td>Brak</td>
+                                }
+                            }
+                            <td>@item.posilek.kalorie</td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <th scope="row"> </th>
+                    <th> Suma:</th>
+                    <th>@ViewBag.sumKal</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 
 </body>

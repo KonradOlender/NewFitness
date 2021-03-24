@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
 using System.IO;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication.Controllers
 {
@@ -194,11 +194,7 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public IActionResult Report()
-        {
-            return View();
-        }
-
+        [Authorize]
         public IActionResult ExportToPDF()
         {
             //Set Environment variable for OpenSSL assemblies folder 
@@ -214,7 +210,12 @@ namespace WebApplication.Controllers
             //Assign WebKit settings to HTML converter
             htmlConverter.ConverterSettings = settings;
             //Convert URL to PDF
-            PdfDocument document = htmlConverter.Convert("https://localhost:44327/UserHub/Pdf");
+            int id = int.Parse(User.Identity.GetUserId());
+            string url = "https://localhost:44327/UserHub/Pdf/" + id;
+            //this.userIdtoPdf = int.Parse(User.Identity.GetUserId());
+            //string url = "https://localhost:44327/UserHub/Pdf";
+            Console.WriteLine(url);
+            PdfDocument document = htmlConverter.Convert(url);
 
             MemoryStream stream = new MemoryStream();
             document.Save(stream);
@@ -222,45 +223,77 @@ namespace WebApplication.Controllers
             return File(stream.ToArray(), System.Net.Mime.MediaTypeNames.Application.Pdf, "Raport-" + today.ToShortDateString() + ".pdf");
         }
 
-        public IActionResult Pdf()
+        public IActionResult Pdf(int? id)
         {
-            int userid = int.Parse(User.Identity.GetUserId());
-            var user = _context.uzytkownicy.Single(e => e.Id == userid);
-            ViewBag.user = user;
-            DateTime today = DateTime.Today;
-            ViewBag.date = today;
+            /* if (!HttpContext.User.Identity.IsAuthenticated || id == null)
+                 return NotFound();
+             if (!User.Identity.IsAuthenticated || id == null)
+             {
+                 return NotFound();
+             }
+             else if (id != int.Parse(User.Identity.GetUserId()))
+             {
+                 return NotFound();
+             }*/
+            //ViewBag.id = id;
 
-
-            var usersProfile = _context.uzytkownicy.Where(k => k.Id == userid)
-                                        .Include(k => k.profilowe);
-            try
+            //int userid = int.Parse(User.Identity.GetUserId());
+            //int userid = id;
+            //var user = _context.uzytkownicy.Single(e => e.Id == userid);
+            //bool b = HttpContext.User.Identity.IsAuthenticated;
+            //string i  = HttpContext.User.Identity.GetUserId();
+            if (id!=null)
             {
-                if (usersProfile.First().profilowe == null)
-                    ViewBag.image = null;
-                else
-                    ViewBag.image = usersProfile.First().profilowe.GetImageDataUrl();
+                var user = _context.uzytkownicy.Single(e => e.Id == id);
+                ViewBag.user = user;
+                DateTime today = DateTime.Today;
+                ViewBag.date = today;
+
+                //var usersProfile = _context.uzytkownicy.Where(k => k.Id == userid)
+                //                            .Include(k => k.profilowe);
+                var usersProfile = _context.uzytkownicy.Where(k => k.Id == id)
+                                            .Include(k => k.profilowe);
+                try
+                {
+                    if (usersProfile.First().profilowe == null)
+                        ViewBag.image = null;
+                    else
+                        ViewBag.image = usersProfile.First().profilowe.GetImageDataUrl();
+                }
+                catch (Exception e)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                //List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userid).Include(c => c.rola).ToList();
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == id).Include(c => c.rola).ToList();
+                String roles = "";
+                foreach (var usersRole in usersRoles)
+                {
+                    roles += usersRole.rola.nazwa + " ";
+                }
+                ViewBag.roles = roles;
+
+                var his = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id && e.data.Date == today).ToList();
+                var now = his.Single(e => e.data == his.Select(e => e.data).Max());
+                double bmi = now.waga / ((now.wzrost / 100) ^ 2);
+                ViewBag.now = now;
+                ViewBag.bmi = bmi;
+
+                var posilki = _context.planowanePosilki.Include(e => e.posilek)
+                    .Where(e => e.id_uzytkownika == user.Id && e.data.Day== today.Day && e.data.Month == today.Month && e.data.Year == today.Year)
+                    .ToList();
+                ViewBag.posilki = posilki;
+
+                int sum = 0;
+                foreach (var p in posilki)  sum+=p.posilek.kalorie;
+                ViewBag.sumKal = sum;
+                
+
+                return View();
             }
-            catch (Exception e)
-            {
-                return RedirectToAction("Index");
-            }
+            return NotFound();
 
-            List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userid).Include(c => c.rola).ToList();
-            String roles = "";
-            foreach (var usersRole in usersRoles)
-            {
-                roles += usersRole.rola.nazwa + " ";
-            }
-            ViewBag.roles = roles;
-
-            var his = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id && e.data.Date == today).ToList();
-            var now = his.Single(e => e.data == his.Select(e => e.data).Max());
-            double bmi = now.waga / ((now.wzrost / 100) ^ 2);
-            ViewBag.now = now;
-            ViewBag.bmi = bmi;
-
-
-            return View();
         }
 
 
