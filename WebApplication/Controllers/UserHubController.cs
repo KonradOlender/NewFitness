@@ -20,9 +20,9 @@ namespace WebApplication.Controllers
 
 
         private readonly MyContext _context;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public UserHubController(IHostingEnvironment hostingEnvironment, MyContext context )
+        public UserHubController(IWebHostEnvironment hostingEnvironment, MyContext context )
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
@@ -194,11 +194,11 @@ namespace WebApplication.Controllers
             return View();
         }
 
+    
         [Authorize]
         public IActionResult ExportToPDF()
         {
             //Set Environment variable for OpenSSL assemblies folder 
-            //string SSLPath = Server.MapPath("~/OpenSSL");
             string SSLPath = Path.Combine(_hostingEnvironment.ContentRootPath, "OpenSSL");
             Environment.SetEnvironmentVariable("Path", SSLPath);
 
@@ -212,9 +212,6 @@ namespace WebApplication.Controllers
             //Convert URL to PDF
             int id = int.Parse(User.Identity.GetUserId());
             string url = "https://localhost:44327/UserHub/Pdf/" + id;
-            //this.userIdtoPdf = int.Parse(User.Identity.GetUserId());
-            //string url = "https://localhost:44327/UserHub/Pdf";
-            Console.WriteLine(url);
             PdfDocument document = htmlConverter.Convert(url);
 
             MemoryStream stream = new MemoryStream();
@@ -225,32 +222,13 @@ namespace WebApplication.Controllers
 
         public IActionResult Pdf(int? id)
         {
-            /* if (!HttpContext.User.Identity.IsAuthenticated || id == null)
-                 return NotFound();
-             if (!User.Identity.IsAuthenticated || id == null)
-             {
-                 return NotFound();
-             }
-             else if (id != int.Parse(User.Identity.GetUserId()))
-             {
-                 return NotFound();
-             }*/
-            //ViewBag.id = id;
-
-            //int userid = int.Parse(User.Identity.GetUserId());
-            //int userid = id;
-            //var user = _context.uzytkownicy.Single(e => e.Id == userid);
-            //bool b = HttpContext.User.Identity.IsAuthenticated;
-            //string i  = HttpContext.User.Identity.GetUserId();
-            if (id!=null)
+            if (id != null)
             {
                 var user = _context.uzytkownicy.Single(e => e.Id == id);
                 ViewBag.user = user;
                 DateTime today = DateTime.Today;
                 ViewBag.date = today;
 
-                //var usersProfile = _context.uzytkownicy.Where(k => k.Id == userid)
-                //                            .Include(k => k.profilowe);
                 var usersProfile = _context.uzytkownicy.Where(k => k.Id == id)
                                             .Include(k => k.profilowe);
                 try
@@ -265,7 +243,6 @@ namespace WebApplication.Controllers
                     return RedirectToAction("Index");
                 }
 
-                //List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userid).Include(c => c.rola).ToList();
                 List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == id).Include(c => c.rola).ToList();
                 String roles = "";
                 foreach (var usersRole in usersRoles)
@@ -281,21 +258,19 @@ namespace WebApplication.Controllers
                 ViewBag.bmi = bmi;
 
                 var posilki = _context.planowanePosilki.Include(e => e.posilek)
-                    .Where(e => e.id_uzytkownika == user.Id && e.data.Day== today.Day && e.data.Month == today.Month && e.data.Year == today.Year)
+                    .Where(e => e.id_uzytkownika == user.Id && e.data.Day == today.Day && e.data.Month == today.Month && e.data.Year == today.Year)
                     .ToList();
                 ViewBag.posilki = posilki;
 
                 int sum = 0;
-                foreach (var p in posilki)  sum+=p.posilek.kalorie;
+                foreach (var p in posilki) sum += p.posilek.kalorie;
                 ViewBag.sumKal = sum;
-                
 
                 return View();
             }
             return NotFound();
 
         }
-
 
         private bool isAdmin()
         {

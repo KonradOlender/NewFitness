@@ -78,13 +78,17 @@
         <br />
         <br />
         <br />
-        @{Html.BeginForm("ExportToPDF", "UserHub", FormMethod.Post);
+        @{if (User.Identity.Name != null) 
             {
-                <div>
-                    <input class="btn btn-primary" type="submit" value="Pobierz dzisiejszy raport"  />
-                </div>
+                Html.BeginForm("ExportToPDF", "UserHub", FormMethod.Post);
+                    {
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="Pobierz dzisiejszy raport" />
+                    </div>
+                    }
+                Html.EndForm();
+                
             }
-            Html.EndForm();
         }
 
     </div>

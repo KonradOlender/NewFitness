@@ -5,30 +5,37 @@
 </head>
 <body>
     <header>
-        <h2>Raport - @ViewBag.date.Day / @ViewBag.date.Month / @ViewBag.date.Year</h2>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+            <img style="width: 300px" src="~/images/Logo.svg" />
+        </nav>
     </header>
 
+    <h2>Raport z @ViewBag.date.Day/@ViewBag.date.Month/@ViewBag.date.Year</h2>
     <div style=" display: flex;">
-        <picture>
-            <source style="height: 300px; " srcset=@ViewBag.image>
-            <img src="~/images/Profil.svg" alt="Profile picture" style="height: 300px; ">
-        </picture>
-
-        <div>
-            <h4>@ViewBag.user.imie</h4>
-            <p>@ViewBag.user.Email</p>
-            <p>@ViewBag.roles</p>
-        </div>
+            <picture>
+                <source style="height: 250px; " srcset=@ViewBag.image>
+                <img src="~/images/Profil.svg" alt="Profile picture" style="height: 250px; ">
+            </picture>
+            <div style=" padding: 20px;">
+                <h4>@ViewBag.user.imie</h4>
+                <p>@ViewBag.user.Email</p>
+                <p>@ViewBag.roles</p>
+            </div>
     </div>
 
+    <br />
     <div>
-        <h6>Aktualne wymiary:</h6>
+        <h5>Aktualne wymiary:</h5>
         <p>Wzrost: @ViewBag.now.wzrost</p>
         <p>Waga: @ViewBag.now.waga</p>
         <p>BMI: @ViewBag.bmi</p>
     </div>
 
+    <br />
+    <br />
+
     <div class="text-center">
+        <h5>Dzisiejsze posiłki:</h5>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -64,6 +71,13 @@
             </tbody>
         </table>
     </div>
+
+
+
+    <script>
+        const element = document.getElementById("layout_header")
+        element.remove()
+    </script>
 
 
 </body>
