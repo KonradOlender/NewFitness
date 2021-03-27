@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.Entities;
 using MailKit.Net.Smtp;
+using System.IO;
 
 namespace WebApplication.Areas
 {
@@ -60,9 +61,9 @@ namespace WebApplication.Areas
 
         public async Task SendEmailConfirmationRegistrationAsync(string email, string subject, string link)
         {
-            /*string filePath = Path.Combine(_env.WebRootPath, "messages/Confirmation.html");
+            string filePath = Path.Combine(_env.WebRootPath, "messages/Confirmation.html");
             string messageHtml = System.IO.File.ReadAllText(filePath);
-            string messageToSent = string.Format(messageHtml, link);*/
+            string messageToSent = string.Format(messageHtml, link);
             await this.SendEmailAsync(email, subject, link);
         }
         /*public Task Execute(string apiKey, string subject, string message, string email)

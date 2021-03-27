@@ -39,8 +39,8 @@ namespace WebApplication.Services
             using (var scope = scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<MyContext>();
-                /*string filePath = Path.Combine(_env.WebRootPath, "messages/Notification.html");
-                string messageHtml = System.IO.File.ReadAllText(filePath);*/
+                string filePath = Path.Combine(_env.WebRootPath, "messages/Notification.html");
+                string messageHtml = System.IO.File.ReadAllText(filePath);
 
                 while (!stoppingToken.IsCancellationRequested)
                 {
@@ -61,9 +61,9 @@ namespace WebApplication.Services
                     foreach (PlanowanieTreningow trening in listy)
                     {
                         trening.notification_sent = true;
-                        //string messageToSent = string.Format(messageHtml, trening.data);
+                        string messageToSent = string.Format(messageHtml, trening.data);
                         string message = string.Format("<h1>Masz zaplanowany trening o godzinie {0}</h1><br>" +
-                            "<p> Po więcej informacji zaloguj się na nasz protal</p>  ", trening.data);
+                            "<p> Po więcej informacji zaloguj się na nasz protal</p>  ", trening.data, trening.uzytkownik.imie);
                         await emailSender.SendEmailAsync(
                             trening.uzytkownik.Email,
                             "Zaplanowany trening",
