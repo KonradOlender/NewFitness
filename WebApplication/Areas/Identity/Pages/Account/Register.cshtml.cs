@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -25,17 +27,20 @@ namespace WebApplication.Areas.Identity.Pages.Account
         private readonly UserManager<Uzytkownik> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        IHostingEnvironment _env;
 
         public RegisterModel(
             UserManager<Uzytkownik> userManager,
             SignInManager<Uzytkownik> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IHostingEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _env = env;
         }
 
         [BindProperty]
@@ -102,8 +107,10 @@ namespace WebApplication.Areas.Identity.Pages.Account
 
                     /*await _emailSender.SendEmailAsync(Input.Email, "Confirm your email", 
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");*/
-                    await _emailSender.SendEmailAsync(Input.Email, "Potwierdz swój email", 
-                        $"Prosze potwierdz swoje konto przez <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>klikniecie tutaj</a>.");
+                    string filePath = Path.Combine(_env.WebRootPath, "messages/Confirmation.html");
+                    string messageHtml = System.IO.File.ReadAllText(filePath);
+                    string messageToSent = string.Format(messageHtml, HtmlEncoder.Default.Encode(callbackUrl));
+                    await _emailSender.SendEmailAsync(Input.Email, "Potwierdz swój email", messageToSent);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
