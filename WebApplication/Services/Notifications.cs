@@ -22,7 +22,7 @@ namespace WebApplication.Services
     {
         IEmailSender emailSender;
         private readonly IServiceScopeFactory scopeFactory;
-        private bool active = false;
+        private bool active = true;
         Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
         public Notifications(
@@ -61,14 +61,12 @@ namespace WebApplication.Services
                     foreach (PlanowanieTreningow trening in listy)
                     {
                         trening.notification_sent = true;
-                        string messageToSent = string.Format(messageHtml, trening.data);
-                        string message = string.Format("<h1>Masz zaplanowany trening o godzinie {0}</h1><br>" +
-                            "<p> Po więcej informacji zaloguj się na nasz protal</p>  ", trening.data, trening.uzytkownik.imie);
+                        await dbContext.SaveChangesAsync();
+                        string message = string.Format(messageHtml, trening.data, trening.uzytkownik.imie);
                         await emailSender.SendEmailAsync(
                             trening.uzytkownik.Email,
                             "Zaplanowany trening",
                             message);
-                        await dbContext.SaveChangesAsync();
                     }
                     await Task.Delay(60000, stoppingToken);
                 }
