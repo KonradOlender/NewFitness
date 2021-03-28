@@ -79,10 +79,10 @@ namespace WebApplication.Controllers
             if (ViewBag.profil == null) return RedirectToAction("Index");
             ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).Include(k => k.obrazy).ToList();
 
-            ViewBag.obrazyP = _context.obrazyPosilkow.ToList();
-            ViewBag.obrazyT = _context.obrazyTreningow.ToList();
+            //ViewBag.obrazyP = _context.obrazyPosilkow.ToList();
+            //ViewBag.obrazyT = _context.obrazyTreningow.ToList();
 
-            ViewBag.treningi = _context.treningi.Where(e => e.id_uzytkownika == id).ToList();
+            ViewBag.treningi = _context.treningi.Where(e => e.id_uzytkownika == id).Include(k => k.obrazy).ToList();
 
             ViewBag.index = id;
             ViewBag.isTrainer = isTrainer(id);
@@ -109,7 +109,7 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        //wywala jak jest już dana ocena, do zrobienia
+        //wywala jak jest już dana ocena, do zrobienia --> powiedziano mi ze działa ale wole nie usuwac komentarza - Gabrysia :)
         [HttpPost]
         public IActionResult Details(int oceniany_id, double rating, string rola)
         {

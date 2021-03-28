@@ -11,7 +11,10 @@ namespace WebApplication.Models
     [Table("Posilki")]
     public class Posilek
     {
-
+        public Posilek()
+        {
+            obrazy = new List<ObrazyPosilku>();
+        }
         [Key]
         public int id_posilku { get; set; }
         [Required]

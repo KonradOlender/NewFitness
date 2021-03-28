@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.Entities;
 using MailKit.Net.Smtp;
+using System.IO;
 
 namespace WebApplication.Areas
 {

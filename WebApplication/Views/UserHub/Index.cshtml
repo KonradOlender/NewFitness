@@ -67,59 +67,29 @@
                 }
             }
         </div>
-        @if (User.Identity.Name != null)
-        {
-            <div class="col-md-3">
-                <canvas id="chart"></canvas>
-            </div>
-            <canvas id="postep" width="400" height="100"></canvas>
+        <div class="col-md-3">
+            <h3>Białko: @ViewBag.bialko</h3>
+            <h3>Tłuszcze: @ViewBag.tluszcz</h3>
+            <h3>Wenglowodany: @ViewBag.weng</h3>
+
+        </div>
+
+
+        <br />
+        <br />
+        <br />
+        @{if (User.Identity.Name != null) 
+            {
+                Html.BeginForm("ExportToPDF", "UserHub", FormMethod.Post);
+                    {
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="Pobierz dzisiejszy raport" />
+                    </div>
+                    }
+                Html.EndForm();
+                
+            }
         }
+
     </div>
 </div>
-
-<script>
-    var ctx = document.getElementById('chart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Białko ' + @ViewBag.bialko, 'Wenglowodany ' + @ViewBag.weng, 'Tłuszcze ' + @ViewBag.tluszcz],
-            datasets: [{
-                label: 'Mikroelementy',
-                data: [@ViewBag.bialko, @ViewBag.weng, @ViewBag.tluszcz],
-                backgroundColor: [
-                    'rgba(255, 99, 132)',
-                    'rgba(54, 162, 235)',
-                    'rgba(255, 206, 86)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 0,
-            }]
-        }
-    });
-
-    var datesArr = @Html.Raw(Json.Serialize(ViewBag.dates));
-    var postepArr = @Html.Raw(Json.Serialize(ViewBag.postep));
-
-    var postep = document.getElementById('postep').getContext('2d');
-    var postempChart = new Chart(postep, {
-        type: 'line',
-        data: {
-            labels: datesArr,
-            datasets: [{
-                label: 'Weight over time',
-                data: postepArr,
-                backgroundColor:
-                    'rgba(255, 99, 132, 0.2)',
-                borderColor:
-                    'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        }
-    });
-
-
-</script>
