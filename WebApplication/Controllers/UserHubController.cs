@@ -30,7 +30,6 @@ namespace WebApplication.Controllers
 
         public IActionResult Index(DateTime sellected_date)
         {
-
             DateTime first = new DateTime(01, 01, 0001);
             if (sellected_date == first)
             {
@@ -89,6 +88,18 @@ namespace WebApplication.Controllers
                     tluszcz += getTluszcze(item.id_posilku);
                     weng += getWeglowodany(item.id_posilku);
                 }
+
+                List<HistoriaUzytkownika> hist = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == userid && e.data.Month == sellected_date.Month).ToList();
+                List<float> postep = new List<float>();
+                List<int> dates = new List<int>();
+                foreach (var item in hist)
+                {
+                    postep.Add((float)item.waga);
+                    dates.Add(item.data.Day);
+                }
+                ViewBag.postep = postep.ToList();
+                ViewBag.dates = dates.ToList();
+                ViewBag.postepCount = postep.Count;
                 ViewBag.user = user;
                 ViewBag.bmi = bmi;
                 ViewBag.selected = sellected_date;
