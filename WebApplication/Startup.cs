@@ -97,9 +97,9 @@ namespace WebApplication
             app.UseAuthorization();
 
             //chat
-            app.UseSignalR(route =>
+            app.UseSignalR(routes =>
             {
-                route.MapHub<ChatHub>("/Profil/Chat");
+                routes.MapHub<ChatHub>("/chatHub");
             });
 
             app.UseEndpoints(endpoints =>

@@ -6,13 +6,12 @@
         <div class="col-md-3">
             @{ if (User.Identity.Name != null)
                 {
-                    @using (Html.BeginForm())
-                    {
+                    <form name="datapick" method="post">
                         <h4>@ViewBag.selected</h4>
                         <div id="datepicker" data-date=""></div>
                         <input type="hidden" id="my_hidden_input" name="sellected_date">
                         <h4>@ViewBag.name</h4>
-                    }
+                    </form>
 
                 }
 
@@ -79,6 +78,7 @@
 
         @{if (User.Identity.Name != null)
             {
+
                 Html.BeginForm("ExportToPDF", "UserHub", FormMethod.Post);
                 {
                     <div>

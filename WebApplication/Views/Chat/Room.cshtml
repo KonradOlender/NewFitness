@@ -1,13 +1,74 @@
-﻿@foreach(var item in ViewBag.chat.Messages)
-{
-    <p>@item.Name @item.Text @item.Timestamp</p>
-}
-<form method="post">
-    <input type="hidden" name="name" value="@ViewBag.user.imie" />
+﻿<div class="chat-body">
+    @foreach (var item in ViewBag.chat.Messages)
+    {
+        <p>@item.Name @item.Text @item.Timestamp</p>
+    }
+</div>
+
+<form method="post" onsubmit="sendMessage(event)">
+    <input type="hidden" name="roomName" value="@ViewBag.chat.NameOne" />
     <input type="hidden" name="chatId" value="@ViewBag.chat.Id" />
-    <input type="text" name="text" placeholder="Message"/>
+    <input type="text" name="message" placeholder="Message"/>
     <div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
 
+@section scripts{ 
+    <script src="~/js/signalr.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        var _connectionId = '';
+
+        connection.on("RecieveMessage", function (data) {
+            console.log(data);
+
+            var message = document.createElement("p")
+            message.appendChild(document.createTextNode(data.name +" " + data.text +" "+  data.timestamp))
+            var body = document.querySelector('.chat-body')
+            body.append(message);
+            
+        });
+
+        var joinRoom = function () {
+            var url = '/ChatReactivity/JoinRoom/' + _connectionId + '/@ViewBag.chat.NameOne';
+            axios.post(url, null)
+                .then(res => {
+                    console.log("Room Joined", res);
+                })
+                .catch(err => {
+                    console.err("Conection Error", res);
+                })
+        }
+
+        connection.start()
+            .then(function () {
+                connection.invoke('getConnectionId').then(function (connectionId) {
+                    _connectionId = connectionId;
+                    joinRoom();
+                })
+            })
+            .catch(function (err) {
+                console.log(err)
+            })
+
+        var form = null;
+
+        var sendMessage = function (event) {
+            event.preventDefault();
+
+            var data = new FormData(event.target);
+
+            axios.post('/ChatReactivity/SendMessage', data)
+                .then(res => {
+                    console.log("Message Sent");
+                })
+                .catch(err => {
+                    console.log("Failed to send message");
+                })
+        }
+
+    </script>
+}

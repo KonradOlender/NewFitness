@@ -11,7 +11,7 @@ $('#datepicker').on('changeDate', function () {
     $('#my_hidden_input').val(
         $('#datepicker').datepicker('getFormattedDate')       
     );
-    $('form').submit();
+    $('form[name="datapick"]').submit();
 });
 $('#my_hidden_input')
 
