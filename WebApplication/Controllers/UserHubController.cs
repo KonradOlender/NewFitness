@@ -235,6 +235,10 @@ namespace WebApplication.Controllers
         {
             if (id != null)
             {
+                if (User.Identity.IsAuthenticated)
+                    if (id != int.Parse(User.Identity.GetUserId()))
+                        return NotFound();
+
                 var user = _context.uzytkownicy.Single(e => e.Id == id);
                 ViewBag.user = user;
                 DateTime today = DateTime.Today;
@@ -263,10 +267,17 @@ namespace WebApplication.Controllers
                 ViewBag.roles = roles;
 
                 var his = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id && e.data.Date == today).ToList();
-                var now = his.Single(e => e.data == his.Select(e => e.data).Max());
-                double bmi = now.waga / ((now.wzrost / 100) ^ 2);
-                ViewBag.now = now;
-                ViewBag.bmi = bmi;
+                try
+                {
+                    var now = his.Single(e => e.data == his.Select(e => e.data).Max());
+                    double bmi = now.waga / ((now.wzrost / 100) ^ 2);
+                    ViewBag.now = now;
+                    ViewBag.bmi = bmi;  
+                }
+                catch
+                {
+                    return NotFound();
+                }
 
                 var posilki = _context.planowanePosilki.Include(e => e.posilek)
                     .Where(e => e.id_uzytkownika == user.Id && e.data.Day == today.Day && e.data.Month == today.Month && e.data.Year == today.Year)
