@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WebApplication.Entities;
 using MailKit.Net.Smtp;
 using System.IO;
+using MailKit.Security;
 
 namespace WebApplication.Areas
 {
@@ -39,14 +40,17 @@ namespace WebApplication.Areas
 
                 using (var client = new SmtpClient())
                 {
+                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     if (_env.IsDevelopment())
                     {
-                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
+                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
+                        //   await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
                     }
                     else
                     {
-                        await client.ConnectAsync(_emailSettings.MailServer);
+                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
+                        // await client.ConnectAsync(_emailSettings.MailServer);
                     }
                     await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
                     await client.SendAsync(mimeMessage);
