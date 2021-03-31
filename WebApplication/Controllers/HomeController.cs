@@ -34,14 +34,6 @@ namespace WebApplication.Controllers
             _env = env;
         }
 
-        public IActionResult TestImage()
-        {
-            if(!_context.obrazyTreningow.Any()) return View();
-            ObrazyTreningu image = _context.obrazyTreningow.SingleOrDefault(t => t.id_obrazu==1);
-            ViewBag.ImageDataUrl = image.GetImageDataUrl();
-            return View();
-        }
-
         [HttpPost, ActionName("UploadImage")]
         [ValidateAntiForgeryToken]
         public IActionResult UploadImage()
@@ -62,8 +54,6 @@ namespace WebApplication.Controllers
 
             return View("TestImage");
         }
-
-
 
         public IActionResult Index()
         {                

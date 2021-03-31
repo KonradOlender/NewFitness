@@ -51,15 +51,15 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaCwiczenia = await _context.kategoriaCwiczenia
+            var category = await _context.kategoriaCwiczenia
                                                     .Include(k => k.cwiczenia)
                                                     .FirstOrDefaultAsync(m => m.id_kategorii == id);
-            if (kategoriaCwiczenia == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(kategoriaCwiczenia);
+            return View(category);
         }
 
         // GET: KategoriaCwiczenia/Create
@@ -76,18 +76,18 @@ namespace WebApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_kategorii,nazwa")] KategoriaCwiczenia kategoriaCwiczenia)
+        public async Task<IActionResult> Create([Bind("id_kategorii,nazwa")] KategoriaCwiczenia category)
         {
             if (!this.isTrainer())
                 return RedirectToAction("Index");
 
             if (ModelState.IsValid)
             {
-                _context.Add(kategoriaCwiczenia);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(kategoriaCwiczenia);
+            return View(category);
         }
 
         // GET: KategoriaCwiczenia/Edit/5
@@ -101,25 +101,23 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaCwiczenia = await _context.kategoriaCwiczenia.FindAsync(id);
-            if (kategoriaCwiczenia == null)
+            var category = await _context.kategoriaCwiczenia.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(kategoriaCwiczenia);
+            return View(category);
         }
 
         // POST: KategoriaCwiczenia/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_kategorii,nazwa")] KategoriaCwiczenia kategoriaCwiczenia)
+        public async Task<IActionResult> Edit(int id, [Bind("id_kategorii,nazwa")] KategoriaCwiczenia category)
         {
             if (!this.isTrainer())
                 return RedirectToAction("Index");
 
-            if (id != kategoriaCwiczenia.id_kategorii)
+            if (id != category.id_kategorii)
             {
                 return NotFound();
             }
@@ -128,12 +126,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(kategoriaCwiczenia);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!KategoriaCwiczeniaExists(kategoriaCwiczenia.id_kategorii))
+                    if (!KategoriaCwiczeniaExists(category.id_kategorii))
                     {
                         return NotFound();
                     }
@@ -144,7 +142,7 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(kategoriaCwiczenia);
+            return View(category);
         }
 
         // GET: KategoriaCwiczenia/Delete/5
@@ -158,14 +156,14 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaCwiczenia = await _context.kategoriaCwiczenia
+            var category = await _context.kategoriaCwiczenia
                 .FirstOrDefaultAsync(m => m.id_kategorii == id);
-            if (kategoriaCwiczenia == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(kategoriaCwiczenia);
+            return View(category);
         }
 
         // POST: KategoriaCwiczenia/Delete/5
@@ -182,15 +180,15 @@ namespace WebApplication.Controllers
             if(defaultCategory.id_kategorii == id)
                 return RedirectToAction("Index");
 
-            List<Cwiczenie> cwiczenia = _context.cwiczenia.Where(k => k.id_kategorii == id).ToList();
+            List<Cwiczenie> exercises = _context.cwiczenia.Where(k => k.id_kategorii == id).ToList();
 
-            foreach (Cwiczenie cw in cwiczenia)
+            foreach (Cwiczenie cw in exercises)
                 cw.id_kategorii = defaultCategory.id_kategorii;
 
             _context.SaveChanges();
 
-            var kategoriaCwiczenia = await _context.kategoriaCwiczenia.FindAsync(id);
-            _context.kategoriaCwiczenia.Remove(kategoriaCwiczenia);
+            var category = await _context.kategoriaCwiczenia.FindAsync(id);
+            _context.kategoriaCwiczenia.Remove(category);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

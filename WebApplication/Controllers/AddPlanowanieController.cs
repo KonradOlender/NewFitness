@@ -21,11 +21,11 @@ namespace WebApplication.Controllers
 
         public IActionResult Index()
         {
-            var allposilki = _context.posilki.ToList();
+            var allMeals = _context.posilki.ToList();
             List<Posilek> posilki = new List<Posilek>();
-            foreach (var item in allposilki)
+            foreach (var item in allMeals)
             {
-                if (isDietetyk(item.id_uzytkownika))
+                if (isDietician(item.id_uzytkownika))
                 {
                     posilki.Add(item);
                 }
@@ -36,7 +36,7 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        private bool isDietetyk(int id)
+        private bool isDietician(int id)
         {
             var usersRoles = _context.RolaUzytkownika.Include(e => e.rola.nazwa).Where(k => k.id_uzytkownika == id).ToList();
             foreach (var item in usersRoles)

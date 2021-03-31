@@ -49,8 +49,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: RolaUzytkownika/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_uzytkownika,id_roli")] RolaUzytkownika rolaUzytkownika)
@@ -71,32 +69,6 @@ namespace WebApplication.Controllers
             ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "login", rolaUzytkownika.id_uzytkownika);
             return View(rolaUzytkownika);
         }
-
-        // GET: RolaUzytkownika/Delete/5
-        /*public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            if (!isAdmin())
-            {
-                ViewBag.roleName = "admin";
-                return Redirect("UnableToAccessThisPage");
-            }
-
-            var rolaUzytkownika = await _context.RolaUzytkownika
-                .Include(r => r.rola)
-                .Include(r => r.uzytkownik)
-                .FirstOrDefaultAsync(m => m.id_roli == id);
-            if (rolaUzytkownika == null)
-            {
-                return NotFound();
-            }
-
-            return View(rolaUzytkownika);
-        }*/
 
         // POST: RolaUzytkownika/Delete/5
         //[HttpPost, ActionName("Delete")]

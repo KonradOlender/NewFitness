@@ -32,7 +32,6 @@ namespace WebApplication.Controllers
 
         public async Task<IActionResult> Done()
         {
-
             return View();
         }
 
@@ -43,76 +42,23 @@ namespace WebApplication.Controllers
         }
 
         // POST: Historia/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_historia,data,waga,wzrost")] HistoriaUzytkownika historiaUzytkownika)
+        public async Task<IActionResult> Create([Bind("id_historia,data,waga,wzrost")] HistoriaUzytkownika usersHistory)
         {
             int users_id = int.Parse(User.Identity.GetUserId());
-            if (this.HistoriaUzytkownikaExists(users_id, historiaUzytkownika.data))
+            if (this.HistoriaUzytkownikaExists(users_id, usersHistory.data))
                 return View("AlreadyExists");                                                              
 
             if (ModelState.IsValid)
             {
-                historiaUzytkownika.id_uzytkownika = users_id;
-                _context.Add(historiaUzytkownika);
+                usersHistory.id_uzytkownika = users_id;
+                _context.Add(usersHistory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Done));
             }
-            return View(historiaUzytkownika);
+            return View(usersHistory);
         }
-
-        // GET: Historia/Edit/5
-        /*public async Task<IActionResult> Edit(DateTime date)
-        {
-            if (date == null)
-            {
-                return NotFound();
-            }
-            int users_id = int.Parse(User.Identity.GetUserId());
-            var historiaUzytkownika =  _context.historiaUzytkownika.Where(k => k.id_uzytkownika == users_id && k.data == date);
-            if (historiaUzytkownika == null)
-            {
-                return NotFound();
-            }
-            return View(historiaUzytkownika);
-        }
-
-        // POST: Historia/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(DateTime date, [Bind("id_historia,waga,wzrost")] HistoriaUzytkownika historiaUzytkownika)
-        {
-            if (date != historiaUzytkownika.data)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(historiaUzytkownika);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!HistoriaUzytkownikaExists(historiaUzytkownika.id_uzytkownika))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(historiaUzytkownika);
-        }*/
 
         // GET: Historia/Delete/5
         public async Task<IActionResult> Delete(String date)
@@ -122,14 +68,14 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
             int users_id = int.Parse(User.Identity.GetUserId());
-            var historiaUzytkownika = await _context.historiaUzytkownika
+            var usersHistory = await _context.historiaUzytkownika
                 .FirstOrDefaultAsync(m => m.id_uzytkownika == users_id && m.data == Convert.ToDateTime(date));
-            if (historiaUzytkownika == null)
+            if (usersHistory == null)
             {
                 return View("UnableToDelete");
             }
-            ViewBag.date = historiaUzytkownika.data;
-            return View(historiaUzytkownika);
+            ViewBag.date = usersHistory.data;
+            return View(usersHistory);
         }
 
         // POST: Historia/Delete/5
@@ -138,13 +84,13 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(String date)
         {
             int users_id = int.Parse(User.Identity.GetUserId());
-            var historiaUzytkownika = await _context.historiaUzytkownika
+            var usersHistory = await _context.historiaUzytkownika
                 .FirstOrDefaultAsync(m => m.id_uzytkownika == users_id && m.data == Convert.ToDateTime(date));
-            if (historiaUzytkownika == null)
+            if (usersHistory == null)
             {
                 return View("UnableToDelete");
             }
-            _context.historiaUzytkownika.Remove(historiaUzytkownika);
+            _context.historiaUzytkownika.Remove(usersHistory);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

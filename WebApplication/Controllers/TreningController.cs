@@ -114,8 +114,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: Trening/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_treningu,nazwa,id_kategorii")] Trening trening)
@@ -152,8 +150,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: Trening/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id_treningu,nazwa,id_kategorii")] Trening trening)
@@ -347,7 +343,7 @@ namespace WebApplication.Controllers
                 return View("AddImage");
             }
 
-            var trening = _context.treningi.FirstOrDefault(t => t.id_treningu == id);
+            var trening = await _context.treningi.FirstOrDefaultAsync(t => t.id_treningu == id);
             if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = trening.id_treningu });
 
@@ -370,8 +366,8 @@ namespace WebApplication.Controllers
             memeoryStream.Close();
             memeoryStream.Dispose();
 
-            _context.obrazyTreningow.Add(image);
-            _context.SaveChanges();
+            await _context.obrazyTreningow.AddAsync(image);
+            await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
             return View("AddImage");
         }
@@ -404,7 +400,7 @@ namespace WebApplication.Controllers
                 return View("AddLink");
             }
 
-            var trening = _context.treningi.FirstOrDefault(t => t.id_treningu == id);
+            var trening = await _context.treningi.FirstOrDefaultAsync(t => t.id_treningu == id);
             if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = trening.id_treningu });
 
@@ -412,7 +408,7 @@ namespace WebApplication.Controllers
             trening.youtube_link = link;
 
             _context.treningi.Update(trening);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             ViewBag.Message = "Trening został zaktualizowany";
             return View("AddLink");
         }

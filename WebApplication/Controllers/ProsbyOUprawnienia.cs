@@ -30,7 +30,7 @@ namespace WebApplication.Controllers
                 ViewBag.roleName = "admin";
                 return RedirectToAction(nameof(Create));
             }
-            ViewBag.allRequests = _context.prosbyOUprawnienia.Include(k => k.rola).Include(k => k.uzytkownik).ToList();
+            ViewBag.allRequests = await _context.prosbyOUprawnienia.Include(k => k.rola).Include(k => k.uzytkownik).ToListAsync();
             return View();
         }
 
@@ -44,8 +44,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: ProsbyOUprawnienia/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_roli,prosba_pisemna")] ProsbyOUprawnienia prosbyOUprawnienia)
@@ -133,7 +131,5 @@ namespace WebApplication.Controllers
                     return true;
             return false;
         }
-
-
     }
 }

@@ -50,7 +50,7 @@ namespace WebApplication.Controllers
 
             return View();
         }
-        //nie działa
+
         public async Task<IActionResult> Lista(int? id)
         {
             if (id == null)
@@ -129,7 +129,7 @@ namespace WebApplication.Controllers
             return RedirectToAction(nameof(Lista));
         }
 
-            public IActionResult Polecany()
+        public IActionResult Polecany()
         {
             var polecay_id = PolecanyTrening(DateTime.Now.Date);
             Trening polecany = _context.treningi.First();
@@ -143,9 +143,6 @@ namespace WebApplication.Controllers
                                         .ToList();
 
             ViewBag.polecany = polecany;
-
-            
-
             return View();
         }
 
@@ -162,7 +159,6 @@ namespace WebApplication.Controllers
             {
                 polecany = _context.treningi.Single(e => e.id_treningu == polecay_id);
             }
-            
 
             PlanowanieTreningow planowany = new PlanowanieTreningow();
 
@@ -177,8 +173,6 @@ namespace WebApplication.Controllers
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
-
-            //return View();
         }
 
         private int PolecanyTrening(DateTime date)
