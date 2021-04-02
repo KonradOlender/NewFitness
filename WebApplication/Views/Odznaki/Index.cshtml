@@ -1,0 +1,101 @@
+﻿@model IEnumerable<WebApplication.Models.KategoriaTreningu>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    img{
+        width: 30%;
+        height: auto;
+        margin: auto;
+        padding: 1.5%;
+    }
+    div.badges{
+        width: 80%;
+        margin: auto;
+        text-align: center;
+    }
+    .myprogress{
+        width: 100%;
+        height: 30px;
+    }
+    .progressInfo{
+        width: 50%;
+        float: left;
+    }
+    p{
+        font-weight: bold;
+    }
+</style>
+<html>
+    <body>
+        <div style="margin:auto;">
+            <div class="badges">
+                <div>
+                    @if (ViewBag.bronze)
+                    {
+                        <img src="~/images/icons/bronze.svg" alt="brązowy" />
+                    }
+                    else
+                    {
+                        <img src="~/images/icons/notScored.svg" alt="niezdobyta" />
+                    }
+                    @if (ViewBag.silver)
+                    {
+                        <img src="~/images/icons/silver.svg" alt="srebrna" />
+                    }
+                    else
+                    {
+                        <img src="~/images/icons/notScored.svg" alt="niezdobyta" />
+                    }
+                    @if (ViewBag.gold)
+                    {
+                        <img src="~/images/icons/gold.svg" alt="złota" />
+                    }
+                    else
+                    {
+                        <img src="~/images/icons/notScored.svg" alt="niezdobyta" />
+                    }
+                </div>
+                <hr />
+                <progress class="myprogress" value="@ViewBag.progress" max="100"></progress>
+                <hr />
+                <div class="progressInfo">
+                    @if (ViewBag.bronze)
+                    {
+                        <p>Do brązowej odznaki brakuje ci: 0%</p>
+                    }
+                    else
+                    {
+                        <p>Do brązowej odznaki brakuje ci: @(30 - ViewBag.progress) %</p>
+                    }
+                    @if (ViewBag.silver)
+                    {
+                        <p>Do srebrnej odznaki brakuje ci: 0 %</p>
+                    }
+                    else
+                    {
+                        <p>Do srebrnej odznaki brakuje ci: @(65 - ViewBag.progress) %</p>
+                    }
+                    @if (ViewBag.gold)
+                    {
+                        <p>Do złotej odznaki brakuje ci: 0 %</p>
+                    }
+                    else
+                    {
+                        <p>Do złotej odznaki brakuje ci: @(100 - ViewBag.progress) %</p>
+                    }
+                </div>
+                <div class="progressInfo">
+                    <h4>
+                        Twój postęp wynosi: @ViewBag.progress
+                    </h4>
+                </div>
+                <br/>
+                <br />
+            </div>
+        </div>
+    </body>
+
+</html>
