@@ -4,14 +4,20 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int burnt_calories = 0;
-    foreach(var trening in ViewBag.trainingDetails)
+    foreach (var trening in ViewBag.trainingDetails)
         burnt_calories += (trening.liczba_powtorzen * trening.cwiczenie.spalone_kalorie);
     //https://www.youtube.com/embed/qiDoBnh6URU
 }
-<html>
+
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
+    <link rel="stylesheet" type="text/css" href="~/css/site.css">
 </head>
+<style>
+    .footer{
+        display: none;
+    }
+</style>
 <body>
     <h1>Szczegóły</h1>
 
@@ -23,8 +29,10 @@
                 @if (ViewBag.userId == ViewBag.treningOwner)
                 {
                     <a asp-action="AddExercise" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj ćwiczenie</button></a>
-                    <a asp-action="AddImage" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj obraz</button></a>
-                    <a asp-action="AddLink" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj filmik z youtube</button></a>
+                    <button id="addImgButton" class="navigation" onclick="addImg();">Dodaj obraz</button>
+                    <button id="addLinkButton" class="navigation" onclick="addLinkk();">Modyfikuj filmik z youtube</button>
+                    <!--<a asp-action="AddImage" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj obraz</button></a>
+                    <a asp-action="AddLink" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Dodaj filmik z youtube</button></a>-->
                     <a asp-action="Edit" asp-route-id="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Edytuj</button></a>
                 }
                 <a asp-controller="PlanowanieTreningow" asp-action="Create" asp-route-id_string="@Model.id_treningu" style="text-decoration:none"><button class="navigation">Zaplanuj trening</button></a>
@@ -32,71 +40,128 @@
             <br />
         </div>
         <hr />
-        <div style="float:left; width:50%">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.nazwa)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.nazwa)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.kategoria)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.kategoria.nazwa)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.uzytkownik)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.uzytkownik.login)
-                </dd>
-                <dd class="col-sm-10">
-                    Spala @burnt_calories kalorii
-                </dd>
-            </dl>
-            <div>
-                <h5>Cwiczenia</h5>
-                <ul>
-                    @foreach (var trening in ViewBag.trainingDetails)
-                    {
-                        <li>
-                            @trening.cwiczenie.nazwa
-                            <br />
-                            Opis: <br />
-                            @trening.cwiczenie.opis
-                            <br />
-                            Liczba powtórzeń: @trening.liczba_powtorzen
-                            @if (ViewBag.userId == ViewBag.treningOwner)
-                            {
-                                <form asp-action="DeleteExercise" asp-route-idt="@trening.id_treningu" asp-route-idc="@trening.id_cwiczenia">
-                                    <input type="submit" value="Usuń ćwiczenie" class="btn btn-danger" />
-                                </form>
-                            }
-                        </li>
-                    }
-                </ul>
+        <div>
+            <div id="linkDiv" hidden>
+
+                <form style="float:left" asp-action="AddLink"
+                      asp-controller="Trening"
+                      method="post">
+                    <input type="text" id="link" name="link" />
+                    <button type="submit">Dołącz link</button>
+                </form>
+                <form asp-action="AddLink"
+                      asp-controller="Trening"
+                      method="post">
+                    &nbsp &nbsp
+                    <button style="float:left" type="submit" id="link" name="link" value="">Usun link</button>
+
+                </form>
+                <hr />
+            </div>
+
+            <div id="imageAddDiv" hidden>
+                <form asp-action="AddImage"
+                      asp-controller="Trening"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <input type="file"
+                           id="file1"
+                           name="file1"
+                           multiple="multiple" />
+                    <button type="submit">Prześlij obraz</button>
+                </form>
+                <hr />
             </div>
         </div>
+        <div style="display: block;">
+            <div style="float:left; width:50%">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.nazwa)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.nazwa)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.kategoria)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.kategoria.nazwa)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.uzytkownik)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.uzytkownik.login)
+                    </dd>
+                    <dd class="col-sm-10">
+                        Spala @burnt_calories kalorii
+                    </dd>
+                </dl>
+                <div>
+                    <h5>Cwiczenia</h5>
+                    <ul>
+                        @foreach (var trening in ViewBag.trainingDetails)
+                        {
+                            <li>
+                                @trening.cwiczenie.nazwa
+                                <br />
+                                Opis: <br />
+                                @trening.cwiczenie.opis
+                                <br />
+                                Liczba powtórzeń: @trening.liczba_powtorzen
+                                @if (ViewBag.userId == ViewBag.treningOwner)
+                                {
+                                    <form asp-action="DeleteExercise" asp-route-idt="@trening.id_treningu" asp-route-idc="@trening.id_cwiczenia">
+                                        <input type="submit" value="Usuń ćwiczenie" class="btn btn-danger" />
+                                    </form>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
 
-        <div style="float:left; width:50%">
-            @if (ViewBag.youtube != null)
-            {
-                <iframe width="560" height="315" src="@ViewBag.youtube"
-                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                </iframe>
-            }
-            else if (ViewBag.image != null)
-            {
-                <img src="@ViewBag.image" style="width:600px; height:500px" />
-            }
-            else
-            {
-                //default image
-            }
+            <div style="float:left; width:50%">
+                @if (ViewBag.youtube != null)
+                {
+                    <iframe width="560" height="315" src="@ViewBag.youtube"
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                }
+                else if (ViewBag.image != null)
+                {
+                    <img src="@ViewBag.image" style="width:600px; height:500px" />
+                }
+                else
+                {
+                    //default image
+                }
+            </div>
         </div>
     </div>
-    
 </body>
-</html>
+<script>
+    let footer = document.getElementByTagName("footer");
+    footer.hidden = true;
+    function addImg() {
+        let div = document.getElementById("imageAddDiv");
+        div.hidden = !div.hidden;
+        let button = document.getElementById("addImgButton")
+        if (div.hidden) {
+            button.textContent = "Dodaj obraz";
+        }
+        else
+            button.textContent = "Anuluj dodawanie obrazu"
+    }
+    function addLinkk() {
+        let div = document.getElementById("linkDiv");
+        div.hidden = !div.hidden;
+        let button = document.getElementById("addLinkButton")
+        if (div.hidden) {
+            button.textContent = "Modyfikuj filmik z youtube";
+        }
+        else
+            button.textContent = "Anuluj dodawanie filmiku z youtube"
+    }
+</script>
