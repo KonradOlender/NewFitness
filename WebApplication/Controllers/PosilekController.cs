@@ -86,7 +86,6 @@ namespace WebApplication.Controllers
                                         .Include(k => k.skladnik)
                                         .ToList();
 
-            
             ViewBag.posilekOwner = posilek.id_uzytkownika;
 
             if (posilek == null)
@@ -147,8 +146,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: Posilek/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_posilku,nazwa,opis")] Posilek posilek)
@@ -162,7 +159,6 @@ namespace WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
             return View(posilek);
         }
 
@@ -187,8 +183,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: Posilek/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id_posilku,nazwa,opis")] Posilek posilek)
@@ -412,8 +406,8 @@ namespace WebApplication.Controllers
             memeoryStream.Close();
             memeoryStream.Dispose();
 
-            _context.obrazyPosilkow.Add(image);
-            _context.SaveChanges();
+            await _context.obrazyPosilkow.AddAsync(image);
+            await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
             return View("AddImage");
         }

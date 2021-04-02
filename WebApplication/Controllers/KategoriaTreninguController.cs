@@ -32,7 +32,6 @@ namespace WebApplication.Controllers
             ViewBag.DefaultCategory = defaultCategory;
             ViewBag.isTrainer = isTrainer();
 
-
             if (!String.IsNullOrEmpty(searchString))
             {
                 return View(await _context.kategoriaTreningu.Where(k => k.nazwa.Contains(searchString)).ToListAsync());
@@ -49,10 +48,10 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaTreningu = await _context.kategoriaTreningu.Include(k => k.treningi)
+            var category = await _context.kategoriaTreningu.Include(k => k.treningi)
                 .FirstOrDefaultAsync(m => m.id_kategorii == id);
 
-            ViewBag.trainings = kategoriaTreningu.treningi;
+            ViewBag.trainings = category.treningi;
             ViewBag.userId = int.Parse(User.Identity.GetUserId());
 
             Rola usersRole = _context.role.Include(k => k.uzytkownicy)
@@ -67,12 +66,12 @@ namespace WebApplication.Controllers
 
             ViewBag.trainersIds = trainersIds;
 
-            if (kategoriaTreningu == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(kategoriaTreningu);
+            return View(category);
         }
 
         // GET: KategoriaTreningu/Create
@@ -85,22 +84,20 @@ namespace WebApplication.Controllers
         }
 
         // POST: KategoriaTreningu/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_kategorii,nazwa")] KategoriaTreningu kategoriaTreningu)
+        public async Task<IActionResult> Create([Bind("id_kategorii,nazwa")] KategoriaTreningu category)
         {
             if (!this.isTrainer())
                 return RedirectToAction("Index");
 
             if (ModelState.IsValid)
             {
-                _context.Add(kategoriaTreningu);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(kategoriaTreningu);
+            return View(category);
         }
 
         // GET: KategoriaTreningu/Edit/5
@@ -114,22 +111,20 @@ namespace WebApplication.Controllers
             if (!this.isTrainer())
                 return RedirectToAction("Index");
 
-            var kategoriaTreningu = await _context.kategoriaTreningu.FindAsync(id);
-            if (kategoriaTreningu == null)
+            var category = await _context.kategoriaTreningu.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(kategoriaTreningu);
+            return View(category);
         }
 
         // POST: KategoriaTreningu/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_kategorii,nazwa")] KategoriaTreningu kategoriaTreningu)
+        public async Task<IActionResult> Edit(int id, [Bind("id_kategorii,nazwa")] KategoriaTreningu category)
         {
-            if (id != kategoriaTreningu.id_kategorii)
+            if (id != category.id_kategorii)
             {
                 return NotFound();
             }
@@ -141,12 +136,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(kategoriaTreningu);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!KategoriaTreninguExists(kategoriaTreningu.id_kategorii))
+                    if (!KategoriaTreninguExists(category.id_kategorii))
                     {
                         return NotFound();
                     }
@@ -157,7 +152,7 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(kategoriaTreningu);
+            return View(category);
         }
 
         // GET: KategoriaTreningu/Delete/5
@@ -171,14 +166,14 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaTreningu = await _context.kategoriaTreningu
+            var category = await _context.kategoriaTreningu
                 .FirstOrDefaultAsync(m => m.id_kategorii == id);
-            if (kategoriaTreningu == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(kategoriaTreningu);
+            return View(category);
         }
 
         // POST: KategoriaTreningu/Delete/5
@@ -202,8 +197,8 @@ namespace WebApplication.Controllers
 
             _context.SaveChanges();
 
-            var kategoriaTreningu = await _context.kategoriaTreningu.FindAsync(id);
-            _context.kategoriaTreningu.Remove(kategoriaTreningu);
+            var category = await _context.kategoriaTreningu.FindAsync(id);
+            _context.kategoriaTreningu.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

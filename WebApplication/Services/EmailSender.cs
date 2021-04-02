@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WebApplication.Entities;
 using MailKit.Net.Smtp;
 using System.IO;
+using MailKit.Security;
 
 namespace WebApplication.Areas
 {
@@ -39,14 +40,17 @@ namespace WebApplication.Areas
 
                 using (var client = new SmtpClient())
                 {
+                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     if (_env.IsDevelopment())
                     {
-                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
+                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
+                        //   await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
                     }
                     else
                     {
-                        await client.ConnectAsync(_emailSettings.MailServer);
+                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
+                        // await client.ConnectAsync(_emailSettings.MailServer);
                     }
                     await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
                     await client.SendAsync(mimeMessage);
@@ -58,24 +62,5 @@ namespace WebApplication.Areas
                 throw new InvalidOperationException(exp.Message);
             }
         }
-
-        /*public Task Execute(string apiKey, string subject, string message, string email)
-        {
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                From = new EmailAddress("Joe@contoso.com", Options.SendGridUser),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
-            msg.AddTo(new EmailAddress(email));
-
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
-            msg.SetClickTracking(false, false);
-
-            return client.SendEmailAsync(msg);
-        }*/
     }
 }

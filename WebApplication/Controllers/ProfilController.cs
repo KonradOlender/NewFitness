@@ -65,7 +65,6 @@ namespace WebApplication.Controllers
                 {
                     ViewBag.ocenaDietetyk = new Ocena();
                 }
-                
             }
 
             ViewBag.id = id;
@@ -77,12 +76,8 @@ namespace WebApplication.Controllers
             ViewBag.profil = usersProfile;
 
             if (ViewBag.profil == null) return RedirectToAction("Index");
-            ViewBag.posilki = _context.posilki.Where(e => e.id_uzytkownika == id).Include(k => k.obrazy).ToList();
-
-            //ViewBag.obrazyP = _context.obrazyPosilkow.ToList();
-            //ViewBag.obrazyT = _context.obrazyTreningow.ToList();
-
-            ViewBag.treningi = _context.treningi.Where(e => e.id_uzytkownika == id).Include(k => k.obrazy).ToList();
+            ViewBag.posilki = await _context.posilki.Where(e => e.id_uzytkownika == id).Include(k => k.obrazy).ToListAsync();
+            ViewBag.treningi = await _context.treningi.Where(e => e.id_uzytkownika == id).Include(k => k.obrazy).ToListAsync();
 
             ViewBag.index = id;
             ViewBag.isTrainer = isTrainer(id);
@@ -104,17 +99,12 @@ namespace WebApplication.Controllers
             {
                 return RedirectToAction("Index");
             }
-            
-
             return View();
         }
 
-        //wywala jak jest już dana ocena, do zrobienia --> powiedziano mi ze działa ale wole nie usuwac komentarza - Gabrysia :)
         [HttpPost]
         public IActionResult Details(int oceniany_id, double rating, string rola)
         {
-            
-
             int userid = int.Parse(User.Identity.GetUserId());  
             Uzytkownik user = _context.uzytkownicy.Single(e => e.Id == userid);
 
@@ -152,8 +142,6 @@ namespace WebApplication.Controllers
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Details));
-
-            //return View();
         }
 
         public IActionResult AddImage(int id)
@@ -198,12 +186,11 @@ namespace WebApplication.Controllers
             memeoryStream.Close();
             memeoryStream.Dispose();
 
-            _context.obrazyTreningow.Add(image);
-            _context.SaveChanges();
+            await _context.obrazyTreningow.AddAsync(image);
+            await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
             return View("AddImage");
         }
-
 
         private bool userExists(int user)
         {
@@ -232,13 +219,6 @@ namespace WebApplication.Controllers
             if (!isTrainer(user)) return -1;
 
             Rola role = _context.role.FirstOrDefault(k => k.nazwa == "trener");
-            /*double ratings_sum = _context.oceny
-                                      .Where(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli)
-                                      .Sum(k => k.ocena);
-            double ratings_count = _context.oceny
-                                      .Where(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli)
-                                      .Count();
-            return ratings_sum / (double)ratings_count;*/
             if (!_context.oceny.Any(k => k.id_uzytkownika_ocenianego == user && k.id_roli == role.id_roli))
                 return 0;
             double ratings_avg = _context.oceny

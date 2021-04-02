@@ -17,8 +17,6 @@ namespace WebApplication.Controllers
 {
     public class UserHubController : Controller
     {
-
-
         private readonly MyContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
@@ -50,7 +48,9 @@ namespace WebApplication.Controllers
                 if (_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id))
                 {
                 }
-                else if (!_context.historiaUzytkownika.Any(e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id) && _context.historiaUzytkownika.Any(e => e.id_uzytkownika == user.Id))
+                else 
+                if (!_context.historiaUzytkownika.Any(
+                            e => e.data.Date == sellected_date && e.id_uzytkownika == user.Id) && _context.historiaUzytkownika.Any(e => e.id_uzytkownika == user.Id))
                 {
                     var warunek = _context.historiaUzytkownika.Where(e => e.id_uzytkownika == user.Id).ToList();
                     var dayBefore = warunek.Single(e => e.data == warunek.Select(e => e.data).Max());
@@ -62,7 +62,6 @@ namespace WebApplication.Controllers
                     hs.uzytkownik = user;
                     _context.Add(hs);
                     _context.SaveChanges();
-
                 }
                 else
                 {
@@ -204,8 +203,8 @@ namespace WebApplication.Controllers
 
             return View();
         }
-
     
+        //czemu url jest zahardcodowany ?
         [Authorize]
         public IActionResult ExportToPDF()
         {

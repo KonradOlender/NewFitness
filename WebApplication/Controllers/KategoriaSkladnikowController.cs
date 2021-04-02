@@ -50,14 +50,14 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaSkladnikow = await _context.kategoriaSkladnikow
+            var category = await _context.kategoriaSkladnikow
                 .FirstOrDefaultAsync(m => m.id_kategorii == id);
-            if (kategoriaSkladnikow == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(kategoriaSkladnikow);
+            return View(category);
         }
 
         // GET: KategoriaSkladnikow/Create
@@ -70,22 +70,20 @@ namespace WebApplication.Controllers
         }
 
         // POST: KategoriaSkladnikow/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_kategorii,nazwa")] KategoriaSkladnikow kategoriaSkladnikow)
+        public async Task<IActionResult> Create([Bind("id_kategorii,nazwa")] KategoriaSkladnikow category)
         {
             if (!this.isDietician())
                 return RedirectToAction("Index");
 
             if (ModelState.IsValid)
             {
-                _context.Add(kategoriaSkladnikow);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(kategoriaSkladnikow);
+            return View(category);
         }
 
         // GET: KategoriaSkladnikow/Edit/5
@@ -99,25 +97,23 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaSkladnikow = await _context.kategoriaSkladnikow.FindAsync(id);
-            if (kategoriaSkladnikow == null)
+            var category = await _context.kategoriaSkladnikow.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(kategoriaSkladnikow);
+            return View(category);
         }
 
         // POST: KategoriaSkladnikow/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_kategorii,nazwa")] KategoriaSkladnikow kategoriaSkladnikow)
+        public async Task<IActionResult> Edit(int id, [Bind("id_kategorii,nazwa")] KategoriaSkladnikow category)
         {
             if (!this.isDietician())
                 return RedirectToAction("Index");
 
-            if (id != kategoriaSkladnikow.id_kategorii)
+            if (id != category.id_kategorii)
             {
                 return NotFound();
             }
@@ -126,12 +122,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(kategoriaSkladnikow);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!KategoriaSkladnikowExists(kategoriaSkladnikow.id_kategorii))
+                    if (!KategoriaSkladnikowExists(category.id_kategorii))
                     {
                         return NotFound();
                     }
@@ -142,7 +138,7 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(kategoriaSkladnikow);
+            return View(category);
         }
 
         // GET: KategoriaSkladnikow/Delete/5
@@ -156,14 +152,14 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var kategoriaSkladnikow = await _context.kategoriaSkladnikow
+            var category = await _context.kategoriaSkladnikow
                 .FirstOrDefaultAsync(m => m.id_kategorii == id);
-            if (kategoriaSkladnikow == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(kategoriaSkladnikow);
+            return View(category);
         }
 
         // POST: KategoriaSkladnikow/Delete/5
@@ -186,8 +182,8 @@ namespace WebApplication.Controllers
 
             _context.SaveChanges();
 
-            var kategoriaSkladnikow = await _context.kategoriaSkladnikow.FindAsync(id);
-            _context.kategoriaSkladnikow.Remove(kategoriaSkladnikow);
+            var category = await _context.kategoriaSkladnikow.FindAsync(id);
+            _context.kategoriaSkladnikow.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -66,7 +66,6 @@ namespace WebApplication.Controllers
                 training.id_treningu = id;
                 training.data = DateTime.Now;
                 training.notification_sent = false;
-                //training.trening = _context.treningi.Where(x => x.id_treningu == id).FirstOrDefault();
 
                 //polecany trening
                 int id_polecany = this.PolecanyTrening(training.data);
@@ -86,8 +85,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: PlanowanieTreningow/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_uzytkownika,id_treningu,data,dzien")] PlanowanieTreningow planowanieTreningow)

@@ -37,13 +37,10 @@ namespace WebApplication.Controllers
         {
             int user_id = int.Parse(User.Identity.GetUserId());
             ViewBag.allRoles = _context.role.ToList();
-            //ViewBag.userRoles = _context.RolaUzytkownika.Include(k => k.rola).Where(k => k.id_uzytkownika == user_id).ToList();
             List<RolaUzytkownika> userRoles = _context.RolaUzytkownika.Include(k => k.rola).Where(k => k.id_uzytkownika == user_id).ToList();
             ViewBag.usersRoles = userRoles.ToDictionary<RolaUzytkownika, Rola>(k => k.rola);
-            //ViewBag.userRoles = ViewBag.userRoles.ToDictionary<RolaUzytkownika, Rola>(t => t.rola)
             return View();
         }
-
 
         // GET: Rolas/Create
         public IActionResult Create()
@@ -58,8 +55,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: Rolas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_roli,nazwa")] Rola rola)

@@ -114,8 +114,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: Skladnik/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id_skladnika,nazwa,waga,kalorie,bialko,tluszcze,weglowodany,id_kategorii")] Skladnik skladnik)
@@ -159,8 +157,6 @@ namespace WebApplication.Controllers
         }
 
         // POST: Skladnik/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id_skladnika,nazwa,waga,kalorie,id_kategorii")] Skladnik skladnik)

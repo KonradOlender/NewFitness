@@ -40,19 +40,19 @@ namespace WebApplication.Controllers
             }
 
             int userId = int.Parse(User.Identity.GetUserId());
-            var planowaniePosilkow = await _context.planowanePosilki
+            var planningMeals = await _context.planowanePosilki
                 .Include(p => p.posilek)
                 .Include(p => p.uzytkownik)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (planowaniePosilkow == null)
+            if (planningMeals == null)
             {
                 return NotFound();
             }
 
-            if (planowaniePosilkow.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+            if (planningMeals.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
-            return View(planowaniePosilkow);
+            return View(planningMeals);
         }
 
 
@@ -68,9 +68,9 @@ namespace WebApplication.Controllers
                 meal.data = DateTime.Now;
 
                 //polecany posilek
-                int id_polecany = this.PolecanyPosilek(meal.data);
-                if(id_polecany != -1)
-                ViewBag.polecany = _context.posilki.FirstOrDefault(x => x.id_posilku == id_polecany);
+                int id_recommended = this.PolecanyPosilek(meal.data);
+                if(id_recommended != -1)
+                ViewBag.polecany = _context.posilki.FirstOrDefault(x => x.id_posilku == id_recommended);
                 
                 return View(meal);
             }
@@ -79,21 +79,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: PlanowaniePosilkow/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_uzytkownika,id_posilku,data")] PlanowaniePosilkow planowaniePosilkow)
+        public async Task<IActionResult> Create([Bind("id_uzytkownika,id_posilku,data")] PlanowaniePosilkow plannedMeal)
         {
             if (ModelState.IsValid)
             {
-                planowaniePosilkow.id_uzytkownika = int.Parse(User.Identity.GetUserId());
-                _context.Add(planowaniePosilkow);
+                plannedMeal.id_uzytkownika = int.Parse(User.Identity.GetUserId());
+                _context.Add(plannedMeal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["id_posilku"] = new SelectList(_context.posilki, "id_posilku", "nazwa", planowaniePosilkow.id_posilku);
-            return View(planowaniePosilkow);
+            ViewData["id_posilku"] = new SelectList(_context.posilki, "id_posilku", "nazwa", plannedMeal.id_posilku);
+            return View(plannedMeal);
         }
 
         // GET: PlanowaniePosilkow/Delete/5
@@ -104,38 +102,35 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var planowaniePosilkow = await _context.planowanePosilki
+            var plannedMeal = await _context.planowanePosilki
                 .Include(p => p.posilek)
                 .Include(p => p.uzytkownik)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (planowaniePosilkow == null)
+            if (plannedMeal == null)
             {
                 return NotFound();
             }
 
-            if (planowaniePosilkow.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+            if (plannedMeal.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
-            return View(planowaniePosilkow);
+            return View(plannedMeal);
         }
 
         public IActionResult Polecany()
         {
-            var polecay_id = PolecanyPosilek(DateTime.Now.Date);
-            Posilek polecany = _context.posilki.First();
-            if (polecay_id != -1)
+            var recommended_id = PolecanyPosilek(DateTime.Now.Date);
+            Posilek recommended = _context.posilki.First();
+            if (recommended_id != -1)
             {
-                polecany = _context.posilki.Single(e => e.id_posilku == polecay_id);
+                recommended = _context.posilki.Single(e => e.id_posilku == recommended_id);
             }
 
-            ViewBag.mealDetails = _context.posilekSzczegoly.Where(k => k.id_posilku == polecay_id)
+            ViewBag.mealDetails = _context.posilekSzczegoly.Where(k => k.id_posilku == recommended_id)
                                         .Include(k => k.skladnik)
                                         .ToList();
 
-            ViewBag.polecany = polecany;
-
-
-
+            ViewBag.polecany = recommended;
             return View();
         }
 
@@ -145,27 +140,25 @@ namespace WebApplication.Controllers
             int userid = int.Parse(User.Identity.GetUserId());
             var user = _context.uzytkownicy.Single(e => e.Id == userid);
 
-            var polecay_id = PolecanyPosilek(DateTime.Now.Date);
-            Posilek polecany = _context.posilki.First();
-            if (polecay_id != -1)
+            var recommended_id = PolecanyPosilek(DateTime.Now.Date);
+            Posilek recommended = _context.posilki.First();
+            if (recommended_id != -1)
             {
-                polecany = _context.posilki.Single(e => e.id_posilku == polecay_id);
+                recommended = _context.posilki.Single(e => e.id_posilku == recommended_id);
             }
 
-            PlanowaniePosilkow planowany = new PlanowaniePosilkow();
+            PlanowaniePosilkow plannedMeal = new PlanowaniePosilkow();
 
-            planowany.data = DateTime.Now;
-            planowany.posilek = polecany;
-            planowany.uzytkownik = user;
-            planowany.id_posilku = polecany.id_posilku;
-            planowany.id_uzytkownika = user.Id;
+            plannedMeal.data = DateTime.Now;
+            plannedMeal.posilek = recommended;
+            plannedMeal.uzytkownik = user;
+            plannedMeal.id_posilku = recommended.id_posilku;
+            plannedMeal.id_uzytkownika = user.Id;
 
-            _context.Add(planowany);
+            _context.Add(plannedMeal);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
-
-            //return View();
         }
 
         // POST: PlanowaniePosilkow/Delete/5
@@ -173,12 +166,12 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var planowaniePosilkow = await _context.planowanePosilki.FindAsync(id);
+            var planningMeals = await _context.planowanePosilki.FindAsync(id);
 
-            if (planowaniePosilkow.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
+            if (planningMeals.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
-            _context.planowanePosilki.Remove(planowaniePosilkow);
+            _context.planowanePosilki.Remove(planningMeals);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -187,7 +180,6 @@ namespace WebApplication.Controllers
         {
             return _context.planowanePosilki.Any(e => e.id_posilku == id);
         }
-
 
         //polecane posilki - najpopulrniejsze danego dnia
         //zwraca indeks najpopularniejszego posilku lub -1 jeśli nie ma żadnych zaplanowanych posiłków na dany dzień
