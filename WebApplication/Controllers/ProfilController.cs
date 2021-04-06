@@ -97,6 +97,7 @@ namespace WebApplication.Controllers
             }
             catch(Exception e)
             {
+                Console.Write(e.ToString());
                 return RedirectToAction("Index");
             }
             return View();
@@ -176,9 +177,28 @@ namespace WebApplication.Controllers
                 return View("AddImage");
             }
 
-            ObrazyTreningu image = new ObrazyTreningu();
-            image.id_treningu = id;
+            String fileExtension = Path.GetExtension(file.FileName);
+            if (fileExtension.StartsWith(".") && new List<string>() { ".png", ".jpg", ".svg" }.Contains(fileExtension))
+            {
+                fileExtension = fileExtension.Substring(1).ToLower();
+            }
+            else
+            {
+                ViewBag.Message = "Nieprawidłowy format pliku, akceptowane: png, jpg, svg";
+                return View("AddImage");
+            }
 
+            ObrazProfilowe image;
+            bool alreadyExists = await _context.obrazyProfilowe.AnyAsync(t => t.id_uzytkownika == id);
+            if (alreadyExists)
+                image = await _context.obrazyProfilowe.FirstAsync(t => t.id_uzytkownika == id);
+            else
+            {
+                image = new ObrazProfilowe();
+                image.id_uzytkownika = id;
+            }
+
+            image.format = fileExtension;
             MemoryStream memeoryStream = new MemoryStream();
             file.CopyTo(memeoryStream);
             image.obraz = memeoryStream.ToArray();
@@ -186,7 +206,10 @@ namespace WebApplication.Controllers
             memeoryStream.Close();
             memeoryStream.Dispose();
 
-            await _context.obrazyTreningow.AddAsync(image);
+            if (alreadyExists)
+                _context.Update(image);
+            else
+                await _context.obrazyProfilowe.AddAsync(image);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
             return View("AddImage");

@@ -71,6 +71,7 @@ namespace WebApplication.Controllers
         // GET: Trening/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Message = "";
             if (id == null)
             {
                 return NotFound();
@@ -86,6 +87,7 @@ namespace WebApplication.Controllers
                                         .Include(k => k.cwiczenie)
                                         .ToList();
 
+            ViewBag.trainingId = id;
             ViewBag.userId = int.Parse(this.User.Identity.GetUserId());
             ViewBag.treningOwner = trening.id_uzytkownika;
 
@@ -347,7 +349,8 @@ namespace WebApplication.Controllers
             if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = trening.id_treningu });
 
-            ViewBag.training = true;
+            ViewBag.training = false;
+            //ViewBag.training = true;
             var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
 
             if(file == null)
@@ -356,8 +359,21 @@ namespace WebApplication.Controllers
                 return View("AddImage");
             }
 
+            String fileExtension = Path.GetExtension(file.FileName);
+            if (fileExtension.StartsWith(".") && new List<string>() { ".png", ".jpg", ".svg" }.Contains(fileExtension))
+            {
+                fileExtension = fileExtension.Substring(1).ToLower();
+            }
+            else
+            {
+                ViewBag.Message = "Nieprawidłowy format pliku, akceptowane: png, jpg, svg";
+                return View("AddImage");
+            }
+            
+            ViewBag.training = true;
             ObrazyTreningu image = new ObrazyTreningu();
             image.id_treningu = id;
+            image.format = fileExtension;
 
             MemoryStream memeoryStream = new MemoryStream();
             file.CopyTo(memeoryStream);
@@ -369,7 +385,7 @@ namespace WebApplication.Controllers
             await _context.obrazyTreningow.AddAsync(image);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
-            return View("AddImage");
+            return RedirectToAction("Details", new { id = trening.id_treningu });
         }
 
         public IActionResult AddLink(int id)
@@ -410,7 +426,7 @@ namespace WebApplication.Controllers
             _context.treningi.Update(trening);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Trening został zaktualizowany";
-            return View("AddLink");
+            return RedirectToAction("Details", new { id = trening.id_treningu });
         }
 
         private bool ExerciseAlreadyInTraining(int training_id, int exercise_id)

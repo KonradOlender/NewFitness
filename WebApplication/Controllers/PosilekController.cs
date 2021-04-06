@@ -387,7 +387,7 @@ namespace WebApplication.Controllers
                 return RedirectToAction("Details", new { id = meal.id_posilku });
 
             ViewBag.Message = "";
-            ViewBag.meal = true;
+            ViewBag.meal = false;
 
             var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
             if (file == null)
@@ -396,12 +396,25 @@ namespace WebApplication.Controllers
                 return View("AddImage");
             }
 
+            String fileExtension = Path.GetExtension(file.FileName);
+            if (fileExtension.StartsWith(".") && new List<string>() { ".png", ".jpg", ".svg" }.Contains(fileExtension))
+            {
+                fileExtension = fileExtension.Substring(1).ToLower();
+            }
+            else
+            {
+                ViewBag.Message = "Nieprawidłowy format pliku, akceptowane: png, jpg, svg";
+                return View("AddImage");
+            }
+                
+            ViewBag.meal = true;
             ObrazyPosilku image = new ObrazyPosilku();
             image.id_posilku = id;
 
             MemoryStream memeoryStream = new MemoryStream();
             file.CopyTo(memeoryStream);
             image.obraz = memeoryStream.ToArray();
+            image.format = fileExtension;
 
             memeoryStream.Close();
             memeoryStream.Dispose();
@@ -409,7 +422,7 @@ namespace WebApplication.Controllers
             await _context.obrazyPosilkow.AddAsync(image);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
-            return View("AddImage");
+            return RedirectToAction("Details", new { id = meal.id_posilku });
         }
 
         private bool isDietician()

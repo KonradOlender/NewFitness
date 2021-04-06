@@ -5,10 +5,11 @@
     <p>@ViewBag.Message</p>
     @if (ViewBag.user)
     {
-<asp:RegularExpressionValidator ID="uplValidator" runat="server" ControlToValidate="file1"
-                                ErrorMessage=".jpg, .png, .svg są dozwolonymi formatami"
-                                ValidationExpression="(.+\.([Jj][Pp][Gg])|.+\.([Pp][Nn][Gg])|.+\.([Ss][Vv][Gg]))">
-</asp:RegularExpressionValidator>
+        <div style="justify-content:center">
+            <asp:RegularExpressionValidator ID="uplValidator" runat="server" ControlToValidate="file1"
+                                            ErrorMessage=".jpg, .png, .svg są dozwolonymi formatami"
+                                            ValidationExpression="(.+\.([Jj][Pp][Gg])|.+\.([Pp][Nn][Gg])|.+\.([Ss][Vv][Gg]))">
+            </asp:RegularExpressionValidator>
             <form asp-action="AddImage"
                   asp-controller="Profil"
                   method="post"
@@ -19,9 +20,10 @@
                        name="file1"
                        multiple="multiple" />
 
-                <button type="submit">Prześlij obraz</button>
+                <button type="submit" class="btn btn-primary">Prześlij obraz</button>
 
             </form>
+        </div>
     }
 
 }

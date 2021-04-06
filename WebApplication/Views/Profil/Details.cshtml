@@ -10,6 +10,7 @@
                 <img src="@ViewBag.image" />
             }
         </div>
+        <button asp-action="AddImage" class="btn btn-primary">Zmien profilowe</button>
         @foreach (var item in ViewBag.profil)
         {
             <h3>Użytkownik: @item.imie</h3>

@@ -10,7 +10,8 @@
 {
     <a asp-action="AddComponent" asp-route-id="@Model.id_posilku">Dodaj składnik</a>
     <br />
-    <a asp-action="AddImage" asp-route-id="@Model.id_posilku">Dodaj obraz</a>
+    <a href="#" id="addImgButton" onclick="addImg()">Dodaj obraz</a>
+    @*<a asp-action="AddImage" asp-route-id="@Model.id_posilku">Dodaj obraz</a>*@
     <br />
 }
 
@@ -125,6 +126,23 @@
     </div>
 
     <div class="col-md-8">
+
+        <div id="imageAddDiv" hidden>
+            <form asp-action="AddImage"
+                  asp-controller="Posilek"
+                  asp-route-id="@ViewBag.id"
+                  method="post"
+                  enctype="multipart/form-data">
+                <input type="file"
+                       id="file1"
+                       name="file1"
+                       multiple="multiple" />
+                <button type="submit" class="btn btn-primary">Prześlij obraz</button>
+            </form>
+            <hr/>
+        </div>
+
+
         <h5>Składniki</h5>
         <table class="table">
             <thead>
@@ -139,43 +157,43 @@
             <tbody>
                 @foreach (var posilek in ViewBag.mealsDetails)
                 {
-                <tr>
-                    <td>@posilek.skladnik.nazwa</td>
-                    <td>@posilek.skladnik.waga</td>
-                    <td>@posilek.skladnik.kalorie</td>
-                    <td>@posilek.porcja</td>
-                    <td>
+                    <tr>
+                        <td>@posilek.skladnik.nazwa</td>
+                        <td>@posilek.skladnik.waga</td>
+                        <td>@posilek.skladnik.kalorie</td>
+                        <td>@posilek.porcja</td>
+                        <td>
+                            @if (ViewBag.userId == ViewBag.posilekOwner)
+                            {
+                                <form asp-action="DeleteComponent" asp-route-idt="@posilek.id_posilku" asp-route-idc="@posilek.id_skladnika">
+                                    <input type="submit" value="Usuń składnik" class="btn btn-danger" />
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        @*<ul>
+                @foreach (var posilek in ViewBag.mealsDetails)
+                {
+                    <li>
+                        @posilek.skladnik.nazwa
+                        <br />
+                        Waga/kalorie: <br />
+                        @posilek.skladnik.waga g / @posilek.skladnik.kalorie kcal
+                        <br />
+                        Porcja: @posilek.porcja g
                         @if (ViewBag.userId == ViewBag.posilekOwner)
                         {
                             <form asp-action="DeleteComponent" asp-route-idt="@posilek.id_posilku" asp-route-idc="@posilek.id_skladnika">
                                 <input type="submit" value="Usuń składnik" class="btn btn-danger" />
                             </form>
                         }
-                    </td>
-                </tr>
+                    </li>
                 }
-
-            </tbody>
-        </table>
-        @*<ul>
-            @foreach (var posilek in ViewBag.mealsDetails)
-            {
-                <li>
-                    @posilek.skladnik.nazwa
-                    <br />
-                    Waga/kalorie: <br />
-                    @posilek.skladnik.waga g / @posilek.skladnik.kalorie kcal
-                    <br />
-                    Porcja: @posilek.porcja g
-                    @if (ViewBag.userId == ViewBag.posilekOwner)
-                    {
-                        <form asp-action="DeleteComponent" asp-route-idt="@posilek.id_posilku" asp-route-idc="@posilek.id_skladnika">
-                            <input type="submit" value="Usuń składnik" class="btn btn-danger" />
-                        </form>
-                    }
-                </li>
-            }
-        </ul>*@
+            </ul>*@
     </div>
 </div>
 
@@ -189,3 +207,16 @@
     }
     @*<a asp-action="Index">Powrot do listy</a>*@
 </div>
+<script>
+    function addImg() {
+        let div = document.getElementById("imageAddDiv");
+        div.hidden = !div.hidden;
+        let button = document.getElementById("addImgButton")
+        if (div.hidden) {
+            button.textContent = "Dodaj obraz";
+        }
+        else
+            button.textContent = "Anuluj dodawanie obrazu"
+        return false;
+    }
+</script>

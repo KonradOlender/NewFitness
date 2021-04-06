@@ -19,6 +19,7 @@
     }
 </style>
 <body>
+    <p style="color: yellowgreen">@ViewBag.Message</p>
     <h1>Szczegóły</h1>
 
     <div>
@@ -45,30 +46,33 @@
 
                 <form style="float:left" asp-action="AddLink"
                       asp-controller="Trening"
+                      asp-route-id="@ViewBag.trainingId"
                       method="post">
                     <input type="text" id="link" name="link" />
-                    <button type="submit">Dołącz link</button>
+                    <button type="submit" class="btn btn-primary">Dołącz link</button>
                 </form>
                 <form asp-action="AddLink"
                       asp-controller="Trening"
+                      asp-route-id="@ViewBag.trainingId"
                       method="post">
-                    &nbsp &nbsp
-                    <button style="float:left" type="submit" id="link" name="link" value="">Usun link</button>
-
+                    
+                    <button style="float:right" type="submit" id="link" name="link" value="" class="btn btn-danger">Usun link</button>
+                    <br />
                 </form>
                 <hr />
             </div>
 
             <div id="imageAddDiv" hidden>
                 <form asp-action="AddImage"
-                      asp-controller="Trening"
+                      asp-controller="Trening" 
+                      asp-route-id="@ViewBag.trainingId"
                       method="post"
                       enctype="multipart/form-data">
                     <input type="file"
                            id="file1"
                            name="file1"
                            multiple="multiple" />
-                    <button type="submit">Prześlij obraz</button>
+                    <button type="submit" class="btn btn-primary">Prześlij obraz</button>
                 </form>
                 <hr />
             </div>
