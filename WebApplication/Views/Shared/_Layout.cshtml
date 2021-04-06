@@ -19,11 +19,20 @@
     <header id="layout_header">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
             <div class="container">
-                <div> <a href="/" /><img style="width: 200px" src="~/images/Logo.svg" /></div>
+                @{ if (User.Identity.IsAuthenticated)
+                    {
+                        <div> <a href="/UserHub" /><img style="width: 200px" src="~/images/Logo.svg" /></div>
+                    }
+                    else
+                    {
+                        <div> <a href="/" /><img style="width: 200px" src="~/images/Logo.svg" /></div>
+                    }
+                }
+
 
                 @*<div>
-                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
-                    </div>*@
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
+        </div>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -60,7 +69,18 @@
                         {
                             <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
                                 <li class="nav-item text-light">
-                                    <a class="navbar-text text-light" href="/UserHub">@User.Identity.Name</a>
+                                    <div class="dropdown">
+                                        <a class="navbar-text text-light" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            @User.Identity.Name ▼
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="/UserHub">Panel użytkownika </a>
+                                            <a class="dropdown-item" href="/Profil/Details">Profil </a>
+                                            <a class="dropdown-item" href="/Profil/Chat">Chat </a>
+                                            <a class="dropdown-item" href="/Odznaki">Odznaki </a>
+                                            <a class="dropdown-item" href="/ProsbyOUprawnienia/Create">Prośby o uprawnienia </a>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
                                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
@@ -70,6 +90,8 @@
                                     </form>
                                 </li>
                             </ul>
+
+
                         }
                         else
                         {
@@ -102,7 +124,8 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container" >
+            Masz jakieś pytania?  - <a asp-area="" asp-controller="Home" asp-action="ContactUs">Napisz do nas! </a>
             &copy; 2020 - WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
