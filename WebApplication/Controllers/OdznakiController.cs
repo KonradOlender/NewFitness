@@ -4,21 +4,53 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Areas.Identity.Data;
+using WebApplication.Data;
+using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
     [Authorize]
     public class OdznakiController : Controller
     {
+        private readonly MyContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private static Odznaki rewards = new Odznaki();
+
+        public OdznakiController(IWebHostEnvironment hostingEnvironment, MyContext context)
+        {
+            _context = context;
+            _hostingEnvironment = hostingEnvironment;
+        }
+
         public IActionResult Index()
         {
             int userId = int.Parse(User.Identity.GetUserId());
-            ViewBag.gold = false;
-            ViewBag.silver = true;
-            ViewBag.bronze = true;
-            ViewBag.progressLeft = 20;
-            ViewBag.progress = 80;
+            var user = _context.uzytkownicy.FirstOrDefault(t => t.Id == userId);
+            HistoriaUzytkownika usersHistory = _context.historiaUzytkownika.Where(t => t.id_uzytkownika == userId)
+                                                                            .OrderByDescending(t => t.data).FirstOrDefault();
+
+            double progress = (user.cel - usersHistory.waga)*100 / user.cel;
+            if (user.cel - usersHistory.waga < 0) progress = 100;
+            if ((double)Odznaki.gold > progress)
+                ViewBag.gold = false;
+            else
+                ViewBag.gold = true;
+
+            if ((double)Odznaki.silver > progress)
+                ViewBag.silver = false;
+            else
+                ViewBag.silver = true;
+
+            if ((double)Odznaki.bronze > progress)
+                ViewBag.bronze = false;
+            else
+                ViewBag.bronze = true;
+
+            ViewBag.progressLeft = 100 - (int)progress;
+            ViewBag.progress = progress;
             return View();
         }
     }

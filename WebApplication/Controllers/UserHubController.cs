@@ -156,12 +156,13 @@ namespace WebApplication.Controllers
 
         //Do dodania (jeślu bez daty to -500 kcal)
         [HttpPost]
-        public IActionResult Kalkulator(int waga, int goal, int? wzrost, int? plec, int? aktywnosc, DateTime data)
+        public async Task<IActionResult> Kalkulator(int waga, int goal, int? wzrost, int? plec, int? aktywnosc, DateTime data)
         {
             int userid = int.Parse(User.Identity.GetUserId());
             var user = _context.uzytkownicy.Single(e => e.Id == userid);
             int kcal;
             DateTime data1 = DateTime.Today;
+            user.cel = goal;
             double weeks = (data - data1).TotalDays / 7;
             double roznica = goal - waga;
             double wynik;
@@ -199,7 +200,8 @@ namespace WebApplication.Controllers
             ViewBag.userId = userid;
             ViewBag.wynik = wynik;
             user.limit = (int)wynik;
-            _context.SaveChanges();
+            _context.uzytkownicy.Update(user);
+            await _context.SaveChangesAsync();
 
             return View();
         }

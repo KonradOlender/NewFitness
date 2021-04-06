@@ -15,6 +15,7 @@ namespace WebApplication.Areas.Identity.Data
         public string imie { get; set; }
         public string login { get; set; }
         public int limit { get; set; }
+        public int cel { get; set; }
 
         public virtual ICollection<RolaUzytkownika> role { get; set; }
         public virtual ICollection<Trening> treningi { get; set; }
