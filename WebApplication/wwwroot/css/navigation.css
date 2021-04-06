@@ -33,3 +33,17 @@ ul li.training::marker {
 ul li.food::marker {
     content: "🍽️";
 }
+
+a.details {
+    text-decoration: none;
+    color: black;
+}
+a.details:hover{
+    font-weight: bold;
+    color: #1134A6;
+}
+
+a.details:focus {
+    font-weight: bold;
+    color: #598BAF;
+}
