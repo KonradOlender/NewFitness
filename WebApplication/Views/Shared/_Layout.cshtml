@@ -75,10 +75,23 @@
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="/UserHub">Panel użytkownika </a>
+                                            <a class="dropdown-item" href="/UserHub/Kalkulator">Kalkulator </a>
                                             <a class="dropdown-item" href="/Profil/Details">Profil </a>
                                             <a class="dropdown-item" href="/Profil/Chat">Chat </a>
                                             <a class="dropdown-item" href="/Odznaki">Odznaki </a>
-                                            <a class="dropdown-item" href="/ProsbyOUprawnienia/Create">Prośby o uprawnienia </a>
+                                            <a class="dropdown-item" href="/Rola/MyRoles">Role </a>
+
+                                            @{ if (ViewBag.ifAdmin != null)
+                                                {
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="/UserHub/Admin">Panel Administratora </a>
+                                                    <a class="dropdown-item" href="/ProsbyOUprawnienia">Prośby o uprawnienia </a>
+                                                    <a class="dropdown-item" href="/Rola">Zarządzanie rolami </a>
+                                                    <a class="dropdown-item" href="/RolaUzytkownika">Rola użytkownika </a>
+
+                                                } 
+                                            }
+
                                         </div>
                                     </div>
                                 </li>
@@ -135,6 +148,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
     <script src="~/lib/jquery-bar-rating-master/jquery.barrating.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
 
     @RenderSection("Scripts", required: false)
 

@@ -107,6 +107,9 @@ namespace WebApplication.Controllers
                 ViewBag.bialko = bialko;
                 ViewBag.tluszcz = tluszcz;
                 ViewBag.weng = weng;
+
+                //if (this.isAdmin()) ViewBag.ifAdmin = true;
+                this.isAdmin();
             }
             return View();
         }
@@ -151,6 +154,7 @@ namespace WebApplication.Controllers
 
         public IActionResult Kalkulator()
         {
+            this.isAdmin();
             return View();
         }
 
@@ -202,6 +206,8 @@ namespace WebApplication.Controllers
             user.limit = (int)wynik;
             _context.uzytkownicy.Update(user);
             await _context.SaveChangesAsync();
+
+            this.isAdmin();
 
             return View();
         }
@@ -304,6 +310,7 @@ namespace WebApplication.Controllers
                 foreach (var usersRole in usersRoles)
                     if (usersRole.rola.nazwa == "admin")
                     {
+                        ViewBag.ifAdmin = true;
                         return true;
                     }
             }
