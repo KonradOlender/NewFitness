@@ -28,6 +28,7 @@ namespace WebApplication.Controllers
             int userId = int.Parse(User.Identity.GetUserId());
             var myContext = _context.planowanePosilki.Include(p => p.posilek)
                                                      .Where(x => x.id_uzytkownika == userId);
+            this.isAdmin();
             return View(await myContext.ToListAsync());
         }
 
@@ -52,6 +53,7 @@ namespace WebApplication.Controllers
             if (planningMeals.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
+            this.isAdmin();
             return View(planningMeals);
         }
 
@@ -71,7 +73,8 @@ namespace WebApplication.Controllers
                 int id_recommended = this.PolecanyPosilek(meal.data);
                 if(id_recommended != -1)
                 ViewBag.polecany = _context.posilki.FirstOrDefault(x => x.id_posilku == id_recommended);
-                
+
+                this.isAdmin();
                 return View(meal);
             }
 
@@ -91,6 +94,7 @@ namespace WebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["id_posilku"] = new SelectList(_context.posilki, "id_posilku", "nazwa", plannedMeal.id_posilku);
+            this.isAdmin();
             return View(plannedMeal);
         }
 
@@ -114,6 +118,7 @@ namespace WebApplication.Controllers
             if (plannedMeal.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
+            this.isAdmin();
             return View(plannedMeal);
         }
 
@@ -131,6 +136,7 @@ namespace WebApplication.Controllers
                                         .ToList();
 
             ViewBag.polecany = recommended;
+            this.isAdmin();
             return View();
         }
 
@@ -158,6 +164,7 @@ namespace WebApplication.Controllers
             _context.Add(plannedMeal);
             _context.SaveChanges();
 
+            this.isAdmin();
             return RedirectToAction(nameof(Index));
         }
 
@@ -173,6 +180,7 @@ namespace WebApplication.Controllers
 
             _context.planowanePosilki.Remove(planningMeals);
             await _context.SaveChangesAsync();
+            this.isAdmin();
             return RedirectToAction(nameof(Index));
         }
 
@@ -206,6 +214,22 @@ namespace WebApplication.Controllers
                 if(tab[i]==max) return i;
             }
             return -1;
+        }
+
+        private bool isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = int.Parse(User.Identity.GetUserId());
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+                foreach (var usersRole in usersRoles)
+                    if (usersRole.rola.nazwa == "admin")
+                    {
+                        ViewBag.ifAdmin = true;
+                        return true;
+                    }
+            }
+            return false;
         }
     }
 }

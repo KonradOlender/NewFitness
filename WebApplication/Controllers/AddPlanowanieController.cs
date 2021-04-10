@@ -45,6 +45,9 @@ namespace WebApplication.Controllers
                 {
                     return true;
                 }
+                //sprawdza tez czy uzytkownik jest administratorem - do wyswietlnia menu
+                if(item.rola.nazwa == "admin")
+                    ViewBag.ifAdmin = true;
             }
             return false;
         }

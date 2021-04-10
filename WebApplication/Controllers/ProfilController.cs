@@ -28,7 +28,7 @@ namespace WebApplication.Controllers
         }
         public IActionResult Index()
         {
-
+            isAdmin();
             return View();
         }
 
@@ -100,6 +100,7 @@ namespace WebApplication.Controllers
                 Console.Write(e.ToString());
                 return RedirectToAction("Index");
             }
+            isAdmin();
             return View();
         }
 
@@ -142,6 +143,7 @@ namespace WebApplication.Controllers
             }
             _context.SaveChanges();
 
+            isAdmin();
             return RedirectToAction(nameof(Details));
         }
 
@@ -156,6 +158,7 @@ namespace WebApplication.Controllers
             
             ViewBag.Message = "";
             ViewBag.user = true;
+            isAdmin();
             return View();
         }
 
@@ -212,12 +215,29 @@ namespace WebApplication.Controllers
                 await _context.obrazyProfilowe.AddAsync(image);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
+            isAdmin();
             return View("AddImage");
         }
 
         private bool userExists(int user)
         {
             return _context.uzytkownicy.Any(k => k.Id == user);
+        }
+
+        private bool isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = int.Parse(User.Identity.GetUserId());
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+                foreach (var usersRole in usersRoles)
+                    if (usersRole.rola.nazwa == "admin")
+                    {
+                        ViewBag.ifAdmin = true;
+                        return true;
+                    }
+            }
+            return false;
         }
 
         private bool isTrainer(int user)

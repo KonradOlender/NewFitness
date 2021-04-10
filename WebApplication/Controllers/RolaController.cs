@@ -39,6 +39,7 @@ namespace WebApplication.Controllers
             ViewBag.allRoles = _context.role.ToList();
             List<RolaUzytkownika> userRoles = _context.RolaUzytkownika.Include(k => k.rola).Where(k => k.id_uzytkownika == user_id).ToList();
             ViewBag.usersRoles = userRoles.ToDictionary<RolaUzytkownika, Rola>(k => k.rola);
+            isAdmin();
             return View();
         }
 
@@ -127,7 +128,10 @@ namespace WebApplication.Controllers
             List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
             foreach (var usersRole in usersRoles)
                 if (usersRole.rola.nazwa == "admin")
+                {
+                    ViewBag.ifAdmin = true;
                     return true;
+                }
             return false;
         }
     }

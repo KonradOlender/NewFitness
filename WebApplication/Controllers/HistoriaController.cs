@@ -27,17 +27,20 @@ namespace WebApplication.Controllers
         {
             int users_id = int.Parse(User.Identity.GetUserId());
             var myContext = _context.historiaUzytkownika.Where(k => k.id_uzytkownika==users_id);
+            this.isAdmin();
             return View(await myContext.ToListAsync());
         }
 
         public async Task<IActionResult> Done()
         {
+            this.isAdmin();
             return View();
         }
 
         // GET: Historia/Create
         public IActionResult Create()
         {
+            this.isAdmin();
             return View();
         }
 
@@ -57,6 +60,7 @@ namespace WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Done));
             }
+            this.isAdmin();
             return View(usersHistory);
         }
 
@@ -75,6 +79,7 @@ namespace WebApplication.Controllers
                 return View("UnableToDelete");
             }
             ViewBag.date = usersHistory.data;
+            this.isAdmin();
             return View(usersHistory);
         }
 
@@ -92,6 +97,7 @@ namespace WebApplication.Controllers
             }
             _context.historiaUzytkownika.Remove(usersHistory);
             await _context.SaveChangesAsync();
+            this.isAdmin();
             return RedirectToAction(nameof(Index));
         }
 
@@ -103,6 +109,22 @@ namespace WebApplication.Controllers
         private bool HistoriaUzytkownikaExists(int id, DateTime date)
         {
             return _context.historiaUzytkownika.Any(e => e.id_uzytkownika == id && e.data == date);
+        }
+
+        private bool isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = int.Parse(User.Identity.GetUserId());
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+                foreach (var usersRole in usersRoles)
+                    if (usersRole.rola.nazwa == "admin")
+                    {
+                        ViewBag.ifAdmin = true;
+                        return true;
+                    }
+            }
+            return false;
         }
     }
 }

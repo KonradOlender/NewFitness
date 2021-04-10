@@ -39,6 +39,7 @@ namespace WebApplication.Controllers
         public IActionResult Create()
         {
             ViewData["id_roli"] = new SelectList(_context.role, "id_roli", "nazwa");
+            isAdmin();
             return View();
 
         }
@@ -61,6 +62,7 @@ namespace WebApplication.Controllers
             }
 
             ViewData["id_roli"] = new SelectList(_context.role, "id_roli", "nazwa", prosbyOUprawnienia.id_roli);
+            isAdmin();
             return View(prosbyOUprawnienia);
         }
 
@@ -128,7 +130,10 @@ namespace WebApplication.Controllers
             List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
             foreach (var usersRole in usersRoles)
                 if (usersRole.rola.nazwa == "admin")
+                {
+                    ViewBag.ifAdmin = true;
                     return true;
+                }
             return false;
         }
     }

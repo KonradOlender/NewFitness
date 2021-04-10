@@ -13,6 +13,8 @@ using System.IO;
 using WebApplication.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 
 namespace WebApplication.Controllers
 {
@@ -58,12 +60,16 @@ namespace WebApplication.Controllers
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
+            {
+                this.isAdmin();
                 return RedirectToAction("Index", "UserHub");
+            }
             return View();
         }
 
         public IActionResult Privacy()
         {
+            this.isAdmin();
             return View();
         }
 
@@ -71,6 +77,7 @@ namespace WebApplication.Controllers
         {
             ViewBag.message = "";
             ViewBag.ErrorMessage = "";
+            this.isAdmin();
             return View();
         }
 
@@ -89,6 +96,7 @@ namespace WebApplication.Controllers
             string messageHtml = System.IO.File.ReadAllText(filePath);
             string messageToSent = string.Format(messageHtml, name, message);
             await emailSender.SendEmailAsync(emailAdress,"Zapytanie ze strony: " + subject, messageToSent);
+            this.isAdmin();
             return View();
         }
 
@@ -96,6 +104,22 @@ namespace WebApplication.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private bool isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = int.Parse(User.Identity.GetUserId());
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+                foreach (var usersRole in usersRoles)
+                    if (usersRole.rola.nazwa == "admin")
+                    {
+                        ViewBag.ifAdmin = true;
+                        return true;
+                    }
+            }
+            return false;
         }
     }
 }

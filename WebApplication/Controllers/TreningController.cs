@@ -63,7 +63,8 @@ namespace WebApplication.Controllers
                 if(category_id != -1)
                     trainings = trainings.Where(k => k.id_kategorii == category_id);
             }
-                
+
+            isTrainer();
             return View(await trainings.Include(t => t.kategoria).Include(t => t.obrazy).Include(t => t.uzytkownik).ToListAsync());
 
         }
@@ -105,6 +106,7 @@ namespace WebApplication.Controllers
 
             var link = generateYoutubeEmbededLink(trening.youtube_link);
             ViewBag.youtube = link =="" || link == null ? null : link ;
+            isTrainer();
             return View(trening);
         }
 
@@ -112,6 +114,7 @@ namespace WebApplication.Controllers
         public IActionResult Create()
         {
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaTreningu, "id_kategorii", "nazwa");
+            isTrainer();
             return View();
         }
 
@@ -128,6 +131,7 @@ namespace WebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaTreningu, "id_kategorii", "nazwa", trening.id_kategorii);
+            isTrainer();
             return View(trening);
         }
 
@@ -148,6 +152,7 @@ namespace WebApplication.Controllers
                 return RedirectToAction("Details", new { id = trening.id_treningu });
 
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaTreningu, "id_kategorii", "nazwa", trening.id_kategorii);
+            isTrainer();
             return View(trening);
         }
 
@@ -188,6 +193,7 @@ namespace WebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaTreningu, "id_kategorii", "nazwa", trening.id_kategorii);
+            isTrainer();
             return View(trening);
         }
 
@@ -211,6 +217,7 @@ namespace WebApplication.Controllers
             if (trening.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = trening.id_treningu });
 
+            isTrainer();
             return View(trening);
         }
 
@@ -226,6 +233,7 @@ namespace WebApplication.Controllers
 
             _context.treningi.Remove(trening);
             await _context.SaveChangesAsync();
+            isTrainer();
             return RedirectToAction(nameof(Index));
         }
 
@@ -244,6 +252,7 @@ namespace WebApplication.Controllers
 
             _context.treningSzczegoly.Remove(cwiczenie);
             await _context.SaveChangesAsync();
+            isTrainer();
             return RedirectToAction(nameof(Details), new { id = idt});
         }
 
@@ -280,6 +289,7 @@ namespace WebApplication.Controllers
             else
                 ViewData["id_cwiczenia"] = new SelectList(_context.cwiczenia, "id_cwiczenia", "nazwa");
 
+            isTrainer();
             return View(tszczegoly);
         }
 
@@ -314,6 +324,7 @@ namespace WebApplication.Controllers
             }
             ViewBag.trainingId = id;
             ViewData["id_cwiczenia"] = new SelectList(_context.cwiczenia, "id_cwiczenia", "nazwa", tszczegoly.id_cwiczenia);
+            isTrainer();
             return View(tszczegoly);
         }
 
@@ -331,6 +342,7 @@ namespace WebApplication.Controllers
 
             ViewBag.Message = "";
             ViewBag.training = true;
+            isTrainer();
             return View();
         }
 
@@ -385,6 +397,7 @@ namespace WebApplication.Controllers
             await _context.obrazyTreningow.AddAsync(image);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
+            isTrainer();
             return RedirectToAction("Details", new { id = trening.id_treningu });
         }
 
@@ -402,6 +415,7 @@ namespace WebApplication.Controllers
 
             ViewBag.Message = "";
             ViewBag.training = true;
+            isTrainer();
             return View();
         }
 
@@ -426,6 +440,7 @@ namespace WebApplication.Controllers
             _context.treningi.Update(trening);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Trening został zaktualizowany";
+            isTrainer();
             return RedirectToAction("Details", new { id = trening.id_treningu });
         }
 
@@ -445,8 +460,15 @@ namespace WebApplication.Controllers
             List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
 
             foreach (var usersRole in usersRoles)
-                if (usersRole.rola.nazwa == "trener" || usersRole.rola.nazwa == "admin")
+            {
+                if (usersRole.rola.nazwa == "admin")
+                {
+                    ViewBag.ifAdmin = true;
                     return true;
+                }
+                if (usersRole.rola.nazwa == "trener")
+                    return true;
+            }
             return false;
         }
 

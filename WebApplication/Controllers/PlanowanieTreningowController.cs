@@ -27,6 +27,7 @@ namespace WebApplication.Controllers
         {
             int userId = int.Parse(User.Identity.GetUserId());
             var myContext = _context.planowaneTreningi.Include(p => p.trening).Where(x => x.id_uzytkownika == userId );
+            this.isAdmin();
             return View(await myContext.ToListAsync());
         }
 
@@ -51,6 +52,7 @@ namespace WebApplication.Controllers
             if (planowanieTreningow.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
+            this.isAdmin();
             return View(planowanieTreningow);
         }
 
@@ -75,7 +77,7 @@ namespace WebApplication.Controllers
                 else
                     ViewBag.polecany = _context.treningi.First();
 
-
+                this.isAdmin();
                 return View(training);
             }
 
@@ -98,6 +100,7 @@ namespace WebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["id_treningu"] = new SelectList(_context.treningi, "id_treningu", "nazwa", planowanieTreningow.id_treningu);
+            this.isAdmin();
             return View(planowanieTreningow);
         }
 
@@ -121,6 +124,7 @@ namespace WebApplication.Controllers
             if (planowanieTreningow.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Index");
 
+            this.isAdmin();
             return View(planowanieTreningow);
         }
 
@@ -136,6 +140,7 @@ namespace WebApplication.Controllers
 
             _context.planowaneTreningi.Remove(planowanieTreningow);
             await _context.SaveChangesAsync();
+            this.isAdmin();
             return RedirectToAction(nameof(Index));
         }
 
@@ -169,6 +174,21 @@ namespace WebApplication.Controllers
                 if (tab[i] == max) return i;
             }
             return -1;
+        }
+        private bool isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = int.Parse(User.Identity.GetUserId());
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+                foreach (var usersRole in usersRoles)
+                    if (usersRole.rola.nazwa == "admin")
+                    {
+                        ViewBag.ifAdmin = true;
+                        return true;
+                    }
+            }
+            return false;
         }
     }
 }

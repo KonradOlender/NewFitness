@@ -27,6 +27,8 @@ namespace WebApplication.Controllers
                 var chat = _context.chatUsers.Where(e => e.UserId == userid).Include(e => e.Chat).ToList();
                 ViewBag.chat = chat;
                 ViewBag.user = user;
+
+                this.isAdmin();
             }
             
             return View();
@@ -103,5 +105,23 @@ namespace WebApplication.Controllers
             rc.DeleteRoom(chatId);
             return Redirect("/UserHub/Admin");
         }
+
+
+        private bool isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = int.Parse(User.Identity.GetUserId());
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+                foreach (var usersRole in usersRoles)
+                    if (usersRole.rola.nazwa == "admin")
+                    {
+                        ViewBag.ifAdmin = true;
+                        return true;
+                    }
+            }
+            return false;
+        }
+
     }
 }

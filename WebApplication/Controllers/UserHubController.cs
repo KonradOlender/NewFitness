@@ -314,7 +314,6 @@ namespace WebApplication.Controllers
                         return true;
                     }
             }
-            
             return false;
         }
 

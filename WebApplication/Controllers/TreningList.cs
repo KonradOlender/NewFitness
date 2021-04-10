@@ -48,6 +48,7 @@ namespace WebApplication.Controllers
                 ViewBag.niedziela = niedziela;
             }
 
+            isAdmin();
             return View();
         }
 
@@ -89,6 +90,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
+            isAdmin();
             return View(trening);
         }
 
@@ -126,6 +128,7 @@ namespace WebApplication.Controllers
             }
             _context.SaveChanges();
 
+            isAdmin();
             return RedirectToAction(nameof(Lista));
         }
 
@@ -143,6 +146,7 @@ namespace WebApplication.Controllers
                                         .ToList();
 
             ViewBag.polecany = polecany;
+            isAdmin();
             return View();
         }
 
@@ -172,6 +176,7 @@ namespace WebApplication.Controllers
             _context.Add(planowany);
             _context.SaveChanges();
 
+            isAdmin();
             return RedirectToAction(nameof(Index));
         }
 
@@ -215,5 +220,20 @@ namespace WebApplication.Controllers
             return avg;
         }
 
+        private bool isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = int.Parse(User.Identity.GetUserId());
+                List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
+                foreach (var usersRole in usersRoles)
+                    if (usersRole.rola.nazwa == "admin")
+                    {
+                        ViewBag.ifAdmin = true;
+                        return true;
+                    }
+            }
+            return false;
+        }
     }
 }

@@ -50,6 +50,7 @@ namespace WebApplication.Controllers
                 meals = meals.Where(k => k.nazwa.Contains(searchString));
             }
 
+            this.isDietician();
             return View(await meals.Include(t => t.uzytkownik).Include(k => k.obrazy).ToListAsync());
 
         }
@@ -100,6 +101,7 @@ namespace WebApplication.Controllers
                                     .Last()
                                     .GetImageDataUrl();
 
+            this.isDietician();
             return View(posilek);
         }
 
@@ -135,6 +137,7 @@ namespace WebApplication.Controllers
             }
             _context.SaveChanges();
 
+            this.isDietician();
             return RedirectToAction(nameof(Details));
         }
 
@@ -142,6 +145,7 @@ namespace WebApplication.Controllers
         public IActionResult Create()
         {
             ViewData["id_uzytkownika"] = new SelectList(_context.uzytkownicy, "Id", "Id");
+            this.isDietician();
             return View();
         }
 
@@ -159,6 +163,7 @@ namespace WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            this.isDietician();
             return View(posilek);
         }
 
@@ -179,6 +184,7 @@ namespace WebApplication.Controllers
             if (posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = posilek.id_posilku });
 
+            this.isDietician();
             return View(posilek);
         }
 
@@ -219,6 +225,7 @@ namespace WebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            this.isDietician();
             return View(posilek);
         }
 
@@ -241,6 +248,7 @@ namespace WebApplication.Controllers
             if (posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = posilek.id_posilku });
 
+            this.isDietician();
             return View(posilek);
         }
 
@@ -256,6 +264,7 @@ namespace WebApplication.Controllers
 
             _context.posilki.Remove(posilek);
             await _context.SaveChangesAsync();
+            this.isDietician();
             return RedirectToAction(nameof(Index));
         }
 
@@ -276,6 +285,7 @@ namespace WebApplication.Controllers
 
             _context.posilekSzczegoly.Remove(skladnik);
             await _context.SaveChangesAsync();
+            this.isDietician();
             return RedirectToAction(nameof(Details), new { id = idt });
         }
 
@@ -312,6 +322,7 @@ namespace WebApplication.Controllers
             else
                 ViewData["id_skladnika"] = new SelectList(_context.skladnik, "id_skladnika", "nazwa");
 
+            this.isDietician();
             return View(pszczegoly);
         }
 
@@ -349,6 +360,7 @@ namespace WebApplication.Controllers
             }
             ViewBag.posilekId = id;
             ViewData["id_skladnika"] = new SelectList(_context.skladnik, "id_skladnika", "nazwa", pszczegoly.id_skladnika);
+            this.isDietician();
             return View(pszczegoly);
 
         }
@@ -368,6 +380,7 @@ namespace WebApplication.Controllers
 
             ViewBag.Message = "";
             ViewBag.meal = true;
+            this.isDietician();
             return View();
         }
 
@@ -422,6 +435,7 @@ namespace WebApplication.Controllers
             await _context.obrazyPosilkow.AddAsync(image);
             await _context.SaveChangesAsync();
             ViewBag.Message = "Obraz został dodany";
+            this.isDietician();
             return RedirectToAction("Details", new { id = meal.id_posilku });
         }
 
@@ -431,8 +445,15 @@ namespace WebApplication.Controllers
             List<RolaUzytkownika> usersRoles = _context.RolaUzytkownika.Where(k => k.id_uzytkownika == userId).Include(c => c.rola).ToList();
 
             foreach (var usersRole in usersRoles)
-                if (usersRole.rola.nazwa == "dietetyk" || usersRole.rola.nazwa == "admin")
+            {
+                if (usersRole.rola.nazwa == "admin")
+                {
+                    ViewBag.ifAdmin = true;
                     return true;
+                }
+                if (usersRole.rola.nazwa == "dietetyk")
+                    return true;
+            }
             return false;
         }
 
