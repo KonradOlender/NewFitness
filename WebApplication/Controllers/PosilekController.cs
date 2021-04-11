@@ -79,7 +79,9 @@ namespace WebApplication.Controllers
             }
             catch
             {
-                ViewBag.ocena = new OcenaPosilku();
+                var rate = new OcenaPosilku();
+                rate.ocena = 0;
+                ViewBag.ocena = rate;
             }
             ViewBag.srednia = avgRating(posilek.id_posilku);
             

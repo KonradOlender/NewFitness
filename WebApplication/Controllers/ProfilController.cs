@@ -52,7 +52,9 @@ namespace WebApplication.Controllers
                 }
                 catch
                 {
-                    ViewBag.ocenaTrener = new Ocena();
+                    var rate = new Ocena();
+                    rate.ocena = 0;
+                    ViewBag.ocenaTrener = rate;
                 }
             }
             if (isDietician(id))
@@ -63,7 +65,9 @@ namespace WebApplication.Controllers
                 }
                 catch
                 {
-                    ViewBag.ocenaDietetyk = new Ocena();
+                    var rate = new Ocena();
+                    rate.ocena = 0;
+                    ViewBag.ocenaDietetyk = rate;
                 }
             }
 
