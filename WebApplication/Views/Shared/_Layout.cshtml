@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@{
+    if (User.Identity.IsAuthenticated)
+    {
+        @using Microsoft.AspNet.Identity;
+        ViewBag.userId = User.Identity.GetUserId();
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,8 +39,8 @@
 
 
                 @*<div>
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
-        </div>*@
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
+                    </div>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -76,7 +84,7 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="/UserHub">Panel użytkownika </a>
                                             <a class="dropdown-item" href="/UserHub/Kalkulator">Kalkulator </a>
-                                            <a class="dropdown-item" href="/Profil/Details">Profil </a>
+                                            <a class="dropdown-item" href="/Profil/Details/@ViewBag.userId">Profil </a>
                                             <a class="dropdown-item" href="/Profil/Chat">Chat </a>
                                             <a class="dropdown-item" href="/Odznaki">Odznaki </a>
                                             <a class="dropdown-item" href="/Rola/MyRoles">Role </a>
@@ -89,7 +97,7 @@
                                                     <a class="dropdown-item" href="/Rola">Zarządzanie rolami </a>
                                                     <a class="dropdown-item" href="/RolaUzytkownika">Rola użytkownika </a>
 
-                                                } 
+                                                }
                                             }
 
                                         </div>
@@ -137,7 +145,7 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container" >
+        <div class="container">
             Masz jakieś pytania?  - <a asp-area="" asp-controller="Home" asp-action="ContactUs">Napisz do nas! </a>
             &copy; 2020 - WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
