@@ -31,7 +31,7 @@ namespace WebApplication.Controllers
             return View(await myContext.ToListAsync());
         }
 
-        public async Task<IActionResult> Done()
+        public IActionResult Done()
         {
             this.isAdmin();
             return View();

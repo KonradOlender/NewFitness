@@ -191,6 +191,8 @@ namespace WebApplication.Controllers
             if (posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = posilek.id_posilku });
 
+            ViewBag.ingredients = await _context.posilekSzczegoly.Where(t => t.id_posilku == posilek.id_posilku)
+                                                .Include(t => t.skladnik).ToListAsync();
             this.isDietician();
             return View(posilek);
         }
@@ -231,7 +233,8 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
+            ViewBag.ingredients = await _context.posilekSzczegoly.Where(t => t.id_posilku == posilek.id_posilku)
+                                                .Include(t => t.skladnik).ToListAsync();
             this.isDietician();
             return View(posilek);
         }

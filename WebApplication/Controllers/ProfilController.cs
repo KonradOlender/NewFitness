@@ -36,11 +36,6 @@ namespace WebApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             int userid = int.Parse(User.Identity.GetUserId());
             Uzytkownik user = _context.uzytkownicy.Single(e => e.Id == userid);
 
@@ -319,7 +314,7 @@ namespace WebApplication.Controllers
         {
             //var currentUser = await _userManager.GetUserAsync(User);
             int userid = int.Parse(User.Identity.GetUserId());
-            var currentUser = _context.uzytkownicy.Single(e => e.Id == userid);
+            var currentUser = await _context.uzytkownicy.SingleAsync(e => e.Id == userid);
             if (User.Identity.IsAuthenticated)
             {
                 ViewBag.CurrentUserName = currentUser.UserName;

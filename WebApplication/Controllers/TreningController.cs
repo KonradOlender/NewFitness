@@ -202,6 +202,10 @@ namespace WebApplication.Controllers
                 return RedirectToAction("Details", new { id = trening.id_treningu });
 
             ViewData["id_kategorii"] = new SelectList(_context.kategoriaTreningu, "id_kategorii", "nazwa", trening.id_kategorii);
+
+            ViewBag.exercises = await _context.treningSzczegoly.Where(t => t.id_treningu == trening.id_treningu)
+                                                                .Include(t => t.cwiczenie)
+                                                                .ToListAsync();
             isTrainer();
             return View(trening);
         }

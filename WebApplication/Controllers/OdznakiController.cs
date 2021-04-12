@@ -19,7 +19,6 @@ namespace WebApplication.Controllers
     {
         private readonly MyContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private static Odznaki rewards = new Odznaki();
 
         public OdznakiController(IWebHostEnvironment hostingEnvironment, MyContext context)
         {
