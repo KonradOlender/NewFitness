@@ -22,7 +22,7 @@ namespace WebApplication.Services
     {
         IEmailSender emailSender;
         private readonly IServiceScopeFactory scopeFactory;
-        private bool active = true;
+        private bool active = false;
         Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
         public Notifications(
