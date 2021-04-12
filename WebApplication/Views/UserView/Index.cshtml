@@ -1,5 +1,10 @@
 ﻿<div>
-    @foreach(var item in ViewBag.trenerzy){
-        <p>@item.imie</p>
+    @foreach (var item in ViewBag.dietetycy)
+    {
+        <a href="~/profil/details/@item.Id"> @item.imie</a>
+    }
+    @foreach (var item in ViewBag.trenerzy)
+    {
+        <a href="~/profil/details/@item.Id"> @item.imie</a>
     }
 </div>
