@@ -9,8 +9,8 @@
 
 <h4>Trening</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div style="width:50%; float:left">
+    <div >
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id_treningu" />
@@ -29,6 +29,19 @@
             </div>
         </form>
     </div>
+</div>
+
+<div style="width:50%; float:left">
+    <ul>
+        Ćwiczenia, które wchodzą w skład tego treningu to:
+        @foreach (TreningSzczegoly item in ViewBag.exercises)
+        {
+            <li>
+                @item.cwiczenie.nazwa
+
+            </li>
+        }
+    </ul>
 </div>
 
 <div>
