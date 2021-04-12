@@ -64,6 +64,10 @@ namespace WebApplication.Controllers
                     trainings = trainings.Where(k => k.id_kategorii == category_id);
             }
 
+            ViewBag.ratingsCounted = _context.ocenyTreningow.GroupBy(t => t.id_treningu)
+                                                            .Select(t => new { training = t.Key, Avg = t.Average(k => k.ocena) })
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.training, v => v.Avg);
             isTrainer();
             return View(await trainings.Include(t => t.kategoria).Include(t => t.obrazy).Include(t => t.uzytkownik).ToListAsync());
 

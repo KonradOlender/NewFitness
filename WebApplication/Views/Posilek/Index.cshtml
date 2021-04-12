@@ -42,6 +42,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.opis)
                 </th>
+                <th>
+                    ocena
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -68,6 +71,17 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.opis)
+                        </td>
+                        <td>
+                            @if ((ViewBag.ratingsCounted).ContainsKey(item.id_posilku))
+                            {
+                            <p>@((ViewBag.ratingsCounted)[item.id_posilku])</p>
+                            }
+                            else
+                            {
+                                <p>0</p>
+                            }
+
                         </td>
                         <td>
                             @if (ViewBag.userId == item.id_uzytkownika)

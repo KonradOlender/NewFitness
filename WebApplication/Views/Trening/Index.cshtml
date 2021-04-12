@@ -48,6 +48,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.kategoria)
                 </th>
+                <th>
+                    Ocena
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -58,32 +61,44 @@
             {
                 @if (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
                 {
-                    <tr>
-                        <td>
-                            @if (item.obrazy.Count > 0)
-                            {
-                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
-                            }
-                            else
-                            {
-                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.nazwa)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.kategoria.nazwa)
-                        </td>
-                        <td>
-                            @if (ViewBag.userId == item.id_uzytkownika)
-                            {
-                                <a asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
-                                <a asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
-                            }
-                            <a asp-action="Details" asp-route-id="@item.id_treningu">Szczegóły</a> <br />
-                        </td>
-                    </tr>
+            <tr>
+                <td>
+                    @if (item.obrazy.Count > 0)
+                    {
+                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                    }
+                    else
+                    {
+                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nazwa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.kategoria.nazwa)
+                </td>
+                <td>
+                    @if ((ViewBag.ratingsCounted).ContainsKey(item.id_treningu))
+                    {
+                    <p>@((ViewBag.ratingsCounted)[item.id_treningu])</p>
+                    }
+                    else
+                    {
+                        <p>0</p>
+                    }
+
+                </td>
+                <td>
+                    @if (ViewBag.userId == item.id_uzytkownika)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
+                        <a asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
+                    }
+                    <a asp-action="Details" asp-route-id="@item.id_treningu">Szczegóły</a> <br />
+                </td>
+
+            </tr>
                 }
             }
         </tbody>

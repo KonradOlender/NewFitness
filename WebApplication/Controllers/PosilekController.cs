@@ -50,6 +50,11 @@ namespace WebApplication.Controllers
                 meals = meals.Where(k => k.nazwa.Contains(searchString));
             }
 
+            ViewBag.ratingsCounted = _context.ocenyPosilkow.GroupBy(t => t.id_posilku)
+                                                            .Select(t => new { posilek = t.Key, Avg = t.Average(k => k.ocena) })
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.posilek, v => v.Avg);
+
             this.isDietician();
             return View(await meals.Include(t => t.uzytkownik).Include(k => k.obrazy).ToListAsync());
 
