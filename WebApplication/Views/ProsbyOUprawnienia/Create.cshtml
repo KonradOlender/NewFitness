@@ -9,16 +9,18 @@
 
 <h4></h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div >
+    <div >
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="id_roli" class="control-label">Wybierz role:</label>
-                <select asp-for="id_roli" class="form-control" asp-items="ViewBag.id_roli"></select>
-                <div class="form-group">
+                <div style="width:20%">
+                    <label asp-for="id_roli" class="control-label">Wybierz role:</label>
+                    <select asp-for="id_roli" class="form-control" asp-items="ViewBag.id_roli"></select>
+                </div>
+                <div class="form-group" >
                     <label asp-for="prosba_pisemna" class="control-label"></label>
-                    <input asp-for="prosba_pisemna" class="form-control" />
+                    <input asp-for="prosba_pisemna" class="form-control" style="width: 100%; min-height: 200px"/>
                     <span asp-validation-for="prosba_pisemna" class="text-danger"></span>
                 </div>
             </div>
