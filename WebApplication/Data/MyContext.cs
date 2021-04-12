@@ -282,5 +282,6 @@ namespace WebApplication.Data
         public DbSet<Message> messages { get; set; }
         public DbSet<Chat> chats { get; set; }
         public DbSet<ChatUser> chatUsers { get; set; }
+        public DbSet<Notyfikacje> notyfikacjes { get; set; }
     }
 }

@@ -5,11 +5,28 @@
     {
         if (ViewBag.user.imie == item.Chat.NameOne)
         {
-            <a style=" width: 100%" class="btn btn-primary" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameTwo</a>
+            if (item.read)
+            {
+                <a style=" width: 100%" class="btn btn-primary" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameTwo</a>
+            }
+            else
+            {
+
+                <a style=" width: 100%" class="btn btn-danger" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameTwo</a>
+            }
+
         }
         else
         {
-            <a style=" width: 100%" class="btn btn-primary" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameOne</a>
+            if (item.read)
+            {
+                <a style=" width: 100%" class="btn btn-primary" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameOne</a>
+            }
+            else
+            {
+                <a style=" width: 100%" class="btn btn-danger" href="/Chat/Room/@item.ChatId" role="button">@item.Chat.NameOne</a>
+            }
+
         }
 
     }

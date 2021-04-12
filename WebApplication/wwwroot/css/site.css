@@ -121,3 +121,7 @@ body.dark{
     z-index:200;
     transition: transform 0.2s linear;
 }
+.notif-box{
+    background-color:white;
+    position:absolute;
+}
