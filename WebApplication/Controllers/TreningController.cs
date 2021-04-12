@@ -87,6 +87,17 @@ namespace WebApplication.Controllers
             ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == id)
                                         .Include(k => k.cwiczenie)
                                         .ToList();
+            var userId = int.Parse(User.Identity.GetUserId());
+            try
+            {
+                ViewBag.rating = _context.ocenyTreningow.Single(e => e.id_uzytkownika == userId && e.id_treningu == id);
+            }
+            catch
+            {
+                var rate = new OcenaTreningu();
+                rate.ocena = 0;
+                ViewBag.rating = rate;
+            }
 
             ViewBag.trainingId = id;
             ViewBag.userId = int.Parse(this.User.Identity.GetUserId());
@@ -108,6 +119,41 @@ namespace WebApplication.Controllers
             ViewBag.youtube = link =="" || link == null ? null : link ;
             isTrainer();
             return View(trening);
+        }
+
+        [HttpPost]
+        public IActionResult Details(int id, double rating)
+        {
+            var training = _context.treningi
+                .FirstOrDefault(m => m.id_treningu == id);
+
+            var userId = int.Parse(this.User.Identity.GetUserId());
+
+            if (_context.ocenyTreningow.Any(e => e.id_uzytkownika == userId && e.id_treningu == training.id_treningu))
+            {
+                OcenaTreningu ocena = new OcenaTreningu();
+                ocena.id_uzytkownika = userId;
+                ocena.id_treningu = training.id_treningu;
+                ocena.ocena = rating;
+                ocena.oceniajacy = _context.uzytkownicy.First(e => e.Id == userId);
+                ocena.trening = training;
+
+                _context.Update(ocena);
+            }
+            else
+            {
+                OcenaTreningu ocena = new OcenaTreningu();
+                ocena.id_uzytkownika = userId;
+                ocena.id_treningu = training.id_treningu;
+                ocena.ocena = rating;
+                ocena.oceniajacy = _context.uzytkownicy.First(e => e.Id == userId);
+                ocena.trening = training;
+
+                _context.Add(ocena);
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Details));
         }
 
         // GET: Trening/Create

@@ -543,7 +543,7 @@ namespace WebApplication.Controllers
                 sum += item.ocena;
                 index++;
             }
-            avg = sum / index;
+            avg = sum / (index == 0 ? 1 : index);
             return avg;
         }
     }
