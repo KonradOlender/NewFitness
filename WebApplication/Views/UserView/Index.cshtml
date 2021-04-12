@@ -1,29 +1,99 @@
-﻿<div class="row">
+﻿<style>
+    .olElement {
+        list-style: none;
+        counter-reset: my-awesome-counter;
+    }
+
+    .liElement {
+        counter-increment: my-awesome-counter;
+        margin: 0.25rem;
+    }
+
+        .liElement::before {
+            content: counter(my-awesome-counter);
+            background: #007bff;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: inline-block;
+            line-height: 2rem;
+            color: white;
+            text-align: center;
+            margin-right: 0.5rem;
+        }
+</style>
+
+<div class="row">
     <div class="col-md-2">
 
     </div>
     <div class="col-md-4">
-        @foreach (var item in ViewBag.dietetycy)
-        {
-            <a href="~/profil/details/@item.Id"> @item.imie</a>
-        }
+        <p style=   "font-size: 24px;
+                    text-shadow: 0 0 0.2em #007bff, 0 0 0.2em #007bff, 0 0 0.2em #007bff, 0 0 0.2em #007bff;
+                    color: white;
+                    text-align: center">
+        Lista dietetyków</p>
+        <ol class="olElement">
+            @foreach (var item in ViewBag.dietetycy)
+            {
+                <li class="liElement">
+                    <a href="~/profil/details/@item.Id"> @item.imie</a>
+                </li>
+            }
 
-
-        <a href="#">Imie</a>
-        <a href="#">Imie</a>
-        <a href="#">Imie</a>
-        <a href="#">Imie</a>
+        </ol> 
+    <ol class="olElement">
+        <li class="liElement">
+            <a href="#">Dietetyk1</a>
+        </li>
+        <li class="liElement">
+            <a href="#">Dietetyk2</a>
+        </li>
+        <li class="liElement">
+            <a href="#">Dietetyk3</a>
+        </li>
+        <li class="liElement">
+            <a href="#">Dietetyk4</a>
+        </li>
+    </ol>
     </div>
     <div class="col-md-4">
-        @foreach (var item in ViewBag.trenerzy)
-        {
-            <a href="~/profil/details/@item.Id"> @item.imie</a>
-        }
-        <a href="#">Imie</a>
-        <a href="#">Imie</a>
-        <a href="#">Imie</a>
-        <a href="#">Imie</a>
-        <a href="#">Imie</a>
+        <p style=   "font-size: 24px;
+                    text-shadow: 0 0 0.2em #007bff, 0 0 0.2em #007bff, 0 0 0.2em #007bff, 0 0 0.2em #007bff;
+                    color: white;
+                    text-align: center">
+        Lista trenerów</p>
+        <ol class="olElement">
+            @foreach (var item in ViewBag.trenerzy)
+            {
+                <li class="liElement">
+                    <a href="~/profil/details/@item.Id"> @item.imie</a>
+                </li>
+            }
+        </ol>
+        <ol class="olElement">
+            <li class="liElement">
+                <a href="#">Trener1</a>
+            </li>
+            <li class="liElement">
+                <a href="#">Trener2</a>
+            </li>
+            <li class="liElement">
+                <a href="#">Trener3</a>
+            </li>
+            <li class="liElement">
+                <a href="#">Trener4</a>
+            </li>
+            <li class="liElement">
+                <a href="#">Trener5</a>
+            </li>
+            <li class="liElement">
+                <a href="#">Trener6</a>
+            </li>
+            <li class="liElement">
+                <a href="#">Trener7</a>
+            </li>
+        </ol>
     </div>
     <div class="col-md-2">
 
