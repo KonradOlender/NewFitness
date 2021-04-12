@@ -37,7 +37,7 @@ namespace WebApplication.Controllers
         {
             int user_id = int.Parse(User.Identity.GetUserId());
             ViewBag.allRoles = _context.role.ToList();
-            List<RolaUzytkownika> userRoles = _context.RolaUzytkownika.Include(k => k.rola).Where(k => k.id_uzytkownika == user_id).ToList();
+            List<RolaUzytkownika> userRoles = await _context.RolaUzytkownika.Include(k => k.rola).Where(k => k.id_uzytkownika == user_id).ToListAsync();
             ViewBag.usersRoles = userRoles.ToDictionary<RolaUzytkownika, Rola>(k => k.rola);
             isAdmin();
             return View();
