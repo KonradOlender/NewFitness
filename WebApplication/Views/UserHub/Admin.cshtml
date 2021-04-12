@@ -14,7 +14,7 @@
                     <a class="list-group-item list-group-item-action" id="list-trening-list" data-toggle="list" href="#list-trening" role="tab" aria-controls="treningi">Treningi</a>
                     <a class="list-group-item list-group-item-action" id="list-skladnik-list" data-toggle="list" href="#list-skladnik" role="tab" aria-controls="skladniki">Składniki</a>
                     <a class="list-group-item list-group-item-action" id="list-posilek-list" data-toggle="list" href="#list-posilek" role="tab" aria-controls="posilki">Posiłki</a>
-                    <a class="list-group-item list-group-item-action" asp-controller="RolaUzytkownika" asp-action="Index">Prosby o role</a>
+                    <a class="list-group-item list-group-item-action" asp-controller="ProsbyOUprawnienia" asp-action="Index">Prosby o role</a>
                     <a class="list-group-item list-group-item-action" id="list-rola-list" data-toggle="list" href="#list-rola" role="tab" aria-controls="rola">Role</a>
                     <a class="list-group-item list-group-item-action" id="list-oceny-list" data-toggle="list" href="#list-oceny" role="tab" aria-controls="oceny">Oceny</a>
                     <a class="list-group-item list-group-item-action" id="list-ocenyT-list" data-toggle="list" href="#list-ocenyT" role="tab" aria-controls="ocenyT">Oceny Treningów</a>
@@ -132,7 +132,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nazwa</th>
-                                    <th scope="col">Id Użytkownika</th>
+                                    <th scope="col">Nazwa Użytkownika</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,7 +141,7 @@
                                         <tr>
                                             <th scope="row">@item.id_roli</th>
                                             <td>@item.rola.nazwa</td>
-                                            <td>@item.id_uzytkownika</td>
+                                            <td>@item.uzytkownik.login</td>
                                         </tr>
                                     }
                                 }
@@ -163,10 +163,10 @@
                                 @{ foreach (var item in ViewBag.oceny)
                                     {
                                         <tr>
-                                            <th scope="row">@item.id_uzytkownika_oceniajacego</th>
-                                            <td>@item.id_uzytkownika_ocenianego</td>
+                                            <th scope="row">@item.oceniajacy.login</th>
+                                            <td>@item.oceniany.login</td>
                                             <td>@item.ocena</td>
-                                            <td>@item.id_roli</td>
+                                            <td>@item.rola.nazwa</td>
                                         </tr>
                                     }
                                 }
@@ -186,8 +186,8 @@
                                 @{ foreach (var item in ViewBag.ocenyTrening)
                                     {
                                         <tr>
-                                            <th scope="row">@item.id_uzytkownika</th>
-                                            <td>@item.id_treningu</td>
+                                            <th scope="row">@item.oceniajacy.login</th>
+                                            <td>@item.trening.nazwa</td>
                                             <td>@item.ocena</td>
                                         </tr>
                                     }

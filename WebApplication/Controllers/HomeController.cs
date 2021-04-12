@@ -14,7 +14,7 @@ using WebApplication.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNet.Identity;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication.Controllers
 {

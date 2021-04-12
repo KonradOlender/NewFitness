@@ -130,10 +130,21 @@ namespace WebApplication.Controllers
             var skladnik = _context.skladnik.ToList();
             var posilek = _context.posilki.ToList();
             var kat_skladnika = _context.kategoriaSkladnikow.ToList();
-            var role = _context.RolaUzytkownika.Include(e=>e.rola).ToList();
+            var role = _context.RolaUzytkownika
+                                .Include(e=>e.rola)
+                                .Include(t => t.uzytkownik)
+                                .ToList();
             var planowanie_trening = _context.planowaneTreningi.ToList();
-            var oceny = _context.oceny.ToList();
-            var ocenyTrening = _context.ocenyTreningow.ToList();
+            var oceny = _context.oceny
+                                .Include(t => t.oceniajacy)
+                                .Include(t => t.oceniany)
+                                .Include(t => t.rola)
+                                .ToList();
+            var ocenyTrening = _context.ocenyTreningow
+                                        .Include(t => t.oceniajacy)
+                                        .Include(t => t.trening)
+                                        .OrderBy(t => t.id_treningu)
+                                        .ToList();
             var messages = _context.messages.ToList();
             var chats = _context.chats.ToList();
             ViewBag.cwiczenie = cwiczenie;
