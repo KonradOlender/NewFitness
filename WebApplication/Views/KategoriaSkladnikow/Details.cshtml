@@ -25,5 +25,22 @@
     </dl>
 </div>
 <div>
-    
-</div>
+    @if (ViewBag.meals.Count == 0)
+    {
+        <p>Brak składników oznaczonych tą kategorią.</p>
+    }
+    else
+    {
+        <h5>Składniki oznaczone tą kategorią:</h5>
+        <ul class="training">
+            @foreach (Skladnik s in ViewBag.meals)
+            {
+                <li class="training">
+                    Nazwa:
+                    <a asp-controller="Skladnik" asp-action="Details" asp-route-id="@s.id_skladnika">@s.nazwa</a>
+                </li>
+            }
+        </ul>
+    }
+
+    </div>

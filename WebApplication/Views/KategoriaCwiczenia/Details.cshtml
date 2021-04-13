@@ -32,15 +32,16 @@
     <div>
         @if (Model.cwiczenia.Count == 0)
         {
-            <p>Brak ćwiczeń należących do tej kategorii.</p>
+            <p>Brak ćwiczeń oznaczonych tą kategorią.</p>
         }
         else
         {
-            <p>Ćwiczenia należące do tej kategorii:</p>
+            <h5>Ćwiczenia oznaczone tą kategorią:</h5>
             <ul class="training">
                 @foreach (Cwiczenie cw in Model.cwiczenia)
                 {
                     <li class="training">
+                        Nazwa: 
                         <a asp-controller="Cwiczenie" asp-action="Details" asp-route-id="@cw.id_cwiczenia">@cw.nazwa</a>
                     </li>
                 }
