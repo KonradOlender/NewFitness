@@ -149,7 +149,6 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="list-oceny" role="tabpanel" aria-labelledby="list-oceny-list">
-                        <a class="btn btn-primary" href="/Rolauzytkownika" role="button">Zarządzaj</a>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -196,7 +195,6 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
-                        <a class="btn btn-primary" href="/Rolauzytkownika" role="button">Zarządzaj</a>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -242,7 +240,7 @@
                                             <td>
                                                 <form method="post" action="/Chat/DeleteRoom">
                                                     <input type="hidden" name="chatId" value="@item.Id" />
-                                                    <button type="submit" class="btn btn-danger">Usuń</button>
+                                                    <button type="submit" class="btn btn-outline-danger">Usuń</button>
                                                 </form>
                                             </td>
                                         </tr>

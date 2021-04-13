@@ -39,7 +39,7 @@
                     @Html.DisplayNameFor(model => model.nazwa)
                 </th>
                 <th>
-                    <a asp-action="Index" asp-route-sort="@ViewData["currentSort"]" asp-route-searchString="@ViewData["currentSearchString"]">
+                    <a class="dark-a" asp-action="Index" asp-route-sort="@ViewData["currentSort"]" asp-route-searchString="@ViewData["currentSearchString"]">
                         @Html.DisplayNameFor(model => model.waga)
                         @if ((int)ViewData["currentSort"] == 0)
                         {
@@ -66,7 +66,7 @@
             {
                 <tr>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.id_skladnika">@Html.DisplayFor(modelItem => item.nazwa)</a>
+                        <a class="dark-a" asp-action="Details" asp-route-id="@item.id_skladnika">@Html.DisplayFor(modelItem => item.nazwa)</a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.waga)
@@ -80,8 +80,8 @@
                     <td>
                         @if (ViewBag.isDietician)
                         {
-                            <a asp-action="Edit" asp-route-id="@item.id_skladnika">Edytuj</a> <br />
-                            <a asp-action="Delete" asp-route-id="@item.id_skladnika">Usuń</a> <br />
+                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_skladnika">Edytuj</a> <br />
+                            <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_skladnika">Usuń</a> <br />
                         }
                     </td>
                 </tr>

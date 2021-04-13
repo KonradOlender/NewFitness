@@ -48,8 +48,8 @@
                     <td>
                         @if (item.id_kategorii != ViewBag.DefaultCategory.id_kategorii && ViewBag.isTrainer)
                         {
-                            <a asp-action="Delete" asp-route-id="@item.id_kategorii">Usuń</a> <br />
-                            <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a> <br />
+                            <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_kategorii">Usuń</a> <br />
+                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a> <br />
                         }
                     </td>
                 </tr>
