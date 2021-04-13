@@ -37,18 +37,31 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> SendMessage(int chatId, string message, string roomName, [FromServices] MyContext _context)
+        public async Task<IActionResult> SendMessage(int chatId, string message, string roomName, int toWho, [FromServices] MyContext _context)
         {
+            var chatnotif = _context.chatUsers.Single(e => e.ChatId == chatId && e.UserId == toWho);
             Message Message = new Message();
             Message.Name = User.Identity.Name;
             Message.Text = message;
             Message.Timestamp = DateTime.Now;
             Message.ChatId = chatId;
 
+            //notyfikacje
+            Notyfikacje notyfikacje = new Notyfikacje();
+            notyfikacje.UserId = toWho;
+            notyfikacje.Viewed = false;
+
             _context.messages.Add(Message);
             _context.SaveChanges();
-
+            
             await _chat.Clients.Group(roomName).SendAsync("RecieveMessage", Message);
+
+            _context.Add(notyfikacje);
+            _context.SaveChanges();
+
+            chatnotif.read = false;
+            _context.chatUsers.Update(chatnotif);
+            _context.SaveChanges();
             return Ok();
         }
 

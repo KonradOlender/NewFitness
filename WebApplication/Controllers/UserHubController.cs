@@ -40,6 +40,8 @@ namespace WebApplication.Controllers
                 int userid = int.Parse(User.Identity.GetUserId());
                 var user = _context.uzytkownicy.Single(e => e.Id == userid);
 
+                ViewBag.notif = _context.notyfikacjes.Any(e => e.UserId == userid && e.Viewed == false);
+
                 int bialko = 0;
                 int tluszcz = 0;
                 int weng = 0;
@@ -168,6 +170,19 @@ namespace WebApplication.Controllers
             this.isAdmin();
             return View();
         }
+        [HttpPost]
+        public IActionResult Notyfikacje()
+        {
+            int userid = int.Parse(User.Identity.GetUserId());
+            var notif = _context.notyfikacjes.Where(e=>e.UserId == userid && e.Viewed == false).ToList();
+            foreach (var item in notif)
+            {
+                item.Viewed = true;
+                _context.notyfikacjes.Update(item);
+                _context.SaveChanges();
+            }
+            return Redirect("/Chat");
+        }
 
         //Do dodania (jeślu bez daty to -500 kcal)
         [HttpPost]
@@ -273,6 +288,7 @@ namespace WebApplication.Controllers
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     return RedirectToAction("Index");
                 }
 

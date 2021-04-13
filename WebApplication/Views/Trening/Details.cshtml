@@ -17,12 +17,59 @@
     .footer{
         display: none;
     }
+    .txt-center {
+        text-align: center;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .clear {
+        float: none;
+        clear: both;
+    }
+
+    .rating {
+        width: 90px;
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
+        position: relative;
+    }
+
+        .rating > label {
+            float: right;
+            display: inline;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            width: 1.1em;
+            cursor: pointer;
+            color: #000;
+        }
+
+            .rating > label:hover,
+            .rating > label:hover ~ label,
+            .rating > input.radio-btn:checked ~ label {
+                color: transparent;
+            }
+
+                .rating > label:hover:before,
+                .rating > label:hover ~ label:before,
+                .rating > input.radio-btn:checked ~ label:before,
+                .rating > input.radio-btn:checked ~ label:before {
+                    content: "\2605";
+                    position: absolute;
+                    left: 0;
+                    color: #FFD700;
+                }
 </style>
 <body>
     <p style="color: yellowgreen">@ViewBag.Message</p>
     <h1>Szczegóły</h1>
 
-    <div>
+    <div style="display:block">
         <h4>Treningu</h4>
         <br />
         <div style="display: flex; justify-content: center; ">
@@ -55,7 +102,7 @@
                       asp-controller="Trening"
                       asp-route-id="@ViewBag.trainingId"
                       method="post">
-                    
+
                     <button style="float:right" type="submit" id="link" name="link" value="" class="btn btn-danger">Usun link</button>
                     <br />
                 </form>
@@ -64,7 +111,7 @@
 
             <div id="imageAddDiv" hidden>
                 <form asp-action="AddImage"
-                      asp-controller="Trening" 
+                      asp-controller="Trening"
                       asp-route-id="@ViewBag.trainingId"
                       method="post"
                       enctype="multipart/form-data">
@@ -143,6 +190,32 @@
                 }
             </div>
         </div>
+    </div>
+    
+    <div class="txt-center" style="display:block">
+        <form method="post">
+            <input type="hidden" name="id" value="@ViewBag.trainingId" />
+            <div class="rating">
+                @for (int i = 5; i > 0; i--)
+                {
+                    if (i == ViewBag.rating.ocena)
+                    {
+                        <input id="star @i" name="rating" type="radio" checked="checked" value="@i" class="radio-btn hide" />
+                        <label for="star @i">☆</label>
+                    }
+                    else
+                    {
+                        <input id="star @i" name="rating" type="radio" value="@i" class="radio-btn hide" />
+                        <label for="star @i">☆</label>
+                    }
+
+                }
+                <div class="clear"></div>
+            </div>
+            <div style="text-align:left;">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
     </div>
 </body>
 <script>

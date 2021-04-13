@@ -70,7 +70,7 @@ body.dark{
     color: white;
 }
 .dark table{
-    background-color: #292C35;
+    /*background-color: #292C35;*/
     color: white;
 }
 .footer {
@@ -120,4 +120,8 @@ body.dark{
     border-radius:50%;
     z-index:200;
     transition: transform 0.2s linear;
+}
+.notif-box{
+    background-color:white;
+    position:absolute;
 }

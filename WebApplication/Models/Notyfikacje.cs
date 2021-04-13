@@ -8,15 +8,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication.Models
 {
-    public class ChatUser
+    public class Notyfikacje
     {
-        [Required, ForeignKey("Uzytkownik")]
+        [Key]
+        public int Id { get; set; }
+        [ForeignKey("Uzytkownik")]
         public int UserId { get; set; }
-        public Uzytkownik User { get; set; }
-        [Required, ForeignKey("Chat")]
-        public int ChatId { get; set; }
-        public Chat Chat { get; set; }
-        public bool read { get; set; }
-
+        public bool Viewed { get; set; }
     }
 }

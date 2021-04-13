@@ -50,6 +50,11 @@ namespace WebApplication.Controllers
                 meals = meals.Where(k => k.nazwa.Contains(searchString));
             }
 
+            ViewBag.ratingsCounted = _context.ocenyPosilkow.GroupBy(t => t.id_posilku)
+                                                            .Select(t => new { posilek = t.Key, Avg = t.Average(k => k.ocena) })
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.posilek, v => v.Avg);
+
             this.isDietician();
             return View(await meals.Include(t => t.uzytkownik).Include(k => k.obrazy).ToListAsync());
 
@@ -186,6 +191,8 @@ namespace WebApplication.Controllers
             if (posilek.id_uzytkownika != int.Parse(User.Identity.GetUserId()))
                 return RedirectToAction("Details", new { id = posilek.id_posilku });
 
+            ViewBag.ingredients = await _context.posilekSzczegoly.Where(t => t.id_posilku == posilek.id_posilku)
+                                                .Include(t => t.skladnik).ToListAsync();
             this.isDietician();
             return View(posilek);
         }
@@ -226,7 +233,8 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
+            ViewBag.ingredients = await _context.posilekSzczegoly.Where(t => t.id_posilku == posilek.id_posilku)
+                                                .Include(t => t.skladnik).ToListAsync();
             this.isDietician();
             return View(posilek);
         }
@@ -543,7 +551,7 @@ namespace WebApplication.Controllers
                 sum += item.ocena;
                 index++;
             }
-            avg = sum / index;
+            avg = sum / (index == 0 ? 1 : index);
             return avg;
         }
     }

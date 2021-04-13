@@ -42,6 +42,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.opis)
                 </th>
+                <th>
+                    ocena
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -56,27 +59,37 @@
                         <td>
                             @if (item.obrazy.Count > 0)
                             {
-                                <a asp-action="Details" asp-route-id="@item.id_posilku">
-                                    <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyPosilku>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
-                                </a>
+                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyPosilku>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
                             }
                             else
                             {
-                                <a asp-action="Details" asp-route-id="@item.id_posilku"><img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/meal.jpg" /></a>
+                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/meal.jpg" />
                             }
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.id_posilku">@Html.DisplayFor(modelItem => item.nazwa)</a> <br />
+                            @Html.DisplayFor(modelItem => item.nazwa)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.opis)
                         </td>
                         <td>
+                            @if ((ViewBag.ratingsCounted).ContainsKey(item.id_posilku))
+                            {
+                            <p>@((ViewBag.ratingsCounted)[item.id_posilku])</p>
+                            }
+                            else
+                            {
+                                <p>0</p>
+                            }
+
+                        </td>
+                        <td>
                             @if (ViewBag.userId == item.id_uzytkownika)
                             {
-                                <a asp-action="Delete" asp-route-id="@item.id_posilku">Usuń</a> <br />
-                                <a asp-action="Edit" asp-route-id="@item.id_posilku">Edytuj</a> <br />
+                                <button class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id_posilku">Usuń</button> <br />
+                                <button class="btn btn-primary" asp-action="Edit" asp-route-id="@item.id_posilku">Edytuj</button> <br />
                             }
+                            <button class="btn btn-primary" asp-action="Details" asp-route-id="@item.id_posilku">Szczegóły</button> <br />
                         </td>
                     </tr>
                 }

@@ -3,6 +3,9 @@
 
 // Write your JavaScript code.
 
+
+
+
 $("#datepicker").datepicker({
     format: "dd-mm-yyyy",
 });
@@ -14,6 +17,24 @@ $('#datepicker').on('changeDate', function () {
     $('form[name="datapick"]').submit();
 });
 $('#my_hidden_input')
+
+
+var active = false;
+
+function toggel() {
+    const notif = document.getElementById('box');
+    if (active) {
+        notif.style.height = '0px';
+        notif.style.opacity = 0;
+        active = false;
+    }
+    else {
+        notif.style.height = '510px';
+        notif.style.opacity = 1;
+        active = true;
+    }
+    console.log("toggel");
+}
 
 const darkmodeCheckbox = document.getElementById('darkmode-checkbox');
 if (localStorage.getItem('checkbox') == 'true') {

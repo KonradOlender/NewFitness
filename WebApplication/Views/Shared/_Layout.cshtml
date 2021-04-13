@@ -39,8 +39,8 @@
 
 
                 @*<div>
-                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
-                    </div>*@
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
+                </div>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -76,16 +76,35 @@
                     @{ if (User.Identity.IsAuthenticated)
                         {
                             <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+                                @if (ViewBag.notif != null)
+                                {
+                                    @if (ViewBag.notif)
+                                    {
+                                        <form form method="post" action="/UserHub/Notyfikacje">
+                                            <button type="submit" onclick="toggel()" style="background-color: Transparent; border:none;">
+                                                <img style="height: 25px; width: 25px; padding: 2px; position:center;" src="~/images/bellActive.svg" />
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <button style="background-color: Transparent; border:none;">
+                                            <img style="height: 25px; width: 25px; padding: 2px; position:center;" src="~/images/bell.svg" />
+                                        </button>
+                                    }
+                                }
+
                                 <li class="nav-item text-light">
+
                                     <div class="dropdown">
-                                        <a class="navbar-text text-light" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            @User.Identity.Name ▼
-                                        </a>
+                                        <button class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            @User.Identity.Name
+                                        </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="/UserHub">Panel użytkownika </a>
                                             <a class="dropdown-item" href="/UserHub/Kalkulator">Kalkulator </a>
                                             <a class="dropdown-item" href="/Profil/Details/@ViewBag.userId">Profil </a>
-                                            <a class="dropdown-item" href="/Profil/Chat">Chat </a>
+                                            <a class="dropdown-item" href="/Chat">Chat </a>
                                             <a class="dropdown-item" href="/Odznaki">Odznaki </a>
                                             <a class="dropdown-item" href="/Rola/MyRoles">Role </a>
 
@@ -105,8 +124,8 @@
                                 </li>
                                 <li class="nav-item">
                                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
-                                          asp-route-returnUrl="@Url.Page("/", new { area = "" })"
-                                          method="post">
+                                            asp-route-returnUrl="@Url.Page("/", new { area = "" })"
+                                            method="post">
                                         <button type="submit" class="nav-link btn btn-link text-light">Logout</button>
                                     </form>
                                 </li>
@@ -137,9 +156,13 @@
                 </div>
             </div>
         </nav>
+        
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <div class="notif-box" style="height: 0px; opacity: 0;" id="box">
+                <p>Masz nową wiadomość</p>
+            </div>
             @RenderBody()
         </main>
     </div>
