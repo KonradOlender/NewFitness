@@ -59,15 +59,19 @@
                         <td>
                             @if (item.obrazy.Count > 0)
                             {
-                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyPosilku>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                                <a asp-action="Details" asp-route-id="@item.id_posilku">
+                                    <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyPosilku>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                                </a>
                             }
                             else
                             {
-                                <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/meal.jpg" />
+                                <a asp-action="Details" asp-route-id="@item.id_posilku">
+                                    <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/meal.jpg" />
+                                </a>
                             }
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.nazwa)
+                            <a asp-action="Details" asp-route-id="@item.id_posilku">@Html.DisplayFor(modelItem => item.nazwa)</a>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.opis)
@@ -89,7 +93,6 @@
                                 <button class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id_posilku">Usuń</button> <br />
                                 <button class="btn btn-primary" asp-action="Edit" asp-route-id="@item.id_posilku">Edytuj</button> <br />
                             }
-                            <button class="btn btn-primary" asp-action="Details" asp-route-id="@item.id_posilku">Szczegóły</button> <br />
                         </td>
                     </tr>
                 }
