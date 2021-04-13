@@ -67,7 +67,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.nazwa)
+                        <a asp-action="Details" asp-route-id="@item.id_cwiczenia">@Html.DisplayFor(modelItem => item.nazwa)</a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.opis)
@@ -79,7 +79,6 @@
                         @Html.DisplayFor(modelItem => item.kategoria.nazwa)
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.id_cwiczenia">Szczegóły</a> <br />
 
                         @if (ViewBag.isTrainer)
                         {

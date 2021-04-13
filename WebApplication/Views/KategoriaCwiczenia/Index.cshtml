@@ -41,11 +41,9 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.nazwa)
+                        <a asp-action="Details" asp-route-id="@item.id_kategorii">@Html.DisplayFor(modelItem => item.nazwa)</a>
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a> <br />
-
                         @if (item.id_kategorii != ViewBag.DefaultCategory.id_kategorii && ViewBag.isTrainer)
                         {
 
