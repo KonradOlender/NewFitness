@@ -8,7 +8,15 @@
 <form method="post" onsubmit="sendMessage(event)">
     <input type="hidden" name="roomName" value="@ViewBag.chat.NameOne" />
     <input type="hidden" name="chatId" value="@ViewBag.chat.Id" />
-    <input type="text" name="message" placeholder="Message"/>
+    @if (ViewBag.user.Id == ViewBag.chat.FirstId)
+    {
+        <input type="hidden" name="toWho" value="@ViewBag.chat.SecendId" />
+    }
+    else
+    {
+        <input type="hidden" name="toWho" value="@ViewBag.chat.FirstId" />
+    }
+    <input type="text" name="message" placeholder="Message" />
     <div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>

@@ -31,7 +31,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.nazwa)
+                        <a asp-action="Details" asp-route-id="@item.id_kategorii">@Html.DisplayFor(modelItem => item.nazwa)</a>
                     </td>
                     <td>
                         @if (item.nazwa != "inne")
@@ -39,7 +39,6 @@
                             <a asp-action="Edit" asp-route-id="@item.id_kategorii">Edytuj</a>
                             <a asp-action="Delete" asp-route-id="@item.id_kategorii"> Usuń </a>
                         }
-                        <a asp-action="Details" asp-route-id="@item.id_kategorii">Szczegóły</a>
 
                     </td>
                 </tr>

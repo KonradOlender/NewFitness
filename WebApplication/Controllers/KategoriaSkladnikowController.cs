@@ -57,6 +57,11 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
+            var category_meals = await _context.kategoriaSkladnikow.Include(k => k.skladniki)
+                .FirstOrDefaultAsync(m => m.id_kategorii == id);
+
+            ViewBag.meals = category_meals.skladniki;
+
             return View(category);
         }
 

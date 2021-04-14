@@ -22,5 +22,7 @@ namespace WebApplication.Models
         public ChatType ChatType { get; set; }
         public string NameOne { get; set; }
         public string NameTwo { get; set; }
+        public int FirstId { get; set; }
+        public int SecendId { get; set; }
     }
 }

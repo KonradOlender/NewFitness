@@ -30,22 +30,29 @@
     </div>
 
     <div>
-        <h5>Treningi oznaczone tą kategorią:</h5>
-        <ul class="training">
-            @foreach (Trening t in ViewBag.trainings)
-            {
-                @if (t.id_uzytkownika == ViewBag.userId || ViewBag.trainersIds.Contains(t.id_uzytkownika))
+        @if (ViewBag.trainings.Count == 0)
+        {
+            <p>Brak treningów oznaczonych tą kategorią.</p>
+        }
+        else
+        {
+            <h5>Treningi oznaczone tą kategorią:</h5>
+            <ul class="training">
+                @foreach (Trening t in ViewBag.trainings)
                 {
-                    <li class="training">
-                        Nazwa:
-                        <a asp-controller="Trening" asp-action="Details" asp-route-id="@t.id_treningu">
-                            @t.nazwa
-                        </a>
-                    </li>
+                    @if (t.id_uzytkownika == ViewBag.userId || ViewBag.trainersIds.Contains(t.id_uzytkownika))
+                    {
+                        <li class="training">
+                            Nazwa:
+                            <a asp-controller="Trening" asp-action="Details" asp-route-id="@t.id_treningu">
+                                @t.nazwa
+                            </a>
+                        </li>
+                    }
                 }
-            }
-        </ul>
+            </ul>
+        }
 
-    </div>
+        </div>
     </body>
 </html>

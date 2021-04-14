@@ -37,7 +37,7 @@
                         @Html.DisplayFor(modelItem => item.uzytkownik.login)
                     </td>
                     <td>
-                        <a asp-action="Delete" asp-route-users_id="@item.id_uzytkownika" asp-route-role_id="@item.id_roli">Pozbaw uprawnien</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-users_id="@item.id_uzytkownika" asp-route-role_id="@item.id_roli">Pozbaw uprawnien</a>
                     </td>
                 </tr>
             }

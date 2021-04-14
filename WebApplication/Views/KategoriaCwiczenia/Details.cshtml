@@ -27,18 +27,26 @@
                 @Html.DisplayFor(model => model.nazwa)
             </dd>
         </dl>
+        <br />
     </div>
     <div>
-        <ul class="training">
-            @foreach (Cwiczenie cw in Model.cwiczenia)
-            {
-                <li class="training">
-                    <b>Nazwa:</b>
-                    @cw.nazwa
-                    <a asp-controller="Cwiczenie" asp-action="Details" asp-route-id="@cw.id_cwiczenia">Zobacz</a>
-                </li>
-            }
-        </ul>
+        @if (Model.cwiczenia.Count == 0)
+        {
+            <p>Brak ćwiczeń oznaczonych tą kategorią.</p>
+        }
+        else
+        {
+            <h5>Ćwiczenia oznaczone tą kategorią:</h5>
+            <ul class="training">
+                @foreach (Cwiczenie cw in Model.cwiczenia)
+                {
+                    <li class="training">
+                        Nazwa: 
+                        <a asp-controller="Cwiczenie" asp-action="Details" asp-route-id="@cw.id_cwiczenia">@cw.nazwa</a>
+                    </li>
+                }
+            </ul>
+        }
     </div>
 
     </body>

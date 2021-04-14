@@ -65,15 +65,19 @@
                 <td>
                     @if (item.obrazy.Count > 0)
                     {
-                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                        </a>
                     }
                     else
                     {
-                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
+                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
+                        </a>
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.nazwa)
+                    <a class="dark-a" asp-action="Details" asp-route-id="@item.id_treningu">@Html.DisplayFor(modelItem => item.nazwa)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.kategoria.nazwa)
@@ -92,10 +96,9 @@
                 <td>
                     @if (ViewBag.userId == item.id_uzytkownika)
                     {
-                        <a asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
-                        <a asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
+                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
                     }
-                    <a asp-action="Details" asp-route-id="@item.id_treningu">Szczegóły</a> <br />
                 </td>
 
             </tr>

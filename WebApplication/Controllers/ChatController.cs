@@ -43,6 +43,11 @@ namespace WebApplication.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 int userid = int.Parse(User.Identity.GetUserId());
+                var chatuser = _context.chatUsers.Single(e => e.ChatId == id && e.UserId == userid);
+                chatuser.read = true;
+                _context.chatUsers.Update(chatuser);
+                _context.SaveChanges();
+
                 var user = _context.uzytkownicy.Single(e => e.Id == userid);
                 var chat = _context.chats.Include(e => e.Messages)
                         .FirstOrDefault(e => e.Id == id);
@@ -123,6 +128,15 @@ namespace WebApplication.Controllers
                     }
             }
             return false;
+        }
+        [HttpPost]
+        public IActionResult SetRead(int ChatId)
+        {
+            var chat = _context.chatUsers.Single(e => e.ChatId == ChatId);
+            chat.read = true;
+            _context.chatUsers.Update(chat);
+            _context.SaveChanges();
+            return Redirect("/Chat/Room/" + ChatId);
         }
 
     }

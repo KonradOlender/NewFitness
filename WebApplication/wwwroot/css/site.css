@@ -11,7 +11,6 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
 }
 
 .btn-primary {
@@ -70,15 +69,39 @@ body.dark{
     color: white;
 }
 .dark table{
-    background-color: #292C35;
+    /*background-color: #292C35;*/
     color: white;
 }
+.dark a.dark-a{
+    color:white;
+}
+.dark a.btn.btn-outline-danger {
+    color: #dc3545;
+}
+.dark a.btn.btn-outline-danger:hover {
+    color: white;
+}
+.dark a.list-group-item {
+    color: white;
+    background-color: #323540;
+}
+.dark a.list-group-item.active {
+    color: white;
+    background-color: #1a1b21;
+    border-color: #1a1b21;
+}
+select{
+    height: 30px;
+    width: 100px;
+    border-radius:5px;
+    background-color: white;
+}
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
 }
 .datepicker-inline {
     float:right;
@@ -120,4 +143,8 @@ body.dark{
     border-radius:50%;
     z-index:200;
     transition: transform 0.2s linear;
+}
+.notif-box{
+    background-color:white;
+    position:absolute;
 }

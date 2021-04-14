@@ -25,6 +25,8 @@ namespace WebApplication.Controllers
             Chat chat = new Chat();
             chat.NameOne = user.imie;
             chat.NameTwo = specialist.imie;
+            chat.FirstId = userId;
+            chat.SecendId = specialistId;
             chat.Users.Add(new ChatUser
             {
                 UserId = userId

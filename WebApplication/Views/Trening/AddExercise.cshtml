@@ -9,17 +9,17 @@
 
 <h4>Trening</h4>
 <hr />
-@using (Html.BeginForm("AddExercise", "Trening", FormMethod.Get, new { id = ViewBag.trainingId }))
-{
-    <fieldset>
-        @Html.DropDownList("category")
+<div class="row">
+    @using (Html.BeginForm("AddExercise", "Trening", FormMethod.Get, new { id = ViewBag.trainingId }))
+    {
+        <fieldset>
+            @Html.DropDownList("category")
 
-        <p>
-            <input type="submit" value="Filtruj" />
-        </p>
+            <input class="btn btn-primary" type="submit" value="Filtruj" />
 
-    </fieldset>
-}
+        </fieldset>
+    }
+</div>
 
 
 <div class="row">

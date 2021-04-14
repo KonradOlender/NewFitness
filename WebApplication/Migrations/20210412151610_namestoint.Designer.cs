@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication.Data;
 
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20210412151610_namestoint")]
+    partial class namestoint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,9 +269,6 @@ namespace WebApplication.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("read")
-                        .HasColumnType("bit");
-
                     b.HasKey("ChatId", "UserId");
 
                     b.HasIndex("UserId");
@@ -417,24 +416,6 @@ namespace WebApplication.Migrations
                     b.HasIndex("ChatId");
 
                     b.ToTable("messages");
-                });
-
-            modelBuilder.Entity("WebApplication.Models.Notyfikacje", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Viewed")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("notyfikacjes");
                 });
 
             modelBuilder.Entity("WebApplication.Models.ObrazProfilowe", b =>

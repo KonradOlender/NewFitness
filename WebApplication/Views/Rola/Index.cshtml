@@ -31,7 +31,7 @@
                         @Html.DisplayFor(modelItem => item.nazwa)
                     </td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.id_roli">Usuń</a>
+                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_roli">Usuń</a>
                     </td>
                 </tr>
             }
