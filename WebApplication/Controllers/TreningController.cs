@@ -536,7 +536,7 @@ namespace WebApplication.Controllers
             return ratings_avg;
         }
 
-        public string generateYoutubeEmbededLink(string orginalLink)
+        public static string generateYoutubeEmbededLink(string orginalLink)
         {
             if (orginalLink == null) return "";
             string embededLink = "https://www.youtube.com/embed/{0}";

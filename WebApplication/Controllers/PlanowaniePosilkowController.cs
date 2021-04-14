@@ -125,15 +125,22 @@ namespace WebApplication.Controllers
         public IActionResult Polecany()
         {
             var recommended_id = PolecanyPosilek(DateTime.Now.Date);
-            Posilek recommended = _context.posilki.First();
+            Posilek recommended = _context.posilki.Include(t => t.obrazy).First();
             if (recommended_id != -1)
             {
-                recommended = _context.posilki.Single(e => e.id_posilku == recommended_id);
+                recommended = _context.posilki.Include(t => t.obrazy).Single(e => e.id_posilku == recommended_id);
             }
 
-            ViewBag.mealDetails = _context.posilekSzczegoly.Where(k => k.id_posilku == recommended_id)
+            ViewBag.mealDetails = _context.posilekSzczegoly.Where(k => k.id_posilku == recommended.id_posilku)
                                         .Include(k => k.skladnik)
                                         .ToList();
+
+            if (recommended.obrazy.Count <= 0)
+                ViewBag.image = null;
+            else
+                ViewBag.image = recommended.obrazy
+                                    .Last()
+                                    .GetImageDataUrl();
 
             ViewBag.polecany = recommended;
             this.isAdmin();

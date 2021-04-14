@@ -33,7 +33,7 @@ namespace WebApplication.Controllers
             HistoriaUzytkownika usersHistory = _context.historiaUzytkownika.Where(t => t.id_uzytkownika == userId)
                                                                             .OrderByDescending(t => t.data).FirstOrDefault();
 
-            double progress = (user.cel - usersHistory.waga)*100 / user.cel;
+            double progress = Math.Abs(user.cel - usersHistory.waga)*100 / user.cel;
             if (user.cel - usersHistory.waga < 0) progress = 100;
             if ((double)Odznaki.gold > progress)
                 ViewBag.gold = false;
