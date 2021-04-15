@@ -27,9 +27,10 @@ namespace WebApplication.Controllers
         }
 
         // GET: Trening
-        public async Task<IActionResult> Index(String searchString, String category)
+        public async Task<IActionResult> Index(String searchString, String category, int sort)
         {
             ViewData["currentSearchString"] = searchString;
+            ViewData["currentSort"] = (sort + 1) % 3;
 
             ViewBag.userId = int.Parse(User.Identity.GetUserId());
 
@@ -64,10 +65,32 @@ namespace WebApplication.Controllers
                     trainings = trainings.Where(k => k.id_kategorii == category_id);
             }
 
-            ViewBag.ratingsCounted = _context.ocenyTreningow.GroupBy(t => t.id_treningu)
+            switch (sort)
+            {
+                case 2:
+                    ViewBag.ratingsCounted = _context.ocenyTreningow.GroupBy(t => t.id_treningu)
+                                                            .Select(t => new { training = t.Key, Avg = t.Average(k => k.ocena) }).OrderBy(t => t.Avg)
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.training, v => v.Avg);
+                    break;
+
+                case 1:
+                    ViewBag.ratingsCounted = _context.ocenyTreningow.GroupBy(t => t.id_treningu)
+                                                            .Select(t => new { training = t.Key, Avg = t.Average(k => k.ocena) }).OrderByDescending(t => t.Avg)
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.training, v => v.Avg);
+                    break;
+                default:
+                    ViewBag.ratingsCounted = _context.ocenyTreningow.GroupBy(t => t.id_treningu)
                                                             .Select(t => new { training = t.Key, Avg = t.Average(k => k.ocena) })
                                                             .AsEnumerable()
                                                             .ToDictionary(k => k.training, v => v.Avg);
+                    break;
+            }
+            /*ViewBag.ratingsCounted = _context.ocenyTreningow.GroupBy(t => t.id_treningu)
+                                                            .Select(t => new { training = t.Key, Avg = t.Average(k => k.ocena) })
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.training, v => v.Avg);*/
             isTrainer();
             return View(await trainings.Include(t => t.kategoria).Include(t => t.obrazy).Include(t => t.uzytkownik).ToListAsync());
 
@@ -87,11 +110,29 @@ namespace WebApplication.Controllers
                 .Include(t => t.uzytkownik)
                 .Include(t => t.obrazy)
                 .FirstOrDefaultAsync(m => m.id_treningu == id);
+            if (trening == null)
+            {
+                return NotFound();
+            }
 
             ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == id)
                                         .Include(k => k.cwiczenie)
                                         .ToList();
             var userId = int.Parse(User.Identity.GetUserId());
+            Rola usersRole = _context.role.Include(k => k.uzytkownicy)
+                                          .FirstOrDefault(m => m.nazwa == "trener");
+
+            List<int> trainersIds = new List<int>();
+            if (usersRole != null)
+                foreach (var user in usersRole.uzytkownicy)
+                {
+                    trainersIds.Add(user.id_uzytkownika);
+                }
+            if (userId != trening.id_uzytkownika && !trainersIds.Contains(trening.id_uzytkownika))
+            {
+                return NotFound();
+            }
+
             try
             {
                 ViewBag.rating = _context.ocenyTreningow.Single(e => e.id_uzytkownika == userId && e.id_treningu == id);

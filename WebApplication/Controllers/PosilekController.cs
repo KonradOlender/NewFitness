@@ -94,8 +94,24 @@ namespace WebApplication.Controllers
                 .Include(p => p.uzytkownik)
                 .Include(p => p.obrazy)
                 .FirstOrDefaultAsync(m => m.id_posilku == id);
+            if (posilek == null)
+            {
+                return NotFound();
+            }
 
             int userId = int.Parse(this.User.Identity.GetUserId());
+            Rola usersRole = _context.role.Include(k => k.uzytkownicy)
+                                          .FirstOrDefault(m => m.nazwa == "dietetyk");
+            List<int> dieticiansIds = new List<int>();
+            if (usersRole != null)
+                foreach (var user in usersRole.uzytkownicy)
+                {
+                    dieticiansIds.Add(user.id_uzytkownika);
+                }
+            if (userId != posilek.id_uzytkownika && !dieticiansIds.Contains(posilek.id_uzytkownika))
+            {
+                return NotFound();
+            }
             ViewBag.userId = userId;
 
             try

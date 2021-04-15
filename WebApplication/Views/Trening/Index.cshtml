@@ -49,61 +49,210 @@
                     @Html.DisplayNameFor(model => model.kategoria)
                 </th>
                 <th>
-                    Ocena
+                    <a class="dark-a" asp-action="Index" asp-route-sort="@ViewData["currentSort"]" asp-route-searchString="@ViewData["currentSearchString"]">
+                        ocena
+                        @if ((int)ViewData["currentSort"] == 0)
+                        {
+                            <p>▲</p>
+                        }
+                        else if ((int)ViewData["currentSort"] == 2)
+                        {
+                            <p>▼</p>
+                        }
+                    </a>
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
 
-
-            @foreach (var item in Model)
+            @if ((int)ViewData["currentSort"] == 1)
             {
-                @if (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
+                @foreach (var item in Model)
                 {
-            <tr>
-                <td>
-                    @if (item.obrazy.Count > 0)
+                    @if (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
                     {
-                        <a asp-action="Details" asp-route-id="@item.id_treningu">
-                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="Details" asp-route-id="@item.id_treningu">
-                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
-                        </a>
-                    }
-                </td>
-                <td>
-                    <a class="dark-a" asp-action="Details" asp-route-id="@item.id_treningu">@Html.DisplayFor(modelItem => item.nazwa)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.kategoria.nazwa)
-                </td>
-                <td>
-                    @if ((ViewBag.ratingsCounted).ContainsKey(item.id_treningu))
-                    {
-                    <p>@((ViewBag.ratingsCounted)[item.id_treningu])</p>
-                    }
-                    else
-                    {
-                        <p>0</p>
-                    }
+                        <tr>
+                            <td>
+                                @if (item.obrazy.Count > 0)
+                                {
+                                    <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                        <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                <a class="dark-a" asp-action="Details" asp-route-id="@item.id_treningu">@Html.DisplayFor(modelItem => item.nazwa)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.kategoria.nazwa)
+                            </td>
+                            <td>
+                                @if ((ViewBag.ratingsCounted).ContainsKey(item.id_treningu))
+                                {
+                                    <p>@((ViewBag.ratingsCounted)[item.id_treningu])</p>
+                                }
+                                else
+                                {
+                                    <p>0</p>
+                                }
 
-                </td>
-                <td>
-                    @if (ViewBag.userId == item.id_uzytkownika)
-                    {
-                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
-                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
-                    }
-                </td>
+                            </td>
+                            <td>
+                                @if (ViewBag.userId == item.id_uzytkownika)
+                                {
+                                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
+                                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
+                                }
+                            </td>
 
-            </tr>
+                        </tr>
+                    }
                 }
             }
+            else
+            {
+                @if ((int)ViewData["currentSort"] == 0)
+                {
+                    @foreach (var item in Model)
+                    {
+                        @if (!(ViewBag.ratingsCounted).ContainsKey(item.id_treningu) && (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId))
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.obrazy.Count > 0)
+                                    {
+                                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="dark-a" asp-action="Details" asp-route-id="@item.id_treningu">@Html.DisplayFor(modelItem => item.nazwa)</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.kategoria.nazwa)
+                                </td>
+                                <td>
+                                    <p>0</p>
+                                </td>
+                                <td>
+                                    @if (ViewBag.userId == item.id_uzytkownika)
+                                    {
+                                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
+                                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                }
+
+                    @foreach (var rc in ViewBag.ratingsCounted.Keys)
+                    {
+                        var item = Model.First(p => p.id_treningu == rc);
+                        @if (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.obrazy.Count > 0)
+                                    {
+                                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="dark-a" asp-action="Details" asp-route-id="@item.id_treningu">@Html.DisplayFor(modelItem => item.nazwa)</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.kategoria.nazwa)
+                                </td>
+                                <td>
+                                    @if ((ViewBag.ratingsCounted).ContainsKey(item.id_treningu))
+                                    {
+                                        <p>@((ViewBag.ratingsCounted)[item.id_treningu])</p>
+                                    }
+                                    else
+                                    {
+                                        <p>0</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (ViewBag.userId == item.id_uzytkownika)
+                                    {
+                                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
+                                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    }
+
+                @if ((int)ViewData["currentSort"] == 2)
+                {
+                    @foreach (var item in Model)
+                    {
+                        @if (!(ViewBag.ratingsCounted).ContainsKey(item.id_treningu) && (ViewBag.trainersIds.Contains(item.id_uzytkownika) || item.id_uzytkownika == ViewBag.userId))
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.obrazy.Count > 0)
+                                    {
+                                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="@(((List<ObrazyTreningu>)item.obrazy)[item.obrazy.Count - 1].GetImageDataUrl())" />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Details" asp-route-id="@item.id_treningu">
+                                            <img style="height: 50px; width: 50px;" class="rounded float-left" src="~/images/training.jpg" />
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="dark-a" asp-action="Details" asp-route-id="@item.id_treningu">@Html.DisplayFor(modelItem => item.nazwa)</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.kategoria.nazwa)
+                                </td>
+                                <td>
+                                    <p>0</p>
+                                </td>
+                                <td>
+                                    @if (ViewBag.userId == item.id_uzytkownika)
+                                    {
+                                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.id_treningu">Usuń</a> <br />
+                                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.id_treningu">Edytuj</a> <br />
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                }
+            }
+
         </tbody>
     </table>
 </body>
