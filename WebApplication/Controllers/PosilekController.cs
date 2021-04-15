@@ -24,9 +24,10 @@ namespace WebApplication.Controllers
         }
 
         // GET: Posilek
-        public async Task<IActionResult> Index(String searchString)
+        public async Task<IActionResult> Index(String searchString, int sort)
         {
             ViewData["currentSearchString"] = searchString;
+            ViewData["currentSort"] = (sort + 1) % 3;
 
             ViewBag.userId = int.Parse(User.Identity.GetUserId());
 
@@ -42,22 +43,41 @@ namespace WebApplication.Controllers
 
             ViewBag.dieticiansIds = dieticiansIds;
 
-
             var meals = _context.posilki.Where(k => true);
-
+            
             if (!String.IsNullOrEmpty(searchString))
             {
                 meals = meals.Where(k => k.nazwa.Contains(searchString));
             }
+            switch (sort)
+            {
+                case 2:
+                    ViewBag.ratingsCounted = _context.ocenyPosilkow.GroupBy(t => t.id_posilku)
+                                                            .Select(t => new { posilek = t.Key, Avg = t.Average(k => k.ocena) }).OrderBy(t =>t.Avg)
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.posilek, v => v.Avg);
+                    break;
 
-            ViewBag.ratingsCounted = _context.ocenyPosilkow.GroupBy(t => t.id_posilku)
+                case 1:
+                    ViewBag.ratingsCounted = _context.ocenyPosilkow.GroupBy(t => t.id_posilku)
+                                                            .Select(t => new { posilek = t.Key, Avg = t.Average(k => k.ocena) }).OrderByDescending(t => t.Avg)
+                                                            .AsEnumerable()
+                                                            .ToDictionary(k => k.posilek, v => v.Avg);
+                    break;
+                default:
+                    ViewBag.ratingsCounted = _context.ocenyPosilkow.GroupBy(t => t.id_posilku)
                                                             .Select(t => new { posilek = t.Key, Avg = t.Average(k => k.ocena) })
                                                             .AsEnumerable()
                                                             .ToDictionary(k => k.posilek, v => v.Avg);
-
+                    break;
+            }
+            /* ViewBag.ratingsCounted = _context.ocenyPosilkow.GroupBy(t => t.id_posilku)
+                                                             .Select(t => new { posilek = t.Key, Avg = t.Average(k => k.ocena) })
+                                                             .AsEnumerable()
+                                                             .ToDictionary(k => k.posilek, v => v.Avg);*/
+            
             this.isDietician();
             return View(await meals.Include(t => t.uzytkownik).Include(k => k.obrazy).ToListAsync());
-
         }
 
         // GET: Posilek/Details/5
