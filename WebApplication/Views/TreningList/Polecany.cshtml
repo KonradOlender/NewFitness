@@ -20,27 +20,45 @@
     </div>
 
     <div class="col-md-9">
-        <h1>@ViewBag.polecany.nazwa</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Nazwa</th>
-                    <th scope="col">Opis</th>
-                    <th scope="col">Liczba powtórzeń</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in ViewBag.trainingDetails)
-                {
+        <div style="width:50%; float:left">
+            <h1>@ViewBag.polecany.nazwa</h1>
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">@item.cwiczenie.nazwa</th>
-                        <td>@item.cwiczenie.opis</td>
-                        <td>@item.liczba_powtorzen</td>
+                        <th scope="col">Nazwa</th>
+                        <th scope="col">Opis</th>
+                        <!--<th scope="col">Liczba powtórzeń</th>-->
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.trainingDetails)
+                    {
+                        <tr>
+                            <th scope="row">@item.cwiczenie.nazwa</th>
+                            <td>@item.cwiczenie.opis</td>
+                            <!--<td>@item.liczba_powtorzen</td>-->
+                        </tr>
+                    }
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+        <div style="float:left; width:50%">
+                @if (ViewBag.youtube != null)
+                {
+                    <iframe style="width:100%;min-height:230px; height:auto;" src="@ViewBag.youtube"
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                }
+                else if (ViewBag.image != null)
+                {
+                    <img src="@ViewBag.image" style="width:100%; height:auto" />
+                }
+                else
+                {
+                    //default image
+                }
+         </div>
     </div>
 
 </div>

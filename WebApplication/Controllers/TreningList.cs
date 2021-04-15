@@ -135,16 +135,25 @@ namespace WebApplication.Controllers
         public IActionResult Polecany()
         {
             var polecay_id = PolecanyTrening(DateTime.Now.Date);
-            Trening polecany = _context.treningi.First();
+            Trening polecany = _context.treningi.Include(t => t.obrazy).First();
             if (polecay_id != -1)
             {
-                polecany = _context.treningi.Single(e => e.id_treningu == polecay_id);
+                polecany = _context.treningi.Include(t => t.obrazy).Single(e => e.id_treningu == polecay_id);
             }
 
-            ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == polecay_id)
+            ViewBag.trainingDetails = _context.treningSzczegoly.Where(k => k.id_treningu == polecany.id_treningu)
                                         .Include(k => k.cwiczenie)
                                         .ToList();
+            
+            var link = TreningController.generateYoutubeEmbededLink(polecany.youtube_link);
+            ViewBag.youtube = link == "" || link == null ? null : link;
 
+            if (polecany.obrazy.Count <= 0)
+                ViewBag.image = null;
+            else
+                ViewBag.image = polecany.obrazy
+                                    .Last()
+                                    .GetImageDataUrl();
             ViewBag.polecany = polecany;
             isAdmin();
             return View();

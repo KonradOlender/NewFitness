@@ -9,10 +9,6 @@
     //https://www.youtube.com/embed/qiDoBnh6URU
 }
 
-<head>
-    <link rel="stylesheet" type="text/css" href="~/css/navigation.css">
-    <link rel="stylesheet" type="text/css" href="~/css/site.css">
-</head>
 <style>
     .footer{
         display: none;
@@ -65,7 +61,7 @@
                     color: #FFD700;
                 }
 </style>
-<body>
+<div>
     <p style="color: yellowgreen">@ViewBag.Message</p>
     <h1>Szczegóły</h1>
 
@@ -91,17 +87,18 @@
         <div>
             <div id="linkDiv" hidden>
 
-                <form style="float:left" asp-action="AddLink"
+                <form style="float:left;padding-bottom:2px;width:50%" asp-action="AddLink"
                       asp-controller="Trening"
                       asp-route-id="@ViewBag.trainingId"
                       method="post">
-                    <input type="text" id="link" name="link" />
+                    <input style="width:60%" type="text" id="link" name="link" />
                     <button type="submit" class="btn btn-primary">Dołącz link</button>
                 </form>
                 <form asp-action="AddLink"
                       asp-controller="Trening"
                       asp-route-id="@ViewBag.trainingId"
-                      method="post">
+                      method="post"
+                      style="padding-bottom:2px">
 
                     <button style="float:right" type="submit" id="link" name="link" value="" class="btn btn-danger">Usun link</button>
                     <br />
@@ -217,7 +214,7 @@
             </div>
         </form>
     </div>
-</body>
+</div>
 <script>
     let footer = document.getElementByTagName("footer");
     footer.hidden = true;
