@@ -40,8 +40,8 @@
 
 
                 @*<div>
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
-                </div>*@
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FitnessFriend</a>
+        </div>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -73,6 +73,16 @@
                     </ul>
 
                 </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/UserView">Dietetycy i trenerzy</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
                 <div>
                     @{ if (User.Identity.IsAuthenticated)
                         {
@@ -125,8 +135,8 @@
                                 </li>
                                 <li class="nav-item">
                                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
-                                            asp-route-returnUrl="@Url.Page("/", new { area = "" })"
-                                            method="post">
+                                          asp-route-returnUrl="@Url.Page("/", new { area = "" })"
+                                          method="post">
                                         <button type="submit" class="nav-link btn btn-link text-light">Logout</button>
                                     </form>
                                 </li>
