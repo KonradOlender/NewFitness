@@ -163,6 +163,13 @@ select{
     align-self: flex-end;
     text-align: center;
 }
+dark div.chat-bubble-mine {
+    background-color: #4B4B4B;
+    border-radius: 5px;
+    width: 700px;
+    align-self: flex-end;
+    text-align: center;
+}
 .chat-bubble {
     background-color: dodgerblue;
     border-radius: 5px;
