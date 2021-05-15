@@ -44,12 +44,14 @@ namespace WebApplication.Areas
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     if (_env.IsDevelopment())
                     {
-                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
+                        client.Connect(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
                         //   await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
                     }
                     else
                     {
-                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
+                        client.Connect(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
+                        
+                        //await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
                         // await client.ConnectAsync(_emailSettings.MailServer);
                     }
                     await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
