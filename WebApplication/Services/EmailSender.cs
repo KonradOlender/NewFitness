@@ -54,7 +54,8 @@ namespace WebApplication.Areas
                         //await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, SecureSocketOptions.StartTls);
                         // await client.ConnectAsync(_emailSettings.MailServer);
                     }
-                    await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
+                    //await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
+                    client.Authenticate(_emailSettings.Sender, _emailSettings.Password);
                     await client.SendAsync(mimeMessage);
                     await client.DisconnectAsync(true);
                 }
