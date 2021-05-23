@@ -1,26 +1,48 @@
-﻿<div class="chat-body">
-    @foreach (var item in ViewBag.chat.Messages)
-    {
-        <p>@item.Name @item.Text @item.Timestamp</p>
-    }
+﻿<div class="row">
+    <div class="col-md-3"></div>
+    <div class="chat-body col-md-6">
+        @foreach (var item in ViewBag.chat.Messages)
+        {
+            if (item.Name == User.Identity.Name)
+            {
+                <div class="chat-bubble-mine">
+                    <p>@item.Name  @item.Text @item.Timestamp</p>
+                </div>
+            }
+            else
+            {
+                <div class="chat-bubble">
+                    <p>@item.Name  @item.Text @item.Timestamp</p>
+                </div>
+            }
+
+        }
+        
+    </div>
+    <div class="col-md-6">
+        <form method="post" onsubmit="sendMessage(event)">
+            <input type="hidden" name="roomName" value="@ViewBag.chat.NameOne" />
+            <input type="hidden" name="chatId" value="@ViewBag.chat.Id" />
+            @if (ViewBag.user.Id == ViewBag.chat.FirstId)
+            {
+                <input type="hidden" name="toWho" value="@ViewBag.chat.SecendId" />
+            }
+            else
+            {
+                <input type="hidden" name="toWho" value="@ViewBag.chat.FirstId" />
+            }
+            <input type="text" name="message" placeholder="Message" />
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-3"></div>
 </div>
 
-<form method="post" onsubmit="sendMessage(event)">
-    <input type="hidden" name="roomName" value="@ViewBag.chat.NameOne" />
-    <input type="hidden" name="chatId" value="@ViewBag.chat.Id" />
-    @if (ViewBag.user.Id == ViewBag.chat.FirstId)
-    {
-        <input type="hidden" name="toWho" value="@ViewBag.chat.SecendId" />
-    }
-    else
-    {
-        <input type="hidden" name="toWho" value="@ViewBag.chat.FirstId" />
-    }
-    <input type="text" name="message" placeholder="Message" />
-    <div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
+
+
 
 @section scripts{ 
     <script src="~/js/signalr.min.js"></script>
@@ -34,9 +56,16 @@
             console.log(data);
 
             var message = document.createElement("p")
-            message.appendChild(document.createTextNode(data.name +" " + data.text +" "+  data.timestamp))
+            message.appendChild(document.createTextNode(data.name + " " + data.text + " " + data.timestamp))
+
+            var bubble = document.createElement("div")
+            bubble.append(message);
+
+            bubble.classList.add("chat-bubble-mine")
+
+            
             var body = document.querySelector('.chat-body')
-            body.append(message);
+            body.append(bubble);
             
         });
 
