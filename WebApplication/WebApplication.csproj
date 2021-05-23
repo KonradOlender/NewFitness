@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20210223184626_profile-pic.cs" />
     <Compile Remove="Migrations\20210223184626_profile-pic.Designer.cs" />
+    <Compile Remove="Migrations\20210510211954_Jan.cs" />
+    <Compile Remove="Migrations\20210510211954_Jan.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +30,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="MimeKit" Version="2.10.1" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
     <PackageReference Include="Syncfusion.HtmlToPdfConverter.QtWebKit.Net.Core" Version="18.4.0.39" />
   </ItemGroup>
 

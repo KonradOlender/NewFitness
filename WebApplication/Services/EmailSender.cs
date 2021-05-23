@@ -40,7 +40,7 @@ namespace WebApplication.Areas
 
                 using (var client = new SmtpClient())
                 {
-                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     if (_env.IsDevelopment())
                     {
