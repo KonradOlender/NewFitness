@@ -11,14 +11,14 @@
         <h1>Ćwiczenia</h1>
         <hr />
 
-        <nav class="navigation">
+        <nav class="navigation" style="margin-bottom:5px">
             <a asp-action="Create" style="text-decoration:none"><button class="navigation">Dodaj ćwiczenie</button></a>
             <a asp-controller="KategoriaCwiczenia" asp-action="Index" style="text-decoration:none"><button class="navigation">Zobacz kategorie</button></a>
         </nav>
         @using (Html.BeginForm("Index", "Cwiczenie", FormMethod.Get))
         {
             <fieldset style="display:inline">
-                @Html.TextBox("searchString")
+                <input id="searchString" type="text" value="" style="border-radius:5px">
 
                 @Html.DropDownList("category")
 

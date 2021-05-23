@@ -21,9 +21,9 @@
         @using (Html.BeginForm("Index", "Posilek", FormMethod.Get, new { id = ViewBag.posilekId }))
         {
             <fieldset>
-                @Html.TextBox("searchString")
+                <input id="searchString" type="text" value="" style="border-radius:5px">
 
-                <p>
+                <p style="margin-top: 5px">
                     <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
                 </p>
 

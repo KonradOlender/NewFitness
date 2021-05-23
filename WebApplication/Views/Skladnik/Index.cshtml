@@ -12,7 +12,7 @@
     <div class="text-center">
         <h1>Składniki</h1>
 
-        <nav class="navigation">
+        <nav class="navigation" style="margin-bottom: 5px">
             <a asp-action="Create" style="text-decoration:none"><button class="navigation">Dodaj nowy</button></a>
             <a asp-controller="KategoriaSkladnikow" asp-action="Index" style="text-decoration:none"><button class="navigation">Zobacz kategorie </button></a>
         </nav>
@@ -20,11 +20,11 @@
         @using (Html.BeginForm("Index", "Skladnik", FormMethod.Get))
         {
             <fieldset>
-                @Html.TextBox("searchString")
+                <input id="searchString" type="text" value="" style="border-radius:5px">
 
                 @Html.DropDownList("category")
 
-                <p>
+                <p style="margin-top: 5px">
                     <button type="submit" class="btn btn-primary" value="Filtruj">Filtruj</button>
                 </p>
 
